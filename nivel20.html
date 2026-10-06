@@ -598,55 +598,37 @@ function pruebaPuertas(){
    SECUENCIA
 ========================= */
 
-function pruebaSecuencia(){
+async function comprobarSecuencia(){
 
-    document.getElementById("icono")
-        .textContent="🔢";
-
-    document.getElementById("titulo")
-        .textContent="PRUEBA 3 — COMPLETA LA SECUENCIA";
-
-    document.getElementById("pregunta")
-        .textContent=
-        "Observa la secuencia y descubre qué número falta.";
-
-    document.getElementById("contenido")
-        .innerHTML=`
-
-        <div class="secuencia">
-            2 — 4 — 8 — 16 — ?
-        </div>
-
-        <input
-            class="numero"
-            id="respuestaNumero"
-            type="number"
-            placeholder="Escribe el número"
-        >
-
-        <br>
-
-        <button
-            class="boton"
-            onclick="comprobarSecuencia()">
-
-            🔓 COMPROBAR
-
-        </button>
-
-    `;
-
-}
-
-
-function comprobarSecuencia(){
-
-    const respuesta=
+    const respuesta =
         document.getElementById(
             "respuestaNumero"
         ).value;
 
-    if(respuesta==="32"){
+    const correcta =
+        respuesta === "32";
+
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            "Prueba 3 — Completa la secuencia",
+            respuesta || "(sin respuesta)",
+            correcta
+        );
+
+
+    if(!guardada){
+
+        alert(
+            "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+        );
+
+        return;
+
+    }
+
+
+    if(correcta){
 
         pruebaCorrecta(respuesta);
 
@@ -655,85 +637,61 @@ function comprobarSecuencia(){
     else{
 
         document.getElementById("mensaje")
-            .textContent=
+            .textContent =
             "❌ No se abre. Pista: cada número se multiplica por 2.";
 
     }
 
 }
 
-
 /* =========================
    PRUEBA 4
    REACCIÓN
 ========================= */
 
-function pruebaReaccion(){
-
-    document.getElementById("icono")
-        .textContent="⚡";
-
-    document.getElementById("titulo")
-        .textContent="PRUEBA 4 — REFLEJOS SIMBA";
-
-    document.getElementById("pregunta")
-        .textContent=
-        "Espera... cuando aparezca “¡AHORA!”, presiona el botón lo más rápido posible.";
-
-    document.getElementById("contenido")
-        .innerHTML=`
-
-        <button
-            class="botonReaccion"
-            id="botonReaccion"
-            onclick="reaccionar()">
-
-            ESPERA...
-
-        </button>
-
-        `;
-
-    reaccionIniciada=false;
-    reaccionTerminada=false;
-
-    const espera=
-        2000+Math.random()*3000;
-
-    setTimeout(()=>{
-
-        reaccionIniciada=true;
-
-        document.getElementById(
-            "botonReaccion"
-        ).textContent="¡AHORA!";
-
-    },espera);
-
-}
-
-
-function reaccionar(){
+async function reaccionar(){
 
     if(!reaccionIniciada){
 
+        const guardada =
+            await guardarRespuestaSupabase(
+                "Prueba 4 — Reflejos Simba",
+                "Demasiado pronto",
+                false
+            );
+
+
+        if(!guardada){
+
+            alert(
+                "❌ No se pudo guardar el intento."
+            );
+
+            return;
+
+        }
+
+
         document.getElementById("mensaje")
-            .textContent=
+            .textContent =
             "😂 ¡Demasiado pronto! Espera a que diga AHORA.";
 
         return;
 
     }
 
+
     if(reaccionTerminada)return;
+
 
     reaccionTerminada=true;
 
-    pruebaCorrecta("Reacción rápida");
+
+    pruebaCorrecta(
+        "Reacción rápida"
+    );
 
 }
-
-
 /* =========================
    PRUEBA 5
    CÓDIGO
@@ -796,13 +754,37 @@ function pruebaCodigo(){
 }
 
 
-function comprobarCodigo(){
+async function comprobarCodigo(){
 
-    const codigo=
+    const codigo =
         document.getElementById("codigo")
         .value.trim();
 
-    if(codigo==="315"){
+
+    const correcta =
+        codigo === "315";
+
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            "Prueba 5 — El código oculto",
+            codigo || "(sin respuesta)",
+            correcta
+        );
+
+
+    if(!guardada){
+
+        alert(
+            "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+        );
+
+        return;
+
+    }
+
+
+    if(correcta){
 
         pruebaCorrecta(codigo);
 
@@ -811,7 +793,7 @@ function comprobarCodigo(){
     else{
 
         document.getElementById("mensaje")
-            .textContent=
+            .textContent =
             "❌ Código incorrecto. Lee las tres pistas nuevamente.";
 
     }
