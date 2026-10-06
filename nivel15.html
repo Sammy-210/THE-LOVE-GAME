@@ -436,13 +436,49 @@ function mostrarPregunta(){
     });
 
 }
+    async function guardarRespuestaSupabase(pregunta, respuesta){
 
-function seleccionar(respuesta){
+    const { error } = await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+            pregunta: pregunta,
+            respuesta: respuesta,
+            tipo: "Nivel 15 - Final Especial"
+        }]);
+
+    if(error){
+
+        console.error(
+            "Error guardando respuesta:",
+            error
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+async function seleccionar(respuesta){
 
     const preguntaActual = preguntas[actual];
 
     document.getElementById("mensaje").textContent =
-        "💗 Respuesta guardada...";
+        "⏳ Guardando tu respuesta...";
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            preguntaActual.texto,
+            respuesta
+        );
+
+    if(!guardada){
+
+        document.getElementById("mensaje").textContent =
+            "❌ No se pudo guardar la respuesta.";
+
+        return;
+    }
 
     crearCorazones();
 
@@ -456,6 +492,9 @@ function seleccionar(respuesta){
         "nivel15_respuesta_" + (actual + 1),
         respuesta
     );
+
+    document.getElementById("mensaje").textContent =
+        "💗 ¡Respuesta guardada!";
 
     actual++;
 
