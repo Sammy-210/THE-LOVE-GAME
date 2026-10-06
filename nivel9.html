@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -446,8 +446,57 @@ function todosHasta8() {
 
 }
 
+async function guardarLogroSupabase(
+    titulo,
+    desarrollo
+) {
 
-function render() {
+    try {
+
+        const { error } =
+            await supabaseClient
+            .from("respuestas_nivel4")
+            .insert([{
+
+                pregunta:
+                    "Nivel 9 - Logro desbloqueado",
+
+                respuesta:
+                    titulo +
+                    " | " +
+                    desarrollo,
+
+                tipo:
+                    "Nivel 9 - Logros secretos"
+
+            }]);
+
+        if (error) {
+
+            console.error(
+                "Error al guardar logro:",
+                error
+            );
+
+        } else {
+
+            console.log(
+                "✅ Logro del Nivel 9 guardado en Supabase"
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Error:",
+            error
+        );
+
+    }
+
+}
+async function render() {
 
     const grid = document.getElementById("grid");
 
@@ -475,6 +524,23 @@ function render() {
         if (ok) {
 
             desbloqueados++;
+if (
+        !localStorage.getItem(
+            "nivel9_logro_" + logro.titulo
+        )
+    ) {
+
+        await guardarLogroSupabase(
+            logro.titulo,
+            logro.desarrollo
+        );
+
+        localStorage.setItem(
+            "nivel9_logro_" + logro.titulo,
+            "true"
+        );
+
+    }
 
         }
 
