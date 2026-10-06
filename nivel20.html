@@ -648,7 +648,7 @@ function comprobarSecuencia(){
 
     if(respuesta==="32"){
 
-        pruebaCorrecta();
+        pruebaCorrecta(respuesta);
 
     }
 
@@ -729,7 +729,7 @@ function reaccionar(){
 
     reaccionTerminada=true;
 
-    pruebaCorrecta();
+    pruebaCorrecta("Reacción rápida");
 
 }
 
@@ -804,7 +804,7 @@ function comprobarCodigo(){
 
     if(codigo==="315"){
 
-        pruebaCorrecta();
+        pruebaCorrecta(codigo);
 
     }
 
@@ -879,11 +879,11 @@ function crearOpciones(lista){
                     b.disabled=true;
                 });
 
-            if(item[1]){
+           if(item[1]){
 
-                pruebaCorrecta();
+    pruebaCorrecta(item[0]);
 
-            }
+}
 
             else{
 
@@ -916,27 +916,96 @@ function crearOpciones(lista){
    PRUEBA CORRECTA
 ========================= */
 
-function pruebaCorrecta(){
+async function guardarRespuestaSupabase(
+    pregunta,
+    respuesta,
+    correcta
+){
+
+    const { error } =
+        await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+
+            pregunta: pregunta,
+
+            respuesta: respuesta,
+
+            tipo:
+                "Nivel 20 - Prueba Simba - " +
+                (correcta ? "Correcta" : "Incorrecta")
+
+        }]);
+
+
+    if(error){
+
+        console.error(
+            "Error guardando respuesta:",
+            error
+        );
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+async function pruebaCorrecta(
+    respuestaSeleccionada
+){
+
+    const preguntaActual =
+        document.getElementById("pregunta")
+        .textContent;
+
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            preguntaActual,
+            respuestaSeleccionada,
+            true
+        );
+
+
+    if(!guardada){
+
+        alert(
+            "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+        );
+
+        return;
+
+    }
+
 
     puntos++;
 
     xp+=250;
+
 
     localStorage.setItem(
         "xp",
         xp
     );
 
+
     document.getElementById("xp")
         .textContent=xp;
+
 
     document.getElementById("mensaje")
         .textContent=
         "🦁 ¡PRUEBA SUPERADA! +250 XP";
 
+
     setTimeout(()=>{
 
         pruebaActual++;
+
 
         if(pruebaActual>=6){
 
@@ -953,7 +1022,6 @@ function pruebaCorrecta(){
     },900);
 
 }
-
 
 /* =========================
    TERMINAR
