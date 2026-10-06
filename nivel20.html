@@ -857,21 +857,21 @@ function pruebaFinal(){
 
 function crearOpciones(lista){
 
-    const contenedor=
+    const contenedor =
         document.getElementById("opciones");
 
     contenedor.innerHTML="";
 
     lista.forEach(item=>{
 
-        const boton=
+        const boton =
             document.createElement("button");
 
         boton.className="opcion";
 
         boton.textContent=item[0];
 
-        boton.onclick=()=>{
+        boton.onclick=async ()=>{
 
             document
                 .querySelectorAll(".opcion")
@@ -879,17 +879,82 @@ function crearOpciones(lista){
                     b.disabled=true;
                 });
 
-           if(item[1]){
 
-    pruebaCorrecta(item[0]);
+            const pregunta =
+                document.getElementById("pregunta")
+                .textContent;
 
-}
+
+            const guardada =
+                await guardarRespuestaSupabase(
+                    pregunta,
+                    item[0],
+                    item[1]
+                );
+
+
+            if(!guardada){
+
+                document
+                    .querySelectorAll(".opcion")
+                    .forEach(b=>{
+                        b.disabled=false;
+                    });
+
+                alert(
+                    "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+                );
+
+                return;
+
+            }
+
+
+            if(item[1]){
+
+                puntos++;
+
+                xp+=250;
+
+                localStorage.setItem(
+                    "xp",
+                    xp
+                );
+
+                document.getElementById("xp")
+                    .textContent=xp;
+
+                document.getElementById("mensaje")
+                    .textContent=
+                    "🦁 ¡PRUEBA SUPERADA! +250 XP";
+
+
+                setTimeout(()=>{
+
+                    pruebaActual++;
+
+                    if(pruebaActual>=6){
+
+                        terminar();
+
+                    }
+
+                    else{
+
+                        mostrarPrueba();
+
+                    }
+
+                },900);
+
+            }
 
             else{
 
                 document.getElementById("mensaje")
                     .textContent=
                     "❌ Esa opción no supera la prueba. Inténtalo de nuevo.";
+
 
                 setTimeout(()=>{
 
@@ -910,7 +975,6 @@ function crearOpciones(lista){
     });
 
 }
-
 
 /* =========================
    PRUEBA CORRECTA
