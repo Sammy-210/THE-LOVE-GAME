@@ -411,7 +411,10 @@ function responder(indice){
 
         xp+=200;
 
-        localStorage.setItem("xp",xp);
+        localStorage.setItem(
+    "nivel16_respuesta_"+(actual+1),
+    s.opciones[indice]
+);
 
         document.getElementById("xp").textContent=xp;
 
