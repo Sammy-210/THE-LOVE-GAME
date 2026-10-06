@@ -500,7 +500,32 @@ window.supabase.createClient(
 
     const xpTexto =
         document.getElementById("xp");
+async function guardarRespuestaSupabase(
+    preguntaTexto,
+    respuestaTexto,
+    esCorrecta
+) {
 
+    const { error } = await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+            pregunta: preguntaTexto,
+            respuesta: respuestaTexto,
+            tipo: "Nivel 2 - " +
+                (esCorrecta ? "Correcta" : "Incorrecta")
+        }]);
+
+    if (error) {
+        console.error(
+            "Error al guardar respuesta:",
+            error
+        );
+    } else {
+        console.log(
+            "✅ Respuesta del Nivel 2 guardada"
+        );
+    }
+}
 
     function mostrarRecuerdo() {
 
@@ -615,11 +640,22 @@ window.supabase.createClient(
 
 
         xpTexto.innerText =
-            xpGanado;
+    xpGanado;
 
+const respuestaTexto =
+    recuerdos[recuerdoActual].opciones[indice];
 
-        nextButton.style.display =
-            "block";
+const esCorrecta =
+    indice === recuerdos[recuerdoActual].correcta;
+
+guardarRespuestaSupabase(
+    recuerdos[recuerdoActual].pregunta,
+    respuestaTexto,
+    esCorrecta
+);
+
+nextButton.style.display =
+    "block";
 
     }
 
