@@ -391,7 +391,32 @@ function mostrar(){
     });
 }
 
-function responder(indice){
+async function guardarRespuestaSupabase(pregunta, respuesta, correcta){
+
+    const { error } = await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+            pregunta: pregunta,
+            respuesta: respuesta,
+            tipo: "Nivel 16 - Lo que Samis piensa cuando te ve - " +
+                  (correcta ? "Correcta" : "Incorrecta")
+        }]);
+
+    if(error){
+
+        console.error(
+            "Error guardando respuesta:",
+            error
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+
+async function responder(indice){
 
     const s=situaciones[actual];
 
@@ -400,21 +425,41 @@ function responder(indice){
     document.querySelectorAll(".opcion")
     .forEach(b=>b.disabled=true);
 
-    if(indice===s.correcta){
+    const esCorrecta =
+        indice === s.correcta;
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            s.pregunta,
+            s.opciones[indice],
+            esCorrecta
+        );
+
+    if(!guardada){
+
+        resultado.innerHTML =
+            "❌ No se pudo guardar la respuesta. Inténtalo nuevamente.";
+
+        resultado.style.display="block";
+
+        document.querySelectorAll(".opcion")
+        .forEach(b=>b.disabled=false);
+
+        return;
+    }
+
+    if(esCorrecta){
 
         puntos++;
 
-        resultado.innerHTML=
+        resultado.innerHTML =
         "💗 ¡Exacto! Esa es bastante parecida a lo que Samis pensaría. 🥹";
 
         resultado.style.display="block";
 
         xp+=200;
 
-        localStorage.setItem(
-    "nivel16_respuesta_"+(actual+1),
-    s.opciones[indice]
-);
+        localStorage.setItem("xp",xp);
 
         document.getElementById("xp").textContent=xp;
 
@@ -422,7 +467,7 @@ function responder(indice){
 
     }else{
 
-        resultado.innerHTML=
+        resultado.innerHTML =
         "👀 Mmm... esa no era la que pensaba Samis. Pero puedes seguir intentando conocerla. ❤️";
 
         resultado.style.display="block";
