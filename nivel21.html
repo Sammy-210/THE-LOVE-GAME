@@ -639,13 +639,32 @@ function reto3(){
 }
 
 
-function retoNumero(){
+async function retoNumero(){
 
-    const r=
+    const r =
         document.getElementById("respuesta")
         .value;
 
-    if(r==="80"){
+    const correcta = r === "80";
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            "Reto 3 — Número perdido",
+            r || "(sin respuesta)",
+            correcta
+        );
+
+    if(!guardada){
+
+        alert(
+            "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+        );
+
+        return;
+
+    }
+
+    if(correcta){
 
         correcto();
 
@@ -654,14 +673,12 @@ function retoNumero(){
     else{
 
         document.getElementById("mensaje")
-            .textContent=
+            .textContent =
             "❌ Casi. Observa qué ocurre con cada número.";
 
     }
 
 }
-
-
 /* =========================
    RETO 4
 ========================= */
@@ -832,14 +849,33 @@ function reto8(){
 }
 
 
-function retoMultiplicacion(){
+async function retoMultiplicacion(){
 
-    const r=
+    const r =
         document.getElementById(
             "multiplicacion"
         ).value;
 
-    if(r==="49"){
+    const correcta = r === "49";
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            "Reto 8 — Cerradura: 7 × 7",
+            r || "(sin respuesta)",
+            correcta
+        );
+
+    if(!guardada){
+
+        alert(
+            "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+        );
+
+        return;
+
+    }
+
+    if(correcta){
 
         correcto();
 
@@ -848,13 +884,12 @@ function retoMultiplicacion(){
     else{
 
         document.getElementById("mensaje")
-            .textContent=
+            .textContent =
             "❌ La cerradura sigue cerrada.";
 
     }
 
 }
-
 
 /* =========================
    RETO 9
