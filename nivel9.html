@@ -505,7 +505,7 @@ async function render() {
     let desbloqueados = 0;
 
 
-    logros.forEach((logro) => {
+   for (const logro of logros) {
 
         let ok;
 
@@ -634,7 +634,7 @@ if (
 
         grid.appendChild(card);
 
-    });
+    }
 
 
     document.getElementById("count").textContent =
