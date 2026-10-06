@@ -377,9 +377,7 @@ window.supabase.createClient(
     const next = document.getElementById("next");
     const progress = document.getElementById("progress");
     const xpTexto = document.getElementById("xp");
-
-    function mostrarPregunta() {
-        async function guardarRespuestaSupabase(preguntaTexto, respuestaTexto, esCorrecta) {
+async function guardarRespuestaSupabase(preguntaTexto, respuestaTexto, esCorrecta) {
 
     const { error } = await supabaseClient
         .from("respuestas_nivel4")
@@ -395,6 +393,7 @@ window.supabase.createClient(
         console.log("✅ Respuesta guardada en Supabase");
     }
 }
+    function mostrarPregunta() {
 
         respondida = false;
         next.style.display = "none";
