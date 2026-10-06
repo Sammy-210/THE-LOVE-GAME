@@ -1,0 +1,1198 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nivel 14 - Álbum de recuerdos</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:radial-gradient(circle at top,#641b45,#260d1d 45%,#09070b);
+    padding:25px 15px 50px;
+}
+
+.container{
+    max-width:950px;
+    margin:auto;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.header-icon{
+    font-size:70px;
+}
+
+h1{
+    color:#ff8fc7;
+    font-size:38px;
+    margin:5px 0;
+}
+
+.subtitle{
+    color:#ffd7e9;
+}
+
+.xp{
+    display:inline-block;
+    margin-top:12px;
+    padding:10px 20px;
+    border-radius:25px;
+    background:#35172a;
+    border:1px solid #ff72b6;
+    color:#ffd8ea;
+    font-weight:bold;
+}
+
+.intro{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,130,190,.35);
+    border-radius:22px;
+    padding:23px;
+    text-align:center;
+    line-height:1.6;
+    margin-bottom:25px;
+}
+
+.progress-box{
+    background:rgba(255,255,255,.07);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:25px;
+}
+
+.progress-text{
+    text-align:center;
+    color:#ffd9e9;
+    margin-bottom:10px;
+}
+
+.progress{
+    height:14px;
+    background:#291923;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    background:linear-gradient(90deg,#ff4fa5,#ff9dca);
+    transition:.5s;
+}
+
+.album{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,130,190,.35);
+    border-radius:23px;
+    padding:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.card.completed{
+    border-color:#56d68a;
+    background:rgba(50,140,80,.12);
+}
+
+.card.locked{
+    opacity:.45;
+    filter:grayscale(.7);
+}
+
+.scene{
+    height:170px;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    background:linear-gradient(135deg,#39162d,#76264f);
+    margin-bottom:16px;
+    font-size:60px;
+}
+
+.scene small{
+    font-size:14px;
+    color:#ffd9ea;
+    margin-top:8px;
+}
+
+.card h2{
+    color:#ff9dcc;
+    font-size:21px;
+}
+
+.card p{
+    color:#f6dbea;
+    line-height:1.5;
+}
+
+.badge{
+    display:inline-block;
+    background:#164d31;
+    color:#91f1b7;
+    border-radius:20px;
+    padding:7px 12px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+input[type="file"]{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    border-radius:12px;
+    background:#170c14;
+    border:1px solid #74304f;
+    color:#ffdbea;
+}
+
+.preview{
+    width:100%;
+    max-height:250px;
+    object-fit:cover;
+    border-radius:16px;
+    margin-top:14px;
+    display:none;
+    border:1px solid #ff72b6;
+}
+
+button{
+    width:100%;
+    margin-top:12px;
+    padding:13px;
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:bold;
+    color:white;
+    background:linear-gradient(90deg,#e83d91,#ff78bb);
+}
+
+button:disabled{
+    background:#42353c;
+    cursor:not-allowed;
+}
+
+.view-button{
+    background:linear-gradient(90deg,#8e3fd1,#d85caf);
+}
+
+.change-button{
+    background:linear-gradient(90deg,#d46a24,#f49b54);
+}
+
+.final{
+    display:none;
+    text-align:center;
+    margin-top:30px;
+    padding:30px;
+    border-radius:25px;
+    background:rgba(255,105,175,.12);
+    border:1px solid #ff72b6;
+}
+
+.final h2{
+    color:#ff9dcc;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.85);
+    z-index:1000;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal-box{
+    width:100%;
+    max-width:650px;
+    max-height:90vh;
+    overflow:auto;
+    background:#21101b;
+    border:1px solid #ff72b6;
+    border-radius:25px;
+    padding:22px;
+    text-align:center;
+}
+
+.modal-box h2{
+    color:#ff9dcc;
+}
+
+.modal-photo{
+    width:100%;
+    max-height:65vh;
+    object-fit:contain;
+    border-radius:18px;
+}
+
+.close{
+    background:#4b3440;
+}
+
+.message{
+    text-align:center;
+    color:#ffd7e9;
+    margin-top:12px;
+    min-height:22px;
+}
+
+@media(max-width:600px){
+    h1{font-size:30px;}
+    .scene{height:145px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<div class="header-icon">📸❤️</div>
+
+<h1>ÁLBUM DE RECUERDOS</h1>
+
+<div class="subtitle">
+Nivel 14 · Momentos que todavía nos faltan vivir 🦁
+</div>
+
+<div class="xp">
+⭐ XP actual:
+<span id="xp">0</span>
+</div>
+
+</div>
+
+
+<div class="intro">
+
+<strong>
+Bienvenido al álbum secreto de Samis y Simba. ❤️
+</strong>
+
+<br><br>
+
+Aquí tienes que guardar momentos que todavía
+les faltan vivir juntos. 📸
+
+<br><br>
+
+Puedes subir una imagen para representar
+cada recuerdo.
+
+<br><br>
+
+<strong>
+Y si después quieres cambiar una foto,
+¡también puedes hacerlo! ❤️
+</strong>
+
+</div>
+
+
+<div class="progress-box">
+
+<div class="progress-text">
+
+Recuerdos guardados:
+
+<strong>
+<span id="contador">0</span>/6
+</strong>
+
+</div>
+
+<div class="progress">
+
+<div
+class="progress-bar"
+id="progressBar"
+style="width:0%">
+</div>
+
+</div>
+
+</div>
+
+
+<div
+class="album"
+id="album">
+</div>
+
+
+<div
+class="final"
+id="final">
+
+<h2>
+📸❤️ ÁLBUM COMPLETO
+</h2>
+
+<p>
+Simba, acabas de completar nuestro álbum.
+</p>
+
+<p>
+Ahora estas imágenes representan
+algunos de los momentos que todavía
+nos faltan vivir.
+</p>
+
+<p>
+<strong>
+Algún día podremos cambiar estas imágenes
+por nuestras fotografías reales. 🥹❤️
+</strong>
+</p>
+
+<button onclick="window.location.href='mapa.html'">
+🗺️ VOLVER AL MAPA
+</button>
+
+</div>
+
+</div>
+
+
+<!-- MODAL -->
+
+<div
+class="modal"
+id="modal">
+
+<div class="modal-box">
+
+<h2 id="modalTitle">
+❤️ Nuestro recuerdo
+</h2>
+
+<img
+id="modalPhoto"
+class="modal-photo"
+src=""
+alt="Foto">
+
+<button
+class="close"
+onclick="cerrarModal()">
+
+✖ CERRAR
+
+</button>
+
+</div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+const BUCKET = "album14";
+
+
+const recuerdos = [
+
+{
+id:1,
+icon:"🏖️",
+small:"Un día frente al mar",
+titulo:"Nuestro primer viaje",
+texto:"Imaginen que por fin pueden escaparse juntos a un lugar bonito.",
+pregunta:"Sube una imagen que represente el viaje que te gustaría hacer con Samis."
+},
+
+{
+id:2,
+icon:"🎄",
+small:"Una Navidad juntos",
+titulo:"Nuestra primera Navidad",
+texto:"Una Navidad juntos, con luces, comida, regalos y mucho cariño.",
+pregunta:"Sube una imagen que represente cómo imaginas una Navidad junto a Samis."
+},
+
+{
+id:3,
+icon:"⚽",
+small:"Después de un partido",
+titulo:"Después del fútbol",
+texto:"Samis va a verte jugar y después tienen un momento solamente para ustedes.",
+pregunta:"Sube una imagen que represente ese momento que te gustaría vivir después de jugar."
+},
+
+{
+id:4,
+icon:"🌅",
+small:"Un atardecer inolvidable",
+titulo:"Nuestro atardecer",
+texto:"Los dos están juntos viendo el cielo cambiar de color.",
+pregunta:"Sube una imagen del tipo de atardecer que te gustaría compartir con Samis."
+},
+
+{
+id:5,
+icon:"🎬",
+small:"Una noche tranquila",
+titulo:"Noche de película",
+texto:"Una noche para comer algo rico, ver una película y estar juntos.",
+pregunta:"Sube una imagen que represente tu noche perfecta de película con Samis."
+},
+
+{
+id:6,
+icon:"📸",
+small:"Una foto que todavía no existe",
+titulo:"Nuestra foto futura",
+texto:"Una fotografía que todavía no tienen, pero que algún día podrían tener.",
+pregunta:"Sube una imagen que represente la fotografía futura que más te gustaría tener con Samis."
+}
+
+];
+
+
+function obtenerXP(){
+
+return parseInt(
+localStorage.getItem("xp") || "0"
+);
+
+}
+
+
+function mostrarXP(){
+
+document.getElementById("xp")
+.textContent = obtenerXP();
+
+}
+
+
+function completado(id){
+
+return localStorage.getItem(
+"album14_" + id
+) === "true";
+
+}
+
+
+function obtenerURL(id){
+
+return localStorage.getItem(
+"album14_url_" + id
+) || "";
+
+}
+
+
+/* ======================================
+   MOSTRAR ÁLBUM
+====================================== */
+
+function renderAlbum(){
+
+const album =
+document.getElementById("album");
+
+album.innerHTML = "";
+
+let total = 0;
+
+
+recuerdos.forEach((recuerdo,index)=>{
+
+const completo =
+completado(recuerdo.id);
+
+const anteriorCompleto =
+index === 0 ||
+completado(
+recuerdos[index-1].id
+);
+
+
+if(completo){
+total++;
+}
+
+
+const card =
+document.createElement("div");
+
+card.className =
+"card " +
+(completo ? "completed" : "") +
+(
+!anteriorCompleto && !completo
+? " locked"
+: ""
+);
+
+
+let html = `
+
+<div class="scene">
+
+<div>
+${recuerdo.icon}
+</div>
+
+<small>
+${recuerdo.small}
+</small>
+
+</div>
+
+`;
+
+
+/* ======================================
+   SI YA ESTÁ COMPLETADO
+====================================== */
+
+if(completo){
+
+html += `
+
+<div class="badge">
+✅ RECUERDO GUARDADO
+</div>
+
+<h2>
+${recuerdo.titulo}
+</h2>
+
+<p>
+${recuerdo.texto}
+</p>
+
+<button
+class="view-button"
+onclick="verFoto(${recuerdo.id})">
+
+👀 VER FOTO GUARDADA
+
+</button>
+
+<input
+type="file"
+id="foto_${recuerdo.id}"
+accept="image/*">
+
+<button
+class="change-button"
+onclick="cambiarFoto(${recuerdo.id})">
+
+🔄 CAMBIAR FOTO
+
+</button>
+
+<div
+class="message"
+id="message_${recuerdo.id}">
+</div>
+
+`;
+
+}
+
+
+/* ======================================
+   SI TODAVÍA NO ESTÁ COMPLETADO
+====================================== */
+
+else if(anteriorCompleto){
+
+html += `
+
+<h2>
+${recuerdo.titulo}
+</h2>
+
+<p>
+${recuerdo.texto}
+</p>
+
+<p>
+<strong>
+📸 ${recuerdo.pregunta}
+</strong>
+</p>
+
+<input
+type="file"
+id="foto_${recuerdo.id}"
+accept="image/*"
+onchange="previsualizar(${recuerdo.id})">
+
+<img
+id="preview_${recuerdo.id}"
+class="preview"
+alt="Vista previa">
+
+<div
+class="message"
+id="message_${recuerdo.id}">
+</div>
+
+<button
+onclick="subirFoto(${recuerdo.id})">
+
+❤️ GUARDAR ESTE RECUERDO
+
+</button>
+
+`;
+
+}
+
+
+/* ======================================
+   BLOQUEADO
+====================================== */
+
+else{
+
+html += `
+
+<h2>
+🔒 ${recuerdo.titulo}
+</h2>
+
+<p>
+Completa primero el recuerdo anterior
+para desbloquear este.
+</p>
+
+<button disabled>
+🔒 BLOQUEADO
+</button>
+
+`;
+
+}
+
+
+card.innerHTML = html;
+
+album.appendChild(card);
+
+});
+
+
+document.getElementById("contador")
+.textContent = total;
+
+document.getElementById("progressBar")
+.style.width =
+((total / recuerdos.length) * 100) + "%";
+
+
+if(total === recuerdos.length){
+
+document.getElementById("final")
+.style.display = "block";
+
+localStorage.setItem(
+"nivel14Completado",
+"true"
+);
+
+}
+
+mostrarXP();
+
+}
+
+
+/* ======================================
+   PREVISUALIZAR
+====================================== */
+
+function previsualizar(id){
+
+const input =
+document.getElementById(
+"foto_" + id
+);
+
+const preview =
+document.getElementById(
+"preview_" + id
+);
+
+if(!input.files[0]) return;
+
+preview.src =
+URL.createObjectURL(
+input.files[0]
+);
+
+preview.style.display =
+"block";
+
+}
+
+
+/* ======================================
+   SUBIR PRIMERA FOTO
+====================================== */
+
+async function subirFoto(id){
+
+const input =
+document.getElementById(
+"foto_" + id
+);
+
+if(!input.files[0]){
+
+alert(
+"📸 Primero selecciona una foto."
+);
+
+return;
+
+}
+
+await guardarFoto(id,true);
+
+}
+
+
+/* ======================================
+   CAMBIAR FOTO
+====================================== */
+
+async function cambiarFoto(id){
+
+const input =
+document.getElementById(
+"foto_" + id
+);
+
+if(!input.files[0]){
+
+alert(
+"📸 Primero selecciona la nueva foto."
+);
+
+return;
+
+}
+
+const confirmar =
+confirm(
+"¿Quieres cambiar la foto de este recuerdo?\n\n" +
+"La foto anterior seguirá guardada en Supabase, " +
+"pero esta será la nueva foto que aparecerá en el juego."
+);
+
+if(!confirmar) return;
+
+await guardarFoto(id,false);
+
+}
+
+
+/* ======================================
+   GUARDAR FOTO
+====================================== */
+
+async function guardarFoto(id,esNueva){
+
+const recuerdo =
+recuerdos.find(
+r => r.id === id
+);
+
+const input =
+document.getElementById(
+"foto_" + id
+);
+
+const message =
+document.getElementById(
+"message_" + id
+);
+
+const archivo =
+input.files[0];
+
+
+if(!archivo){
+return;
+}
+
+
+if(!archivo.type.startsWith("image/")){
+
+alert(
+"El archivo seleccionado no es una imagen."
+);
+
+return;
+
+}
+
+
+if(archivo.size > 8 * 1024 * 1024){
+
+alert(
+"La imagen es demasiado grande.\n\n" +
+"El máximo permitido es de 8 MB."
+);
+
+return;
+
+}
+
+
+message.textContent =
+"⏳ Subiendo imagen...";
+
+input.disabled = true;
+
+
+try{
+
+const extension =
+archivo.name
+.split(".")
+.pop()
+.toLowerCase();
+
+
+const nombreArchivo =
+"recuerdo_" +
+id +
+"_" +
+Date.now() +
+"." +
+extension;
+
+
+/* SUBIR NUEVA FOTO */
+
+const { error } =
+await supabaseClient
+.storage
+.from(BUCKET)
+.upload(
+nombreArchivo,
+archivo,
+{
+cacheControl:"3600",
+upsert:false,
+contentType:archivo.type
+}
+);
+
+
+if(error){
+throw error;
+}
+
+
+/* URL PÚBLICA */
+
+const { data:urlData } =
+supabaseClient
+.storage
+.from(BUCKET)
+.getPublicUrl(
+nombreArchivo
+);
+
+const fotoURL =
+urlData.publicUrl;
+
+
+/* ACTUALIZAR FOTO ACTUAL */
+
+localStorage.setItem(
+"album14_url_" + id,
+fotoURL
+);
+
+localStorage.setItem(
+"album14_" + id,
+"true"
+);
+
+
+/* GUARDAR REGISTRO */
+
+await supabaseClient
+.from("respuestas_nivel4")
+.insert([{
+
+pregunta:
+"Nivel 14 - " +
+recuerdo.titulo,
+
+respuesta:
+fotoURL,
+
+tipo:
+esNueva
+?
+"Nivel 14 - Álbum de recuerdos - Foto"
+:
+"Nivel 14 - Álbum de recuerdos - Cambio de foto"
+
+}]);
+
+
+/* SOLO DAR XP LA PRIMERA VEZ */
+
+if(esNueva){
+
+let xp =
+obtenerXP();
+
+xp += 300;
+
+localStorage.setItem(
+"xp",
+xp
+);
+
+alert(
+"📸❤️ ¡Recuerdo guardado!\n\n" +
+"+300 XP"
+);
+
+}else{
+
+alert(
+"🔄❤️ ¡Foto cambiada correctamente!"
+);
+
+}
+
+
+renderAlbum();
+
+
+}catch(error){
+
+console.error(error);
+
+input.disabled = false;
+
+message.textContent =
+"❌ No se pudo subir la imagen.";
+
+alert(
+"❌ No se pudo subir la foto.\n\n" +
+"Revisa el bucket album14 y sus políticas."
+);
+
+}
+
+}
+
+
+/* ======================================
+   VER FOTO
+====================================== */
+
+async function verFoto(id){
+
+const recuerdo =
+recuerdos.find(
+r => r.id === id
+);
+
+let fotoURL =
+obtenerURL(id);
+
+
+/* Si no está en localStorage,
+buscarla en Supabase */
+
+if(!fotoURL){
+
+try{
+
+const { data,error } =
+await supabaseClient
+.storage
+.from(BUCKET)
+.list(
+"",
+{
+limit:1000,
+sortBy:{
+column:"name",
+order:"desc"
+}
+}
+);
+
+
+if(!error && data){
+
+const archivos =
+data.filter(
+item =>
+item.name.startsWith(
+"recuerdo_" +
+id +
+"_"
+)
+);
+
+
+/* Tomar la más reciente */
+
+if(archivos.length > 0){
+
+archivos.sort(
+(a,b) =>
+b.name.localeCompare(a.name)
+);
+
+const archivo =
+archivos[0];
+
+
+const { data:urlData } =
+supabaseClient
+.storage
+.from(BUCKET)
+.getPublicUrl(
+archivo.name
+);
+
+fotoURL =
+urlData.publicUrl;
+
+
+localStorage.setItem(
+"album14_url_" + id,
+fotoURL
+);
+
+}
+
+}
+
+}catch(error){
+
+console.error(error);
+
+}
+
+}
+
+
+if(!fotoURL){
+
+alert(
+"❌ No se encontró la fotografía."
+);
+
+return;
+
+}
+
+
+document.getElementById(
+"modalTitle"
+).textContent =
+recuerdo.icon +
+" " +
+recuerdo.titulo;
+
+
+document.getElementById(
+"modalPhoto"
+).src =
+fotoURL;
+
+
+document.getElementById(
+"modal"
+).style.display =
+"flex";
+
+}
+
+
+/* ======================================
+   CERRAR FOTO
+====================================== */
+
+function cerrarModal(){
+
+document.getElementById(
+"modal"
+).style.display =
+"none";
+
+}
+
+
+/* ======================================
+   INICIO
+====================================== */
+
+renderAlbum();
+
+</script>
+
+</body>
+</html>

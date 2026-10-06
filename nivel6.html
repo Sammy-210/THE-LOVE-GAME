@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nivel 6 - Nuestra canción ❤️</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    overflow-y: auto;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    color: white;
+    background: radial-gradient(circle at top, #5a123f 0%, #260b2b 45%, #09030d 100%);
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    padding: 30px 20px 60px;
+}
+
+.back {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    background: rgba(255,255,255,0.1);
+    padding: 10px 18px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.header {
+    text-align: center;
+}
+
+.music {
+    font-size: 60px;
+}
+
+h1 {
+    margin: 10px 0;
+    font-size: 42px;
+}
+
+.subtitle {
+    color: #ff9bd7;
+    font-size: 22px;
+}
+
+.song-card,
+.question,
+#resultado {
+    margin-top: 30px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 25px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.song-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.artist {
+    text-align: center;
+    color: #ff9bd7;
+    margin: 8px 0 22px;
+}
+
+.song-cover {
+    text-align: center;
+    padding: 35px 20px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, rgba(232,62,145,.22), rgba(255,255,255,.06));
+}
+
+.song-cover .note {
+    font-size: 70px;
+}
+
+.song-cover p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.youtube-btn,
+.next-btn,
+.finish-btn,
+.save-btn {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 16px;
+    border: 0;
+    border-radius: 18px;
+    background: linear-gradient(90deg,#e83e91,#ff6db4);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+.youtube-btn:hover,
+.next-btn:hover,
+.finish-btn:hover,
+.save-btn:hover {
+    transform: scale(1.02);
+}
+
+.notice {
+    text-align: center;
+    color: #ffd3ec;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.message {
+    text-align: center;
+    margin-top: 30px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 15px;
+    margin-top: 10px;
+    border: 0;
+    border-radius: 15px;
+    background: rgba(255,255,255,.1);
+    color: white;
+    font-size: 16px;
+    outline: none;
+    resize: vertical;
+}
+
+.question {
+    display: none;
+}
+
+.question.active {
+    display: block;
+}
+
+.question h2 {
+    font-size: 23px;
+    line-height: 1.4;
+    margin-top: 0;
+}
+
+.option {
+    width: 100%;
+    margin-top: 12px;
+    padding: 15px;
+    border: 0;
+    border-radius: 15px;
+    background: #8e245f;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.option:hover {
+    background: #b82d79;
+}
+
+.option.correct {
+    background: #26734d;
+}
+
+.progress {
+    text-align: center;
+    color: #ffb8df;
+    margin-top: 25px;
+    font-size: 18px;
+}
+
+.xp {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+#resultado {
+    display: none;
+    text-align: center;
+}
+
+#resultado h2 {
+    font-size: 32px;
+    color: #ff9bd7;
+}
+
+.big-heart {
+    font-size: 65px;
+}
+
+.small {
+    color: #ffc6e6;
+    line-height: 1.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<a href="mapa.html" class="back">
+    ← Volver al mapa
+</a>
+
+<div class="header">
+
+    <div class="music">🎵</div>
+
+    <h1>Nuestra canción</h1>
+
+    <div class="subtitle">
+        Nivel 6 ❤️
+    </div>
+
+</div>
+
+
+<!-- CANCIÓN -->
+
+<div class="song-card">
+
+    <div class="song-title">
+        Until I Found You
+    </div>
+
+    <div class="artist">
+        Stephen Sanchez ❤️
+    </div>
+
+    <div class="song-cover">
+
+        <div class="note">🎶</div>
+
+        <p>
+            Esta canción es especial porque ahora forma parte
+            de nuestra historia. ❤️
+        </p>
+
+        <a
+            class="youtube-btn"
+            href="https://youtu.be/AT-ojOx2jno"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            ▶️ ESCUCHAR NUESTRA CANCIÓN
+        </a>
+
+    </div>
+
+    <div class="notice">
+        💕 Toca el botón y la canción se abrirá directamente en YouTube.
+    </div>
+
+</div>
+
+
+<!-- MENSAJE -->
+
+<div class="message">
+
+    <h2>💌 Para mi pequeño Simba</h2>
+
+    <p>
+        Hay canciones que simplemente suenan bonitas...
+        y hay otras que terminan teniendo un significado especial
+        porque nos hacen pensar en alguien. ❤️
+    </p>
+
+    <textarea
+        id="mensaje"
+        placeholder="Escribe aquí qué piensas o sientes al escuchar esta canción..."
+    ></textarea>
+
+    <button
+        class="save-btn"
+        onclick="guardarMensaje()"
+    >
+        💌 Guardar mi mensaje
+    </button>
+
+</div>
+
+
+<div class="progress" id="progreso">
+    Pregunta 1 de 8
+</div>
+
+<div class="xp">
+    ⭐ XP de este nivel:
+    <span id="xpNivel">0</span> / 1200
+</div>
+
+
+<!-- PREGUNTA 1 -->
+
+<div class="question active" id="q0">
+
+    <h2>
+        1. Si esta canción fuera una sensación,
+        ¿cuál sería?
+    </h2>
+
+    <button class="option" onclick="responder(0,'Amor',this)">
+        ❤️ Amor
+    </button>
+
+    <button class="option" onclick="responder(0,'Miedo',this)">
+        😨 Miedo
+    </button>
+
+    <button class="option" onclick="responder(0,'Enojo',this)">
+        😡 Enojo
+    </button>
+
+    <button class="option" onclick="responder(0,'Aburrimiento',this)">
+        😴 Aburrimiento
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 2 -->
+
+<div class="question" id="q1">
+
+    <h2>
+        2. Si escuchamos esta canción juntos,
+        ¿qué recuerdo te gustaría crear?
+    </h2>
+
+    <button class="option" onclick="responder(1,'Un momento juntos',this)">
+        💕 Un momento juntos
+    </button>
+
+    <button class="option" onclick="responder(1,'Una discusión',this)">
+        😤 Una discusión
+    </button>
+
+    <button class="option" onclick="responder(1,'Nada especial',this)">
+        😐 Nada especial
+    </button>
+
+    <button class="option" onclick="responder(1,'Irme a dormir',this)">
+        😴 Irme a dormir
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 3 -->
+
+<div class="question" id="q2">
+
+    <h2>
+        3. Si tuvieras que dedicar esta canción
+        a alguien especial, ¿a quién se la dedicarías?
+    </h2>
+
+    <button class="option" onclick="responder(2,'A mi Samis',this)">
+        ❤️ A mi Samis
+    </button>
+
+    <button class="option" onclick="responder(2,'A nadie',this)">
+        😐 A nadie
+    </button>
+
+    <button class="option" onclick="responder(2,'A un amigo',this)">
+        😂 A un amigo
+    </button>
+
+    <button class="option" onclick="responder(2,'A otra persona',this)">
+        🤔 A otra persona
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 4 -->
+
+<div class="question" id="q3">
+
+    <h2>
+        4. Si estamos escuchando esta canción juntos,
+        ¿qué preferirías hacer?
+    </h2>
+
+    <button class="option" onclick="responder(3,'Abrazarla',this)">
+        🫂 Abrazarla
+    </button>
+
+    <button class="option" onclick="responder(3,'Ignorarla',this)">
+        😐 Ignorarla
+    </button>
+
+    <button class="option" onclick="responder(3,'Dormirme',this)">
+        😴 Dormirme
+    </button>
+
+    <button class="option" onclick="responder(3,'Cambiar la canción',this)">
+        😂 Cambiar la canción
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 5 -->
+
+<div class="question" id="q4">
+
+    <h2>
+        5. ¿Qué promesa combina más con nuestra canción?
+    </h2>
+
+    <button class="option" onclick="responder(4,'Pinky promise',this)">
+        🤞 Pinky promise
+    </button>
+
+    <button class="option" onclick="responder(4,'No prometer nada',this)">
+        😶 No prometer nada
+    </button>
+
+    <button class="option" onclick="responder(4,'Olvidarlo todo',this)">
+        😭 Olvidarlo todo
+    </button>
+
+    <button class="option" onclick="responder(4,'No sé',this)">
+        🤷 No sé
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 6 -->
+
+<div class="question" id="q5">
+
+    <h2>
+        6. Si esta canción fuera una escena de nosotros,
+        ¿cuál escogerías?
+    </h2>
+
+    <button class="option" onclick="responder(5,'Un abrazo al atardecer',this)">
+        🌅 Un abrazo al atardecer
+    </button>
+
+    <button class="option" onclick="responder(5,'Una cita juntos',this)">
+        💕 Una cita juntos
+    </button>
+
+    <button class="option" onclick="responder(5,'Una aventura viajando',this)">
+        ✈️ Una aventura viajando
+    </button>
+
+    <button class="option" onclick="responder(5,'Todas las anteriores',this)">
+        🥹 Todas las anteriores
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 7 -->
+
+<div class="question" id="q6">
+
+    <h2>
+        7. ¿Qué te gustaría que esta canción
+        nos recuerde en el futuro?
+    </h2>
+
+    <button class="option" onclick="responder(6,'Lo mucho que nos queremos',this)">
+        ❤️ Lo mucho que nos queremos
+    </button>
+
+    <button class="option" onclick="responder(6,'Nuestro primer videojuego',this)">
+        🎮 Nuestro primer videojuego
+    </button>
+
+    <button class="option" onclick="responder(6,'Que nos daba sueño',this)">
+        😴 Que nos daba sueño
+    </button>
+
+    <button class="option" onclick="responder(6,'Nada',this)">
+        😐 Nada
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 8 -->
+
+<div class="question" id="q7">
+
+    <h2>
+        8. Si pudieras decirme una sola cosa
+        mientras escuchamos esta canción,
+        ¿qué sería?
+    </h2>
+
+    <textarea
+        id="respuestaLibre"
+        placeholder="Escribe algo bonito para tu Samis..."
+    ></textarea>
+
+    <button
+        class="next-btn"
+        onclick="responderLibre()"
+    >
+        ❤️ Guardar y continuar
+    </button>
+
+</div>
+
+
+<!-- RESULTADO -->
+
+<div id="resultado">
+
+    <div class="big-heart">
+        ❤️
+    </div>
+
+    <h2>
+        ¡Nivel completado!
+    </h2>
+
+    <p>
+        Mi pequeño Simba... 🎵
+    </p>
+
+    <p class="small">
+        Ahora esta canción también forma parte de nuestra historia.
+        Y quién sabe cuántos recuerdos nos faltan por crear juntos. ❤️
+    </p>
+
+    <h3>
+        ⭐ +1200 XP
+    </h3>
+
+    <button
+        class="finish-btn"
+        onclick="irAlMapa()"
+    >
+        🗺️ CONTINUAR AL MAPA
+    </button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+    "https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================
+   DATOS
+========================= */
+
+const correctas = [
+    "Amor",
+    "Un momento juntos",
+    "A mi Samis",
+    "Abrazarla",
+    "Pinky promise",
+    "Todas las anteriores",
+    "Lo mucho que nos queremos"
+];
+
+const preguntas = [
+    "Si esta canción fuera una sensación, ¿cuál sería?",
+    "Si escuchamos esta canción juntos, ¿qué recuerdo te gustaría crear?",
+    "Si tuvieras que dedicar esta canción a alguien especial, ¿a quién se la dedicarías?",
+    "Si estamos escuchando esta canción juntos, ¿qué preferirías hacer?",
+    "¿Qué promesa combina más con nuestra canción?",
+    "Si esta canción fuera una escena de nosotros, ¿cuál escogerías?",
+    "¿Qué te gustaría que esta canción nos recuerde en el futuro?",
+    "Si pudieras decirme una sola cosa mientras escuchamos esta canción, ¿qué sería?"
+];
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let preguntaActual = 0;
+let xpNivel = 0;
+let nivelTerminado = false;
+
+
+/* =========================
+   MOSTRAR PREGUNTA
+========================= */
+
+function mostrarPregunta(numero) {
+
+    for (let i = 0; i < 8; i++) {
+
+        const pregunta =
+            document.getElementById("q" + i);
+
+        pregunta.classList.remove("active");
+
+    }
+
+    document
+        .getElementById("q" + numero)
+        .classList.add("active");
+
+    document
+        .getElementById("progreso")
+        .textContent =
+        "Pregunta " + (numero + 1) + " de 8";
+
+}
+
+
+/* =========================
+   GUARDAR EN SUPABASE
+========================= */
+
+async function guardarEnSupabase(
+    pregunta,
+    respuesta
+) {
+
+    try {
+
+        const { error } =
+            await supabaseClient
+                .from("respuestas_nivel4")
+                .insert([{
+                    pregunta: pregunta,
+                    respuesta: respuesta,
+                    tipo: "Nivel 6 - Nuestra canción"
+                }]);
+
+        if (error) {
+            console.error(error);
+        }
+
+    } catch (error) {
+        console.error(error);
+    }
+
+}
+
+
+/* =========================
+   GUARDAR MENSAJE
+========================= */
+
+async function guardarMensaje() {
+
+    const mensaje =
+        document
+            .getElementById("mensaje")
+            .value
+            .trim();
+
+    if (!mensaje) {
+
+        alert(
+            "Escribe primero tu mensaje ❤️"
+        );
+
+        return;
+    }
+
+    await guardarEnSupabase(
+        "Mensaje sobre nuestra canción",
+        mensaje
+    );
+
+    document
+        .getElementById("mensaje")
+        .disabled = true;
+
+    document
+        .querySelector(".save-btn")
+        .disabled = true;
+
+    alert(
+        "💌 Tu mensaje quedó guardado."
+    );
+
+}
+
+
+/* =========================
+   RESPONDER OPCIÓN
+========================= */
+
+async function responder(
+    numero,
+    respuesta,
+    boton
+) {
+
+    /*
+     IMPORTANTE:
+     Solo permite responder la pregunta
+     que está actualmente visible.
+    */
+
+    if (numero !== preguntaActual) {
+        return;
+    }
+
+
+    if (respuesta !== correctas[numero]) {
+
+        alert(
+            "💭 Mmm... piensa bien, pequeño Simba ❤️"
+        );
+
+        return;
+    }
+
+
+    boton.classList.add("correct");
+
+
+    await guardarEnSupabase(
+        preguntas[numero],
+        respuesta
+    );
+
+
+    xpNivel += 150;
+
+    document
+        .getElementById("xpNivel")
+        .textContent = xpNivel;
+
+
+    setTimeout(function() {
+
+        preguntaActual++;
+
+        if (preguntaActual >= 8) {
+
+            completarNivel();
+
+        } else {
+
+            mostrarPregunta(
+                preguntaActual
+            );
+
+        }
+
+    }, 500);
+
+}
+
+
+/* =========================
+   RESPUESTA PREGUNTA 8
+========================= */
+
+async function responderLibre() {
+
+    if (preguntaActual !== 7) {
+        return;
+    }
+
+
+    const respuesta =
+        document
+            .getElementById("respuestaLibre")
+            .value
+            .trim();
+
+
+    if (!respuesta) {
+
+        alert(
+            "Escribe algo para tu Samis ❤️"
+        );
+
+        return;
+    }
+
+
+    await guardarEnSupabase(
+        preguntas[7],
+        respuesta
+    );
+
+
+    xpNivel += 150;
+
+    document
+        .getElementById("xpNivel")
+        .textContent = xpNivel;
+
+
+    completarNivel();
+
+}
+
+
+/* =========================
+   COMPLETAR NIVEL
+========================= */
+
+function completarNivel() {
+
+    if (nivelTerminado) {
+        return;
+    }
+
+    nivelTerminado = true;
+
+
+    /*
+     Guardamos los 1200 XP solamente
+     cuando termina todo el nivel.
+    */
+
+    let xpActual =
+        parseInt(
+            localStorage.getItem("xp") || "0"
+        );
+
+
+    xpActual += 1200;
+
+
+    localStorage.setItem(
+        "xp",
+        xpActual
+    );
+
+
+    localStorage.setItem(
+        "nivel6Completado",
+        "true"
+    );
+
+
+    for (let i = 0; i < 8; i++) {
+
+        document
+            .getElementById("q" + i)
+            .style.display = "none";
+
+    }
+
+
+    document
+        .getElementById("progreso")
+        .textContent =
+        "🎉 ¡Completaste las 8 preguntas!";
+
+
+    document
+        .getElementById("xpNivel")
+        .textContent = "1200";
+
+
+    document
+        .getElementById("resultado")
+        .style.display = "block";
+
+}
+
+
+/* =========================
+   INICIAR
+========================= */
+
+mostrarPregunta(0);
+
+
+/* =========================
+   VOLVER AL MAPA
+========================= */
+
+function irAlMapa() {
+
+    window.location.href =
+        "mapa.html";
+
+}
+
+</script>
+
+</body>
+</html>

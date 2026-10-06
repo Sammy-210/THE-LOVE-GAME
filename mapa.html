@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mapa - Mi Pequeño Simba</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #64183f 0%,
+                    #260819 45%,
+                    #080008 100%
+                );
+
+            padding: 30px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        /* ENCABEZADO */
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        header .lion {
+            font-size: 65px;
+            margin-bottom: 5px;
+        }
+
+        header h1 {
+            margin: 0;
+
+            color: #ff75b9;
+
+            font-size: 42px;
+
+            text-shadow:
+                0 0 15px rgba(255, 80, 170, 0.4);
+        }
+
+        header p {
+            color: #ffd5e8;
+            font-size: 18px;
+        }
+
+        /* XP */
+
+        .xp-box {
+            margin: 20px auto;
+
+            width: fit-content;
+
+            padding: 12px 28px;
+
+            background: #2d1028;
+
+            border: 1px solid #ff4fa3;
+
+            border-radius: 25px;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 0 15px rgba(255, 70, 160, 0.2);
+        }
+
+        /* PROGRESO */
+
+        .progress-box {
+            max-width: 600px;
+
+            margin: 0 auto 35px;
+
+            text-align: center;
+        }
+
+        .progress-text {
+            color: #ffc5df;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+
+            height: 14px;
+
+            background: #351127;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            border: 1px solid #71335a;
+        }
+
+        .progress-fill {
+            height: 100%;
+
+            width: 0%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff3f9f,
+                    #ff91c9
+                );
+
+            border-radius: 20px;
+
+            transition: width 0.5s;
+        }
+
+        /* MAPA */
+
+        .mapa {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(240px, 1fr));
+
+            gap: 20px;
+        }
+
+        /* TARJETAS */
+
+        .level {
+            position: relative;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(42, 12, 38, 0.98),
+                    rgba(18, 5, 20, 0.98)
+                );
+
+            border: 1px solid #633052;
+
+            border-radius: 24px;
+
+            padding: 24px;
+
+            text-align: center;
+
+            transition: 0.3s;
+
+            min-height: 290px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: space-between;
+        }
+
+        .level.unlocked {
+            border-color: #ff4fa3;
+
+            box-shadow:
+                0 0 20px rgba(255, 60, 160, 0.18);
+        }
+
+        .level.unlocked:hover {
+            transform: translateY(-6px);
+
+            box-shadow:
+                0 0 30px rgba(255, 60, 160, 0.35);
+        }
+
+        .level.completed {
+            border-color: #55df9b;
+
+            box-shadow:
+                0 0 20px rgba(80, 220, 150, 0.15);
+        }
+
+        .level.locked {
+            opacity: 0.5;
+        }
+
+        /* ICONO */
+
+        .icon {
+            font-size: 48px;
+
+            margin-bottom: 8px;
+        }
+
+        /* NUMERO */
+
+        .level-number {
+            color: #ff8bc4;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+        }
+
+        /* TITULO */
+
+        .level h2 {
+            color: #ff78bc;
+
+            font-size: 20px;
+
+            margin: 8px 0;
+        }
+
+        .level p {
+            color: #e8c8d9;
+
+            line-height: 1.5;
+
+            margin: 8px 0 15px;
+        }
+
+        /* BOTON */
+
+        .button {
+            display: inline-block;
+
+            padding: 11px 22px;
+
+            border: none;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff3f9f,
+                    #ff70b5
+                );
+
+            color: white;
+
+            font-weight: bold;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+        }
+
+        /* COMPLETADO */
+
+        .completed-badge {
+            display: inline-block;
+
+            margin-bottom: 10px;
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            background: rgba(65, 220, 145, 0.12);
+
+            border: 1px solid #55df9b;
+
+            color: #6df0ae;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        /* BLOQUEADO */
+
+        .locked-text {
+            color: #a98b9f;
+
+            font-weight: bold;
+
+            padding: 12px;
+        }
+
+        /* PIE */
+
+        .back {
+            display: block;
+
+            width: fit-content;
+
+            margin: 40px auto 20px;
+
+            padding: 13px 25px;
+
+            border-radius: 25px;
+
+            background: #321225;
+
+            color: white;
+
+            text-decoration: none;
+
+            border: 1px solid #71345a;
+        }
+
+        .back:hover {
+            background: #4b1938;
+        }
+
+        .footer {
+            text-align: center;
+
+            color: #806579;
+
+            font-size: 13px;
+
+            margin-top: 15px;
+        }
+
+        /* MOVIL */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 20px 12px;
+            }
+
+            header h1 {
+                font-size: 31px;
+            }
+
+            header .lion {
+                font-size: 52px;
+            }
+
+            .mapa {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <header>
+
+        <div class="lion">
+            🦁
+        </div>
+
+        <h1>
+            MI PEQUEÑO SIMBA
+        </h1>
+
+        <p>
+            🗺️ Mapa de nuestra aventura ❤️
+        </p>
+
+        <div class="xp-box">
+
+            ⭐ XP:
+            <span id="xp">
+                0
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- PROGRESO -->
+
+    <div class="progress-box">
+
+        <div
+            class="progress-text"
+            id="progressText">
+
+            1 de 23 niveles desbloqueados
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="progressFill">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- NIVELES -->
+
+    <div
+        class="mapa"
+        id="mapa">
+    </div>
+
+
+    <a
+        href="index.html"
+        class="back">
+
+        ❤️ Volver a la portada
+
+    </a>
+
+
+    <div class="footer">
+
+        Hecho con mucho amor por tu Samis 💕🦁
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /*
+    ==================================================
+    DATOS DE LOS 23 NIVELES
+    ==================================================
+    */
+
+    const niveles = [
+
+        {
+            numero: 1,
+            titulo: "¿Cuánto conoces a tu Samis?",
+            descripcion: "Demuestra cuánto sabes sobre ella.",
+            icono: "💗",
+            archivo: "nivel1.html"
+        },
+
+        {
+            numero: 2,
+            titulo: "Nuestros recuerdos",
+            descripcion: "Recuerda nuestra historia.",
+            icono: "🥹",
+            archivo: "nivel2.html"
+        },
+
+        {
+            numero: 3,
+            titulo: "Lo que nunca te dije",
+            descripcion: "Descubre lo que Samis siente por ti.",
+            icono: "💌",
+            archivo: "nivel3.html"
+        },
+
+        {
+            numero: 4,
+            titulo: "Verdad o reto",
+            descripcion: "Atrévete a jugar.",
+            icono: "😈",
+            archivo: "nivel4.html"
+        },
+
+        {
+            numero: 5,
+            titulo: "Ruleta de citas",
+            descripcion: "¿Qué cita tendremos?",
+            icono: "🎡",
+            archivo: "nivel5.html"
+        },
+
+        {
+            numero: 6,
+            titulo: "Nuestra canción",
+            descripcion: "Una canción dedicada especialmente para ti.",
+            icono: "🎵",
+            archivo: "nivel6.html"
+        },
+
+        {
+            numero: 7,
+            titulo: "Medidor de amor",
+            descripcion: "Descubre el resultado de tu aventura.",
+            icono: "❤️",
+            archivo: "nivel7.html"
+        },
+
+        {
+            numero: 8,
+            titulo: "Cofre de premios",
+            descripcion: "Usa tus puntos para conseguir premios.",
+            icono: "🎁",
+            archivo: "nivel8.html"
+        },
+
+        {
+            numero: 9,
+            titulo: "Logros secretos",
+            descripcion: "Encuentra los secretos escondidos.",
+            icono: "🏆",
+            archivo: "nivel9.html"
+        },
+
+        {
+            numero: 10,
+            titulo: "Nuestro futuro",
+            descripcion: "Elige las aventuras que quieres vivir.",
+            icono: "✨",
+            archivo: "nivel10.html"
+        },
+
+        {
+            numero: 11,
+            titulo: "Jefe final",
+            descripcion: "Una prueba especial.",
+            icono: "👑",
+            archivo: "nivel11.html"
+        },
+
+        {
+            numero: 12,
+            titulo: "Bonus: Samis",
+            descripcion: "¿Realmente conoces a tu Samis?",
+            icono: "🎀",
+            archivo: "nivel12.html"
+        },
+
+        {
+            numero: 13,
+            titulo: "Archivo secreto",
+            descripcion: "Archivos clasificados.",
+            icono: "🗂️",
+            archivo: "nivel13.html"
+        },
+
+        {
+            numero: 14,
+            titulo: "Álbum de recuerdos",
+            descripcion: "Creemos nuestros futuros recuerdos.",
+            icono: "📸",
+            archivo: "nivel14.html"
+        },
+
+        {
+            numero: 15,
+            titulo: "Final especial",
+            descripcion: "Una sorpresa para ti.",
+            icono: "💝",
+            archivo: "nivel15.html"
+        },
+
+        {
+            numero: 16,
+            titulo: "Lo que Samis piensa cuando te ve",
+            descripcion: "Descubre lo que pasa por su mente.",
+            icono: "💭",
+            archivo: "nivel16.html"
+        },
+
+        {
+            numero: 17,
+            titulo: "Compatibilidad Donovan ❤️ Samantha",
+            descripcion: "Descubre qué tan compatibles somos.",
+            icono: "💞",
+            archivo: "nivel17.html"
+        },
+
+        {
+            numero: 18,
+            titulo: "¿Qué tan enamorado estás?",
+            descripcion: "Descúbrelo jugando.",
+            icono: "🥰",
+            archivo: "nivel18.html"
+        },
+
+        {
+            numero: 19,
+            titulo: "Caja negra",
+            descripcion: "Algo está escondido aquí dentro.",
+            icono: "🖤",
+            archivo: "nivel19.html"
+        },
+
+        {
+            numero: 20,
+            titulo: "Prueba Simba",
+            descripcion: "Demuestra que eres el pequeño Simba.",
+            icono: "🦁",
+            archivo: "nivel20.html"
+        },
+
+        {
+            numero: 21,
+            titulo: "1000 XP",
+            descripcion: "Un secreto aparece al conseguirlo.",
+            icono: "⭐",
+            archivo: "nivel21.html"
+        },
+
+        {
+            numero: 22,
+            titulo: "Cápsula del tiempo",
+            descripcion: "Guarda algo para nuestro futuro.",
+            icono: "⏳",
+            archivo: "nivel22.html"
+        },
+
+        {
+            numero: 23,
+            titulo: "FINAL VERDADERO",
+            descripcion: "El último nivel de nuestra aventura. ❤️",
+            icono: "💖",
+            archivo: "nivel23.html"
+        }
+
+    ];
+
+
+    /*
+    ==================================================
+    FUNCIÓN PARA SABER SI UN NIVEL ESTÁ COMPLETADO
+    ==================================================
+    */
+
+    function nivelCompletado(numero) {
+
+        return localStorage.getItem(
+            "nivel" + numero + "Completado"
+        ) === "true";
+
+    }
+
+
+    /*
+    ==================================================
+    FUNCIÓN PARA SABER SI UN NIVEL ESTÁ DESBLOQUEADO
+    ==================================================
+
+    Nivel 1 siempre está disponible.
+
+    Los demás se desbloquean cuando el anterior
+    ha sido completado.
+    */
+
+    function nivelDesbloqueado(numero) {
+
+        if (numero === 1) {
+            return true;
+        }
+
+        return nivelCompletado(numero - 1);
+
+    }
+
+
+    /*
+    ==================================================
+    MOSTRAR XP
+    ==================================================
+    */
+
+    const xp =
+        parseInt(
+            localStorage.getItem("xp")
+        ) || 0;
+
+    document.getElementById("xp").innerText =
+        xp;
+
+
+    /*
+    ==================================================
+    CREAR EL MAPA
+    ==================================================
+    */
+
+    const mapa =
+        document.getElementById("mapa");
+
+
+    let nivelesDesbloqueados = 0;
+
+
+    niveles.forEach(nivel => {
+
+        const desbloqueado =
+            nivelDesbloqueado(
+                nivel.numero
+            );
+
+
+        const completado =
+            nivelCompletado(
+                nivel.numero
+            );
+
+
+        if (desbloqueado) {
+
+            nivelesDesbloqueados++;
+
+        }
+
+
+        const tarjeta =
+            document.createElement("div");
+
+
+        tarjeta.className =
+            "level " +
+            (desbloqueado
+                ? "unlocked"
+                : "locked") +
+            (completado
+                ? " completed"
+                : "");
+
+
+        /*
+        ==============================================
+        NIVEL DESBLOQUEADO
+        ==============================================
+        */
+
+        if (desbloqueado) {
+
+            tarjeta.innerHTML = `
+
+                <div>
+
+                    <div class="icon">
+                        ${nivel.icono}
+                    </div>
+
+                    <div class="level-number">
+                        NIVEL ${nivel.numero}
+                    </div>
+
+                    <h2>
+                        ${nivel.titulo}
+                    </h2>
+
+                    <p>
+                        ${nivel.descripcion}
+                    </p>
+
+                </div>
+
+                <div>
+
+                    ${
+                        completado
+                        ?
+                        `
+                        <div class="completed-badge">
+                            ✅ COMPLETADO
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
+                    <a
+                        href="${nivel.archivo}"
+                        class="button">
+
+                        ${
+                            completado
+                            ?
+                            "🔄 Jugar de nuevo"
+                            :
+                            "❤️ Entrar"
+                        }
+
+                    </a>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /*
+        ==============================================
+        NIVEL BLOQUEADO
+        ==============================================
+        */
+
+        else {
+
+            tarjeta.innerHTML = `
+
+                <div>
+
+                    <div class="icon">
+                        🔒
+                    </div>
+
+                    <div class="level-number">
+                        NIVEL ${nivel.numero}
+                    </div>
+
+                    <h2>
+                        ${nivel.titulo}
+                    </h2>
+
+                    <p>
+                        ${nivel.descripcion}
+                    </p>
+
+                </div>
+
+                <div class="locked-text">
+
+                    🔒 Completa el nivel
+                    ${nivel.numero - 1}
+                    para desbloquearlo
+
+                </div>
+
+            `;
+
+        }
+
+
+        mapa.appendChild(tarjeta);
+
+    });
+
+
+    /*
+    ==================================================
+    BARRA DE PROGRESO
+    ==================================================
+    */
+
+    const porcentaje =
+        (nivelesDesbloqueados / niveles.length) * 100;
+
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+        porcentaje + "%";
+
+
+    document.getElementById(
+        "progressText"
+    ).innerText =
+        nivelesDesbloqueados +
+        " de " +
+        niveles.length +
+        " niveles desbloqueados";
+
+
+</script>
+
+</body>
+</html>

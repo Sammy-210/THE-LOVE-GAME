@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Nivel 3 - Lo que nunca te dije
+    </title>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #64183f 0%,
+                    #260819 45%,
+                    #080008 100%
+                );
+
+            padding: 30px 20px;
+        }
+
+
+        .container {
+
+            width: 100%;
+
+            max-width: 850px;
+
+            margin: auto;
+        }
+
+
+        .game {
+
+            background:
+                rgba(20, 5, 20, 0.95);
+
+            border:
+                2px solid #ff4fa3;
+
+            border-radius: 30px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 0 40px
+                rgba(255, 50, 150, 0.35);
+        }
+
+
+        .top {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .level {
+
+            color: #ff76b8;
+
+            font-weight: bold;
+
+            font-size: 18px;
+        }
+
+
+        .xp {
+
+            background: #2d1028;
+
+            border:
+                1px solid #ff4fa3;
+
+            padding:
+                10px 18px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+        }
+
+
+        h1 {
+
+            text-align: center;
+
+            color: #ff78bc;
+
+            font-size: 36px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #ffd5e8;
+
+            font-size: 18px;
+
+            line-height: 1.6;
+
+            margin-bottom: 30px;
+        }
+
+
+        .letter {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #351126,
+                    #1c0a19
+                );
+
+            border:
+                1px solid #8f3568;
+
+            border-radius: 25px;
+
+            padding: 30px;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .envelope {
+
+            font-size: 65px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .secret-number {
+
+            color: #ff79bc;
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .question {
+
+            font-size: 23px;
+
+            line-height: 1.5;
+
+            margin-bottom: 25px;
+        }
+
+
+        .answers {
+
+            display: grid;
+
+            gap: 12px;
+        }
+
+
+        .answer {
+
+            width: 100%;
+
+            padding: 15px;
+
+            background: #241020;
+
+            color: white;
+
+            border:
+                1px solid #8f3568;
+
+            border-radius: 15px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            text-align: left;
+
+            transition: 0.25s;
+        }
+
+
+        .answer:hover {
+
+            background: #461638;
+
+            border-color: #ff5cac;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        .answer.correct {
+
+            background: #164d36;
+
+            border-color: #42e49a;
+        }
+
+
+        .answer.wrong {
+
+            background: #5a172d;
+
+            border-color: #ff5478;
+        }
+
+
+        .feedback {
+
+            min-height: 35px;
+
+            margin-top: 18px;
+
+            font-size: 17px;
+
+            line-height: 1.5;
+        }
+
+
+        .message {
+
+            display: none;
+
+            margin-top: 25px;
+
+            padding: 25px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(255, 79, 163, 0.09);
+
+            border:
+                1px solid #ff4fa3;
+
+            color: #ffd9e9;
+
+            font-size: 18px;
+
+            line-height: 1.7;
+        }
+
+
+        .next {
+
+            display: none;
+
+            margin:
+                25px auto 0;
+
+            padding:
+                14px 30px;
+
+            border: none;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff3f9f,
+                    #ff76b9
+                );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .next:hover {
+
+            transform:
+                scale(1.04);
+        }
+
+
+        .finished {
+
+            display: none;
+
+            text-align: center;
+        }
+
+
+        .finished .hearts {
+
+            font-size: 65px;
+        }
+
+
+        .finished h2 {
+
+            color: #ff78bc;
+
+            font-size: 32px;
+        }
+
+
+        .finished p {
+
+            color: #ffd7e9;
+
+            font-size: 19px;
+
+            line-height: 1.7;
+        }
+
+
+        .map-button {
+
+            margin-top: 20px;
+
+            padding:
+                15px 30px;
+
+            border: none;
+
+            border-radius: 25px;
+
+            background: #ff4fa3;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .map-button:hover {
+
+            background: #ff78bb;
+        }
+
+
+        @media (max-width: 600px) {
+
+            h1 {
+
+                font-size: 28px;
+            }
+
+
+            .question {
+
+                font-size: 20px;
+            }
+
+
+            .game {
+
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+    <div class="game">
+
+
+        <div class="top">
+
+            <div class="level">
+
+                💌 NIVEL 3
+
+            </div>
+
+
+            <div class="xp">
+
+                ⭐ XP:
+
+                <span id="xp">
+
+                    0
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <h1>
+
+            Lo que nunca te dije 💌
+
+        </h1>
+
+
+        <p class="subtitle">
+
+            Hay algunas cosas que quizá nunca te he dicho
+            directamente... 🥹❤️
+
+            <br>
+
+            Responde correctamente y podrás descubrirlas
+            una por una.
+
+        </p>
+
+
+        <div id="gameArea">
+
+
+            <div class="letter">
+
+
+                <div class="envelope">
+
+                    💌
+
+                </div>
+
+
+                <div
+                    class="secret-number"
+                    id="secretNumber">
+
+                    SECRETO 1 DE 6
+
+                </div>
+
+
+                <div
+                    class="question"
+                    id="question">
+
+                </div>
+
+
+                <div
+                    class="answers"
+                    id="answers">
+
+                </div>
+
+
+                <div
+                    class="feedback"
+                    id="feedback">
+
+                </div>
+
+
+                <div
+                    class="message"
+                    id="message">
+
+                </div>
+
+
+                <button
+                    class="next"
+                    id="nextButton"
+                    onclick="siguiente()">
+
+                    Abrir siguiente secreto 💌
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div
+            class="finished"
+            id="finished">
+
+
+            <div class="hearts">
+
+                💌❤️🦁❤️💌
+
+            </div>
+
+
+            <h2>
+
+                Has descubierto mis secretos ❤️
+
+            </h2>
+
+
+            <p>
+
+                Mi pequeño Simba...
+
+                <br><br>
+
+                Tal vez algunas de estas cosas
+                nunca te las había dicho así,
+                pero todas salen de mi corazón. 🥹
+
+                <br><br>
+
+                Ahora ya estás un paso más cerca
+                del siguiente nivel.
+
+            </p>
+
+
+            <p>
+
+                ⭐ Has conseguido
+
+                <strong>
+                    +600 XP
+                </strong>
+
+            </p>
+
+
+            <button
+                class="map-button"
+                onclick="irAlMapa()">
+
+                🗺️ Volver al mapa
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+    const secretos = [
+
+
+        {
+
+            pregunta:
+                "Cuando estoy contigo, ¿qué siento más? ❤️",
+
+            respuestas: [
+
+                "Nervios, felicidad y tranquilidad",
+
+                "Solo nervios",
+
+                "Aburrimiento",
+
+                "Nada especial"
+
+            ],
+
+            correcta: 0,
+
+            mensaje:
+                "Cuando estoy contigo siento una mezcla muy bonita de nervios, felicidad y tranquilidad. 🥹❤️"
+
+        },
+
+
+        {
+
+            pregunta:
+                "¿Qué es una de las cosas que más me gusta de ti? 👀",
+
+            respuestas: [
+
+                "Solo tu ropa",
+
+                "Tus ojos y tu sonrisa",
+
+                "Que siempre llegues tarde",
+
+                "Que me hagas enojar"
+
+            ],
+
+            correcta: 1,
+
+            mensaje:
+                "Me encantan tus ojos, tu sonrisa y también la manera en que me tratas. Hay muchas cosas de ti que me encantan. 💗"
+
+        },
+
+
+        {
+
+            pregunta:
+                "¿Cómo describiría a mi pequeño Simba? 🦁",
+
+            respuestas: [
+
+                "Normal y aburrido",
+
+                "Único, perfecto y maravilloso",
+
+                "Muy serio siempre",
+
+                "No sabría decirlo"
+
+            ],
+
+            correcta: 1,
+
+            mensaje:
+                "Para mí eres alguien único, perfecto y maravilloso. ❤️🦁"
+
+        },
+
+
+        {
+
+            pregunta:
+                "¿Qué quiero hacer contigo en el futuro? ✨",
+
+            respuestas: [
+
+                "No volver a salir",
+
+                "Verte menos",
+
+                "Conocernos más, salir y conocer muchos lugares juntos",
+
+                "Solo hablar por mensajes"
+
+            ],
+
+            correcta: 2,
+
+            mensaje:
+                "Quiero verte mucho más, ir a muchos lugares contigo y vivir muchas experiencias juntos. 🥹💗"
+
+        },
+
+
+        {
+
+            pregunta:
+                "¿Qué deseo para lo que tenemos? ❤️",
+
+            respuestas: [
+
+                "Que termine rápido",
+
+                "Que nunca cambie y que nunca termine",
+
+                "Que solo dure unos días",
+
+                "No sé"
+
+            ],
+
+            correcta: 1,
+
+            mensaje:
+                "Una de las cosas que más deseo es que esto que tenemos nunca termine. ❤️"
+
+        },
+
+
+        {
+
+            pregunta:
+                "¿Qué pregunta especial podría hacerte al final de esta aventura? 🥹",
+
+            respuestas: [
+
+                "¿Quieres una pizza?",
+
+                "¿Quieres dormir?",
+
+                "¿Quieres seguir siendo mi pequeño Simba?",
+
+                "¿Quieres jugar otro juego?"
+
+            ],
+
+            correcta: 2,
+
+            mensaje:
+                "Si llegaste hasta aquí, quizá ya sabes la respuesta que más quería que encontraras... ¿Quieres seguir siendo mi pequeño Simba? 🦁❤️"
+
+        }
+
+
+    ];
+
+
+    let actual = 0;
+
+    let xpGanado = 0;
+
+    let respondido = false;
+
+
+    const question =
+        document.getElementById("question");
+
+
+    const answers =
+        document.getElementById("answers");
+
+
+    const feedback =
+        document.getElementById("feedback");
+
+
+    const message =
+        document.getElementById("message");
+
+
+    const nextButton =
+        document.getElementById("nextButton");
+
+
+    const secretNumber =
+        document.getElementById("secretNumber");
+
+
+    const xpTexto =
+        document.getElementById("xp");
+
+
+    function mostrarSecreto() {
+
+
+        respondido = false;
+
+
+        feedback.innerHTML = "";
+
+        message.style.display = "none";
+
+        nextButton.style.display = "none";
+
+
+        const secreto =
+            secretos[actual];
+
+
+        secretNumber.innerText =
+            "SECRETO " +
+            (actual + 1) +
+            " DE " +
+            secretos.length;
+
+
+        question.innerText =
+            secreto.pregunta;
+
+
+        answers.innerHTML = "";
+
+
+        secreto.respuestas.forEach(
+
+            (respuesta, indice) => {
+
+
+                const boton =
+                    document.createElement("button");
+
+
+                boton.className =
+                    "answer";
+
+
+                boton.innerText =
+                    respuesta;
+
+
+                boton.onclick =
+                    function() {
+
+                        seleccionar(
+                            indice,
+                            boton
+                        );
+
+                    };
+
+
+                answers.appendChild(
+                    boton
+                );
+
+            }
+
+        );
+
+    }
+
+
+    function seleccionar(
+        indice,
+        boton
+    ) {
+
+
+        if (respondido) {
+
+            return;
+
+        }
+
+
+        respondido = true;
+
+
+        const correcta =
+            secretos[actual].correcta;
+
+
+        const botones =
+            document.querySelectorAll(
+                ".answer"
+            );
+
+
+        botones.forEach(
+            boton => {
+
+                boton.disabled = true;
+
+            }
+        );
+
+
+        if (indice === correcta) {
+
+
+            boton.classList.add(
+                "correct"
+            );
+
+
+            xpGanado += 100;
+
+
+            feedback.innerHTML =
+                "💗 ¡Correcto! Has desbloqueado un secreto.";
+
+
+            message.innerHTML =
+                "💌 <strong>Lo que Samis quería decirte:</strong><br><br>" +
+                secretos[actual].mensaje;
+
+
+            message.style.display =
+                "block";
+
+
+        } else {
+
+
+            boton.classList.add(
+                "wrong"
+            );
+
+
+            botones[correcta]
+                .classList.add(
+                    "correct"
+                );
+
+
+            feedback.innerHTML =
+                "🥺 Casi... intenta recordar un poquito más.";
+
+
+            /*
+            Si se equivoca, no puede abrir
+            el secreto todavía.
+            */
+
+            respondido = false;
+
+
+            botones.forEach(
+                boton => {
+
+                    boton.disabled = false;
+
+                }
+            );
+
+
+            return;
+
+        }
+
+
+        xpTexto.innerText =
+            xpGanado;
+
+
+        nextButton.style.display =
+            "block";
+
+    }
+
+
+    function siguiente() {
+
+
+        actual++;
+
+
+        if (
+            actual >=
+            secretos.length
+        ) {
+
+
+            terminarNivel();
+
+
+        } else {
+
+
+            mostrarSecreto();
+
+        }
+
+    }
+
+
+    function terminarNivel() {
+
+
+        document.getElementById(
+            "gameArea"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "finished"
+        ).style.display =
+            "block";
+
+
+        let xpAnterior =
+            parseInt(
+                localStorage.getItem("xp")
+            ) || 0;
+
+
+        let nuevoXP =
+            xpAnterior +
+            xpGanado;
+
+
+        localStorage.setItem(
+            "xp",
+            nuevoXP
+        );
+
+
+        /*
+        ======================================
+        MARCAR NIVEL 3 COMO COMPLETADO
+        ======================================
+        */
+
+        localStorage.setItem(
+            "nivel3Completado",
+            "true"
+        );
+
+
+    }
+
+
+    function irAlMapa() {
+
+
+        window.location.href =
+            "mapa.html";
+
+    }
+
+
+    mostrarSecreto();
+
+
+</script>
+
+
+</body>
+
+</html>

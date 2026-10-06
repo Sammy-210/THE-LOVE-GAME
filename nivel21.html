@@ -1,0 +1,1081 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nivel 21 — Reto de las 1000 XP ⭐</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top,#40132c,transparent 40%),
+        linear-gradient(135deg,#030303,#160810,#050505);
+    padding:25px;
+}
+
+.container{
+    max-width:850px;
+    margin:auto;
+    text-align:center;
+}
+
+h1{
+    font-size:42px;
+    color:#ff9ac5;
+    text-shadow:0 0 20px #ff4f9a;
+    margin-bottom:5px;
+}
+
+.subtitulo{
+    color:#ffc5dd;
+    margin-bottom:20px;
+}
+
+.xp{
+    display:inline-block;
+    padding:10px 25px;
+    border:2px solid #ff4f9a;
+    border-radius:25px;
+    background:#10090d;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,100,160,.5);
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 0 35px rgba(255,40,120,.25);
+}
+
+.icono{
+    font-size:70px;
+}
+
+h2{
+    color:#ff9ac5;
+    font-size:28px;
+}
+
+.texto{
+    color:#ddd;
+    line-height:1.7;
+    font-size:17px;
+}
+
+.boton{
+    padding:15px 28px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(90deg,#b71961,#ef4d91);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin:8px;
+}
+
+.boton:hover{
+    transform:scale(1.04);
+    box-shadow:0 0 20px #ff4f9a;
+}
+
+.reto{
+    display:none;
+}
+
+.pregunta{
+    font-size:23px;
+    line-height:1.5;
+    margin:25px 0;
+}
+
+.opciones{
+    display:grid;
+    gap:13px;
+}
+
+.opcion{
+    padding:17px;
+    border:none;
+    border-radius:15px;
+    background:linear-gradient(90deg,#67143b,#c72d70);
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+}
+
+.opcion:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 18px #ff4f9a;
+}
+
+.mensaje{
+    min-height:30px;
+    margin-top:20px;
+    color:#ffb6d5;
+    font-weight:bold;
+}
+
+.estrellas{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:20px 0;
+}
+
+.estrella{
+    font-size:28px;
+    opacity:.25;
+    transition:.3s;
+}
+
+.estrella.ganada{
+    opacity:1;
+    transform:scale(1.2);
+    filter:drop-shadow(0 0 8px #ffca3a);
+}
+
+.contador{
+    color:#ddd;
+    margin-bottom:10px;
+}
+
+.barra{
+    height:12px;
+    background:#29151e;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.barraInterna{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#ff4f9a,#ffd15c);
+    transition:.5s;
+}
+
+input{
+    width:100%;
+    max-width:400px;
+    padding:15px;
+    border-radius:12px;
+    border:2px solid #8d3560;
+    background:#0d080b;
+    color:white;
+    font-size:19px;
+    text-align:center;
+    outline:none;
+}
+
+input:focus{
+    border-color:#ff4f9a;
+    box-shadow:0 0 15px rgba(255,70,150,.4);
+}
+
+.final{
+    display:none;
+}
+
+.final h2{
+    font-size:38px;
+}
+
+.granEstrella{
+    font-size:100px;
+    animation:brillar 1.2s infinite alternate;
+}
+
+@keyframes brillar{
+
+    from{
+        transform:scale(1);
+        filter:drop-shadow(0 0 5px #ffca3a);
+    }
+
+    to{
+        transform:scale(1.18);
+        filter:drop-shadow(0 0 30px #ffca3a);
+    }
+
+}
+
+.finalTexto{
+    font-size:19px;
+    line-height:1.8;
+}
+
+@media(max-width:600px){
+
+    h1{
+        font-size:32px;
+    }
+
+    .card{
+        padding:22px;
+    }
+
+    .pregunta{
+        font-size:20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>⭐ RETO DE LAS 1000 XP</h1>
+
+<div class="subtitulo">
+    NIVEL 21 — CONSIGUE LAS 10 ESTRELLAS
+</div>
+
+<div class="xp">
+    ⭐ XP: <span id="xp">0</span>
+</div>
+
+
+<!-- INICIO -->
+
+<div id="inicio" class="card">
+
+    <div class="icono">
+        🌟
+    </div>
+
+    <h2>
+        EL RETO DE LAS 1000 XP
+    </h2>
+
+    <p class="texto">
+
+        Pequeño Simba, llegaste al nivel donde
+        cada estrella vale exactamente
+        <strong>100 XP</strong>.
+
+        <br><br>
+
+        Hay <strong>10 estrellas</strong> escondidas.
+
+        <br><br>
+
+        Cada una tiene un reto diferente.
+
+        <br><br>
+
+        Consigue las 10 y desbloquea:
+
+        <br><br>
+
+        ⭐ <strong>1000 XP</strong> ⭐
+
+    </p>
+
+    <button
+        class="boton"
+        onclick="iniciar()">
+
+        ⭐ ACEPTAR RETO
+
+    </button>
+
+</div>
+
+
+<!-- RETOS -->
+
+<div id="reto" class="card reto">
+
+    <div class="estrellas" id="estrellas">
+
+        <span class="estrella">⭐</span>
+        <span class="estrella">⭐</span>
+        <span class="estrella">⭐</span>
+        <span class="estrella">⭐</span>
+        <span class="estrella">⭐</span>
+        <span class="estrella">⭐</span>
+        <span class="estrella">⭐</span>
+        <span class="estrella">⭐</span>
+        <span class="estrella">⭐</span>
+        <span class="estrella">⭐</span>
+
+    </div>
+
+    <div class="contador">
+        Estrella <span id="numero">1</span> de 10
+    </div>
+
+    <div class="barra">
+        <div
+            class="barraInterna"
+            id="barra">
+        </div>
+    </div>
+
+    <div
+        class="icono"
+        id="icono">
+        🎯
+    </div>
+
+    <h2 id="titulo"></h2>
+
+    <div
+        class="pregunta"
+        id="pregunta">
+    </div>
+
+    <div id="contenido"></div>
+
+    <div
+        class="opciones"
+        id="opciones">
+    </div>
+
+    <div
+        class="mensaje"
+        id="mensaje">
+    </div>
+
+</div>
+
+
+<!-- FINAL -->
+
+<div id="final" class="card final">
+
+    <div class="granEstrella">
+        ⭐
+    </div>
+
+    <h2>
+        ¡1000 XP CONSEGUIDAS!
+    </h2>
+
+    <div class="finalTexto">
+
+        <p>
+            🦁 ¡Lo lograste, pequeño Simba!
+        </p>
+
+        <p>
+            Conseguíste las 10 estrellas
+            y completaste el reto.
+        </p>
+
+        <p>
+            ⭐ <strong>+1000 XP</strong>
+        </p>
+
+        <p>
+            Ya estás entrando a la parte
+            más misteriosa del juego...
+        </p>
+
+        <p>
+            ⏳ El siguiente nivel no será
+            una prueba normal.
+        </p>
+
+        <p>
+            <strong>
+                Algo quedará guardado para
+                el futuro...
+            </strong>
+        </p>
+
+        <p>
+            🔓 <strong>Nivel 22 desbloqueado.</strong>
+        </p>
+
+    </div>
+
+    <a
+        href="mapa.html"
+        class="boton">
+
+        🗺️ CONTINUAR AL NIVEL 22
+
+    </a>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   XP
+========================= */
+
+let xp=parseInt(
+    localStorage.getItem("xp") || "0"
+);
+
+document.getElementById("xp")
+    .textContent=xp;
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let retoActual=0;
+
+
+/* =========================
+   INICIAR
+========================= */
+
+function iniciar(){
+
+    document.getElementById("inicio")
+        .style.display="none";
+
+    document.getElementById("reto")
+        .style.display="block";
+
+    mostrarReto();
+
+}
+
+
+/* =========================
+   MOSTRAR RETO
+========================= */
+
+function mostrarReto(){
+
+    document.getElementById("numero")
+        .textContent=retoActual+1;
+
+    document.getElementById("barra")
+        .style.width=
+        (retoActual/10*100)+"%";
+
+    document.getElementById("mensaje")
+        .textContent="";
+
+    document.getElementById("contenido")
+        .innerHTML="";
+
+    document.getElementById("opciones")
+        .innerHTML="";
+
+
+    const estrella=
+        document.querySelectorAll(".estrella")
+        [retoActual];
+
+    if(estrella){
+
+        estrella.classList.add("ganada");
+
+    }
+
+
+    switch(retoActual){
+
+        case 0:
+            reto1();
+            break;
+
+        case 1:
+            reto2();
+            break;
+
+        case 2:
+            reto3();
+            break;
+
+        case 3:
+            reto4();
+            break;
+
+        case 4:
+            reto5();
+            break;
+
+        case 5:
+            reto6();
+            break;
+
+        case 6:
+            reto7();
+            break;
+
+        case 7:
+            reto8();
+            break;
+
+        case 8:
+            reto9();
+            break;
+
+        case 9:
+            reto10();
+            break;
+
+    }
+
+}
+
+
+/* =========================
+   RETO 1
+========================= */
+
+function reto1(){
+
+    titulo(
+        "🎯 RETO 1 — ELECCIÓN IMPOSIBLE"
+    );
+
+    pregunta(
+        "Tienes tres botones. Solo uno activa la primera estrella. ¿Cuál eliges?"
+    );
+
+    opciones([
+
+        ["🔴 BOTÓN ROJO",false],
+
+        ["💗 BOTÓN ROSA",true],
+
+        ["⚫ BOTÓN NEGRO",false]
+
+    ]);
+
+}
+
+
+/* =========================
+   RETO 2
+========================= */
+
+function reto2(){
+
+    titulo(
+        "🧩 RETO 2 — LA PALABRA ESCONDIDA"
+    );
+
+    pregunta(
+        "¿Qué palabra aparece si unes las primeras letras de: Simba, Amor, Misterio, Inolvidable?"
+    );
+
+    opciones([
+
+        ["SAMI",true],
+
+        ["SIMBA",false],
+
+        ["AMOR",false],
+
+        ["MIMO",false]
+
+    ]);
+
+}
+
+
+/* =========================
+   RETO 3
+========================= */
+
+function reto3(){
+
+    titulo(
+        "🔢 RETO 3 — NÚMERO PERDIDO"
+    );
+
+    pregunta(
+        "Completa la secuencia: 5, 10, 20, 40, ___"
+    );
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <input
+            id="respuesta"
+            type="number"
+            placeholder="Escribe el número">
+
+        <br>
+
+        <button
+            class="boton"
+            onclick="retoNumero()">
+
+            🔓 COMPROBAR
+
+        </button>
+
+        `;
+
+}
+
+
+function retoNumero(){
+
+    const r=
+        document.getElementById("respuesta")
+        .value;
+
+    if(r==="80"){
+
+        correcto();
+
+    }
+
+    else{
+
+        document.getElementById("mensaje")
+            .textContent=
+            "❌ Casi. Observa qué ocurre con cada número.";
+
+    }
+
+}
+
+
+/* =========================
+   RETO 4
+========================= */
+
+function reto4(){
+
+    titulo(
+        "🎨 RETO 4 — COLOR SECRETO"
+    );
+
+    pregunta(
+        "Elige el color que NO aparece en esta secuencia:"
+    );
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <div class="secuencia">
+            ❤️ 💙 💛 💚
+        </div>
+
+        `;
+
+    opciones([
+
+        ["💙 AZUL",false],
+
+        ["💜 MORADO",true],
+
+        ["💚 VERDE",false],
+
+        ["💛 AMARILLO",false]
+
+    ]);
+
+}
+
+
+/* =========================
+   RETO 5
+========================= */
+
+function reto5(){
+
+    titulo(
+        "🕵️ RETO 5 — EL INTRUSO"
+    );
+
+    pregunta(
+        "Uno de estos símbolos es diferente a los demás. Encuéntralo."
+    );
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <div class="secuencia">
+            ❤️ ❤️ ❤️ 💗 ❤️
+        </div>
+
+        `;
+
+    opciones([
+
+        ["❤️ PRIMERO",false],
+
+        ["❤️ SEGUNDO",false],
+
+        ["💗 CUARTO",true],
+
+        ["❤️ QUINTO",false]
+
+    ]);
+
+}
+
+
+/* =========================
+   RETO 6
+========================= */
+
+function reto6(){
+
+    titulo(
+        "🎲 RETO 6 — SUERTE DE SIMBA"
+    );
+
+    pregunta(
+        "Escoge una de las tres cajas. Solo una contiene la estrella."
+    );
+
+    opciones([
+
+        ["📦 CAJA A",false],
+
+        ["📦 CAJA B",true],
+
+        ["📦 CAJA C",false]
+
+    ]);
+
+}
+
+
+/* =========================
+   RETO 7
+========================= */
+
+function reto7(){
+
+    titulo(
+        "🧠 RETO 7 — ¿QUÉ SIGUE?"
+    );
+
+    pregunta(
+        "Completa: A — C — E — G — ___"
+
+    );
+
+    opciones([
+
+        ["H",false],
+
+        ["I",true],
+
+        ["J",false],
+
+        ["K",false]
+
+    ]);
+
+}
+
+
+/* =========================
+   RETO 8
+========================= */
+
+function reto8(){
+
+    titulo(
+        "🔐 RETO 8 — CERRADURA"
+    );
+
+    pregunta(
+        "La cerradura pide el resultado de 7 × 7."
+    );
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <input
+            id="multiplicacion"
+            type="number"
+            placeholder="Resultado">
+
+        <br>
+
+        <button
+            class="boton"
+            onclick="retoMultiplicacion()">
+
+            🔐 ABRIR
+
+        </button>
+
+        `;
+
+}
+
+
+function retoMultiplicacion(){
+
+    const r=
+        document.getElementById(
+            "multiplicacion"
+        ).value;
+
+    if(r==="49"){
+
+        correcto();
+
+    }
+
+    else{
+
+        document.getElementById("mensaje")
+            .textContent=
+            "❌ La cerradura sigue cerrada.";
+
+    }
+
+}
+
+
+/* =========================
+   RETO 9
+========================= */
+
+function reto9(){
+
+    titulo(
+        "⚡ RETO 9 — DECISIÓN RÁPIDA"
+    );
+
+    pregunta(
+        "Tienes que elegir antes de que termine la cuenta regresiva. ¿Qué opción contiene exactamente 3 corazones?"
+    );
+
+    opciones([
+
+        ["❤️❤️",false],
+
+        ["❤️❤️❤️",true],
+
+        ["❤️❤️❤️❤️",false],
+
+        ["❤️",false]
+
+    ]);
+
+}
+
+
+/* =========================
+   RETO 10
+========================= */
+
+function reto10(){
+
+    titulo(
+        "👑 RETO FINAL — LA ÚLTIMA ESTRELLA"
+    );
+
+    pregunta(
+        "Solo una opción completa correctamente la frase: “Pequeño Simba, esta aventura...”"
+    );
+
+    opciones([
+
+        [
+            "“...termina aquí.”",
+            false
+        ],
+
+        [
+            "“...apenas está comenzando.”",
+            true
+        ],
+
+        [
+            "“...no tiene sentido.”",
+            false
+        ],
+
+        [
+            "“...ya se acabó.”",
+            false
+        ]
+
+    ]);
+
+}
+
+
+/* =========================
+   FUNCIONES AUXILIARES
+========================= */
+
+function titulo(texto){
+
+    document.getElementById("titulo")
+        .textContent=texto;
+
+}
+
+function pregunta(texto){
+
+    document.getElementById("pregunta")
+        .textContent=texto;
+
+}
+
+
+function opciones(lista){
+
+    const contenedor=
+        document.getElementById("opciones");
+
+    contenedor.innerHTML="";
+
+    lista.forEach(item=>{
+
+        const boton=
+            document.createElement("button");
+
+        boton.className="opcion";
+
+        boton.textContent=item[0];
+
+        boton.onclick=()=>{
+
+            if(item[1]){
+
+                correcto();
+
+            }
+
+            else{
+
+                document.getElementById("mensaje")
+                    .textContent=
+                    "❌ Esa no es. Intenta otra vez.";
+
+            }
+
+        };
+
+        contenedor.appendChild(boton);
+
+    });
+
+}
+
+
+/* =========================
+   CORRECTO
+========================= */
+
+function correcto(){
+
+    xp+=100;
+
+    localStorage.setItem(
+        "xp",
+        xp
+    );
+
+    document.getElementById("xp")
+        .textContent=xp;
+
+    document.getElementById("mensaje")
+        .textContent=
+        "⭐ ¡ESTRELLA CONSEGUIDA! +100 XP";
+
+    document
+        .querySelectorAll(".opcion")
+        .forEach(b=>{
+            b.disabled=true;
+        });
+
+    setTimeout(()=>{
+
+        retoActual++;
+
+        if(retoActual>=10){
+
+            terminar();
+
+        }
+
+        else{
+
+            mostrarReto();
+
+        }
+
+    },850);
+
+}
+
+
+/* =========================
+   FINAL
+========================= */
+
+function terminar(){
+
+    localStorage.setItem(
+        "nivel21Completado",
+        "true"
+    );
+
+    localStorage.setItem(
+        "nivel21XP",
+        "1000"
+    );
+
+    document.getElementById("reto")
+        .style.display="none";
+
+    document.getElementById("final")
+        .style.display="block";
+
+    document.getElementById("barra")
+        .style.width="100%";
+
+    document
+        .querySelectorAll(".estrella")
+        .forEach(e=>{
+            e.classList.add("ganada");
+        });
+
+}
+
+</script>
+
+</body>
+</html>

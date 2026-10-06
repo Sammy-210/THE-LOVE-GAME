@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nivel 15 — Final Especial ❤️</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top, #6d123c 0%, transparent 40%),
+        linear-gradient(135deg,#090909,#210817,#080808);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+    text-align:center;
+}
+
+h1{
+    font-size:42px;
+    margin-bottom:8px;
+    text-shadow:0 0 20px #ff4f9a;
+}
+
+.subtitulo{
+    color:#ffb6d5;
+    font-size:20px;
+    margin-bottom:25px;
+}
+
+.xp{
+    display:inline-block;
+    background:#170b12;
+    border:2px solid #ff4f9a;
+    border-radius:20px;
+    padding:10px 22px;
+    margin-bottom:25px;
+    font-weight:bold;
+}
+
+.card{
+    background:rgba(255,255,255,0.07);
+    border:1px solid rgba(255,105,160,0.5);
+    border-radius:25px;
+    padding:35px;
+    box-shadow:0 0 35px rgba(255,40,120,.25);
+    backdrop-filter:blur(8px);
+}
+
+.pregunta{
+    font-size:26px;
+    margin-bottom:25px;
+    line-height:1.4;
+}
+
+.opciones{
+    display:grid;
+    gap:14px;
+}
+
+.opcion{
+    width:100%;
+    padding:17px;
+    border:none;
+    border-radius:15px;
+    background:linear-gradient(90deg,#8f174d,#d52d75);
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.opcion:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 18px #ff4f9a;
+}
+
+.mensaje{
+    min-height:30px;
+    margin-top:20px;
+    font-size:18px;
+    color:#ffb6d5;
+}
+
+.progreso{
+    margin-top:25px;
+    font-size:15px;
+    color:#ddd;
+}
+
+.barra{
+    width:100%;
+    height:12px;
+    background:#2b1722;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.barraInterna{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#ff4f9a,#ff9ac5);
+    transition:.5s;
+}
+
+.final{
+    display:none;
+    animation:aparecer 1s ease;
+}
+
+.final h2{
+    font-size:38px;
+    color:#ff8fbd;
+    text-shadow:0 0 15px #ff4f9a;
+}
+
+.corazon{
+    font-size:75px;
+    animation:latir 1s infinite;
+}
+
+.carta{
+    background:rgba(255,255,255,.08);
+    border:1px solid #ff77ac;
+    border-radius:20px;
+    padding:25px;
+    margin-top:20px;
+    line-height:1.8;
+    font-size:18px;
+}
+
+.botonMapa{
+    display:inline-block;
+    margin-top:25px;
+    padding:16px 28px;
+    border-radius:30px;
+    text-decoration:none;
+    color:white;
+    background:linear-gradient(90deg,#b71961,#ef4d91);
+    font-weight:bold;
+    box-shadow:0 0 20px rgba(255,50,140,.5);
+}
+
+@keyframes latir{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.18);}
+}
+
+@keyframes aparecer{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.corazonFlotante{
+    position:fixed;
+    font-size:25px;
+    animation:subir 4s linear forwards;
+    pointer-events:none;
+}
+
+@keyframes subir{
+    0%{
+        transform:translateY(0) scale(.7);
+        opacity:1;
+    }
+    100%{
+        transform:translateY(-100vh) scale(1.5);
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>❤️ FINAL ESPECIAL ❤️</h1>
+
+    <div class="subtitulo">
+        La última decisión de mi pequeño Simba 🦁
+    </div>
+
+    <div class="xp">
+        ⭐ XP: <span id="xp">0</span>
+    </div>
+
+    <div id="juego" class="card">
+
+        <div class="pregunta" id="pregunta"></div>
+
+        <div class="opciones" id="opciones"></div>
+
+        <div class="mensaje" id="mensaje"></div>
+
+        <div class="progreso">
+            Decisión <span id="numero">1</span> de 8
+        </div>
+
+        <div class="barra">
+            <div class="barraInterna" id="barra"></div>
+        </div>
+
+    </div>
+
+    <div id="final" class="card final">
+
+        <div class="corazon">❤️</div>
+
+        <h2>¡Llegaste al final, Simba! 🦁</h2>
+
+        <div class="carta">
+
+            <p>
+                Mi pequeño Simba...
+            </p>
+
+            <p>
+                Si llegaste hasta aquí significa que recorriste
+                todo este pequeño mundo que hice pensando en ti.
+            </p>
+
+            <p>
+                Cada pregunta, cada recuerdo, cada juego y cada
+                nivel tiene un poquito de nosotros. ❤️
+            </p>
+
+            <p>
+                No sé qué nos espere en el futuro, pero sí sé que
+                quiero seguir creando recuerdos contigo.
+            </p>
+
+            <p>
+                Quiero más risas, más abrazos, más salidas,
+                más momentos juntos y muchas historias que algún
+                día podamos recordar.
+            </p>
+
+            <p>
+                Gracias por ser tú, por tu forma de tratarme,
+                por tu sonrisa y por todos esos pequeños momentos
+                que hacen que seas tan especial para mí.
+            </p>
+
+            <p>
+                Y ahora viene la pregunta más importante...
+            </p>
+
+            <h3>
+                🦁❤️ ¿Quieres seguir siendo mi pequeño Simba?
+            </h3>
+
+            <p>
+                Oki Doki Loki... 💗<br>
+                Pinky promise. 🤞🏻❤️
+            </p>
+
+            <p>
+                <strong>
+                    Te quiero muchísimo. ❤️
+                </strong>
+            </p>
+
+        </div>
+
+        <a href="mapa.html" class="botonMapa">
+            🗺️ VOLVER AL MAPA
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+const preguntas = [
+
+{
+    texto:"Si pudieras elegir un momento perfecto para pasar conmigo, ¿qué escogerías?",
+    opciones:[
+        "🌅 Ver un atardecer juntos",
+        "🎬 Una noche de películas",
+        "🌎 Irnos de viaje",
+        "❤️ Cualquier momento mientras sea contigo"
+    ]
+},
+
+{
+    texto:"¿Qué crees que hace que lo nuestro sea especial?",
+    opciones:[
+        "😊 Las risas",
+        "💬 La confianza",
+        "❤️ La forma en que nos tratamos",
+        "✨ Todo lo anterior"
+    ]
+},
+
+{
+    texto:"Si mañana pudiéramos ir a cualquier lugar juntos, ¿qué harías?",
+    opciones:[
+        "🏖️ Ir a la playa",
+        "🏔️ Conocer un lugar nuevo",
+        "🎡 Tener una aventura",
+        "🫂 Solo estar juntos y disfrutar"
+    ]
+},
+
+{
+    texto:"¿Qué recuerdo de nosotros te gustaría repetir muchas veces?",
+    opciones:[
+        "💐 Cuando me diste flores",
+        "⚽ Cuando fui a verte jugar fútbol",
+        "💋 Cuando nuestras hermanas nos vieron besándonos",
+        "❤️ Cualquier recuerdo contigo"
+    ]
+},
+
+{
+    texto:"Cuando piensas en nosotros dentro de un tiempo, ¿qué te gustaría que siguiera existiendo?",
+    opciones:[
+        "😂 Nuestras bromas",
+        "🫂 Nuestros abrazos",
+        "❤️ Nuestro cariño",
+        "✨ Todo"
+    ]
+},
+
+{
+    texto:"Si tuvieras que describir a tu Samis con una sola palabra, ¿cuál elegirías?",
+    opciones:[
+        "❤️ Especial",
+        "🥰 Linda",
+        "✨ Única",
+        "👑 Todas"
+    ]
+},
+
+{
+    texto:"¿Qué elegirías para una cita perfecta conmigo?",
+    opciones:[
+        "🌮 Comer tacos",
+        "🎬 Ver una película",
+        "🌅 Ver el atardecer",
+        "❤️ Una mezcla de todo"
+    ]
+},
+
+{
+    texto:"Y ahora sí... ¿quieres seguir escribiendo esta historia conmigo?",
+    opciones:[
+        "❤️ Sí, siempre",
+        "🦁 Sí, mi Samis",
+        "💗 Claro que sí",
+        "🥹 Obviamente"
+    ]
+}
+
+];
+
+let actual = 0;
+let xp = parseInt(localStorage.getItem("xp") || "0");
+
+document.getElementById("xp").textContent = xp;
+
+function mostrarPregunta(){
+
+    if(actual >= preguntas.length){
+        terminarNivel();
+        return;
+    }
+
+    const p = preguntas[actual];
+
+    document.getElementById("pregunta").textContent = p.texto;
+
+    document.getElementById("numero").textContent = actual + 1;
+
+    document.getElementById("barra").style.width =
+        ((actual / preguntas.length) * 100) + "%";
+
+    const contenedor = document.getElementById("opciones");
+
+    contenedor.innerHTML = "";
+
+    document.getElementById("mensaje").textContent = "";
+
+    p.opciones.forEach((opcion, indice)=>{
+
+        const boton = document.createElement("button");
+
+        boton.className = "opcion";
+
+        boton.textContent = opcion;
+
+        boton.onclick = ()=>seleccionar(opcion);
+
+        contenedor.appendChild(boton);
+
+    });
+
+}
+
+function seleccionar(respuesta){
+
+    const preguntaActual = preguntas[actual];
+
+    document.getElementById("mensaje").textContent =
+        "💗 Respuesta guardada...";
+
+    crearCorazones();
+
+    xp += 250;
+
+    localStorage.setItem("xp",xp);
+
+    document.getElementById("xp").textContent = xp;
+
+    localStorage.setItem(
+        "nivel15_respuesta_" + (actual + 1),
+        respuesta
+    );
+
+    actual++;
+
+    setTimeout(()=>{
+        mostrarPregunta();
+    },700);
+
+}
+
+function terminarNivel(){
+
+    document.getElementById("juego").style.display = "none";
+
+    document.getElementById("final").style.display = "block";
+
+    document.getElementById("barra").style.width = "100%";
+
+    localStorage.setItem("nivel15Completado","true");
+
+    crearCorazones();
+
+}
+
+function crearCorazones(){
+
+    for(let i=0;i<8;i++){
+
+        const corazon =
+            document.createElement("div");
+
+        corazon.className = "corazonFlotante";
+
+        corazon.textContent =
+            ["❤️","💕","💗","💖","💘"][Math.floor(Math.random()*5)];
+
+        corazon.style.left =
+            Math.random()*100 + "vw";
+
+        corazon.style.bottom = "-30px";
+
+        corazon.style.animationDuration =
+            (3 + Math.random()*2) + "s";
+
+        document.body.appendChild(corazon);
+
+        setTimeout(()=>{
+            corazon.remove();
+        },5000);
+    }
+
+}
+
+mostrarPregunta();
+
+</script>
+
+</body>
+</html>

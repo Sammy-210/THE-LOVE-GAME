@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nivel 2 - Nuestros recuerdos</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+
+            background:
+                radial-gradient(circle at top, #64183f 0%, #260819 45%, #090009 100%);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 25px;
+        }
+
+        .game {
+            width: 100%;
+            max-width: 900px;
+
+            background: rgba(20, 5, 20, 0.95);
+
+            border: 2px solid #ff4fa3;
+            border-radius: 30px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 0 40px rgba(255, 50, 150, 0.35);
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            flex-wrap: wrap;
+            gap: 15px;
+
+            margin-bottom: 20px;
+        }
+
+        .level {
+            color: #ff76b8;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .xp {
+            background: #2d1028;
+            border: 1px solid #ff4fa3;
+
+            padding: 10px 18px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+        }
+
+        h1 {
+            text-align: center;
+
+            color: #ff78bc;
+
+            font-size: 36px;
+
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            color: #ffd5e8;
+
+            font-size: 18px;
+
+            margin-bottom: 30px;
+        }
+
+        .memory-box {
+            background: rgba(255,255,255,0.05);
+
+            border: 1px solid rgba(255,105,180,0.35);
+
+            border-radius: 25px;
+
+            padding: 25px;
+
+            margin-bottom: 22px;
+        }
+
+        .memory-number {
+            color: #ff6fb4;
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
+        }
+
+        .memory-question {
+            font-size: 23px;
+
+            line-height: 1.4;
+
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: grid;
+
+            gap: 12px;
+        }
+
+        .option {
+            width: 100%;
+
+            padding: 15px;
+
+            border-radius: 15px;
+
+            border: 1px solid #8f3568;
+
+            background: #241020;
+
+            color: white;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            text-align: left;
+
+            transition: 0.25s;
+        }
+
+        .option:hover {
+            background: #461638;
+
+            border-color: #ff5cac;
+
+            transform: translateY(-2px);
+        }
+
+        .option.correct {
+            background: #164d36;
+
+            border-color: #42e49a;
+        }
+
+        .option.wrong {
+            background: #5a172d;
+
+            border-color: #ff5478;
+        }
+
+        .feedback {
+            min-height: 28px;
+
+            text-align: center;
+
+            margin-top: 15px;
+
+            font-size: 17px;
+        }
+
+        .next {
+            display: none;
+
+            margin: 25px auto 0;
+
+            padding: 14px 30px;
+
+            border: none;
+
+            border-radius: 25px;
+
+            background: linear-gradient(
+                90deg,
+                #ff3f9f,
+                #ff76b9
+            );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .next:hover {
+            transform: scale(1.04);
+        }
+
+        .finished {
+            display: none;
+
+            text-align: center;
+        }
+
+        .finished .hearts {
+            font-size: 65px;
+        }
+
+        .finished h2 {
+            color: #ff78bc;
+
+            font-size: 32px;
+        }
+
+        .finished p {
+            color: #ffd7e9;
+
+            font-size: 19px;
+
+            line-height: 1.6;
+        }
+
+        .map-button {
+            margin-top: 20px;
+
+            padding: 15px 30px;
+
+            border: none;
+
+            border-radius: 25px;
+
+            background: #ff4fa3;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .map-button:hover {
+            background: #ff78bb;
+        }
+
+        @media (max-width: 600px) {
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .memory-question {
+                font-size: 20px;
+            }
+
+            .game {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <div class="top">
+
+        <div class="level">
+            🦁 NIVEL 2
+        </div>
+
+        <div class="xp">
+            ⭐ XP:
+            <span id="xp">0</span>
+        </div>
+
+    </div>
+
+
+    <h1>
+        Nuestros recuerdos 💕
+    </h1>
+
+    <p class="subtitle">
+        Pequeño Simba... ahora vamos a recordar algunos momentos
+        importantes de nuestra historia. 🥹❤️
+    </p>
+
+
+    <div id="gameArea">
+
+        <div class="memory-box">
+
+            <div class="memory-number" id="memoryNumber">
+                Recuerdo 1 de 6
+            </div>
+
+            <div class="memory-question" id="memoryQuestion">
+            </div>
+
+            <div class="options" id="options">
+            </div>
+
+            <div class="feedback" id="feedback">
+            </div>
+
+            <button
+                class="next"
+                id="nextButton"
+                onclick="siguienteRecuerdo()">
+
+                Siguiente recuerdo 💗
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="finished" id="finished">
+
+        <div class="hearts">
+            💕🥹🦁🥹💕
+        </div>
+
+        <h2>
+            ¡Recuerdos desbloqueados!
+        </h2>
+
+        <p>
+            Mi pequeño Simba, acabas de demostrar que
+            recuerdas partes importantes de nuestra historia. ❤️
+        </p>
+
+        <p>
+            Has conseguido
+            <strong>+600 XP</strong>.
+        </p>
+
+        <button
+            class="map-button"
+            onclick="irAlMapa()">
+
+            🗺️ Volver al mapa
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const recuerdos = [
+
+        {
+            pregunta:
+                "¿En qué etapa de nuestras vidas nos conocimos? 🥹",
+
+            opciones: [
+                "En la primaria",
+                "En la secundaria",
+                "En la universidad",
+                "En una fiesta"
+            ],
+
+            correcta: 1
+        },
+
+
+        {
+            pregunta:
+                "¿Qué fecha marcó el inicio de nuestras conversaciones? 💬❤️",
+
+            opciones: [
+                "7 de septiembre",
+                "21 de febrero",
+                "25 de febrero",
+                "14 de febrero"
+            ],
+
+            correcta: 0
+        },
+
+
+        {
+            pregunta:
+                "¿Qué momento especial tuvo un significado muy bonito para Samis? 🌷",
+
+            opciones: [
+                "Cuando fuimos al cine",
+                "Cuando me regalaste flores",
+                "Cuando comimos juntos",
+                "Cuando vimos una serie"
+            ],
+
+            correcta: 1
+        },
+
+
+        {
+            pregunta:
+                "¿Qué hemos hecho que actualmente es uno de los recuerdos favoritos de Samis? ⚽❤️",
+
+            opciones: [
+                "Ir a la playa",
+                "Ir de compras",
+                "Ir a verte jugar fútbol",
+                "Ir a un concierto"
+            ],
+
+            correcta: 2
+        },
+
+
+        {
+            pregunta:
+                "Para Samis, ¿qué día es importante? 💗",
+
+            opciones: [
+                "Solo los cumpleaños",
+                "Solo San Valentín",
+                "Solo los aniversarios",
+                "Todos los días"
+            ],
+
+            correcta: 3
+        },
+
+
+        {
+            pregunta:
+                "¿Qué recuerdo todavía nos da un poquito de risa? 😂❤️",
+
+            opciones: [
+                "Cuando nos perdimos",
+                "Cuando nuestras hermanas nos vieron besándonos",
+                "Cuando fuimos al cine",
+                "Cuando cocinamos juntos"
+            ],
+
+            correcta: 1
+        }
+
+    ];
+
+
+    let recuerdoActual = 0;
+
+    let xpGanado = 0;
+
+    let respondido = false;
+
+
+    const memoryNumber =
+        document.getElementById("memoryNumber");
+
+    const memoryQuestion =
+        document.getElementById("memoryQuestion");
+
+    const options =
+        document.getElementById("options");
+
+    const feedback =
+        document.getElementById("feedback");
+
+    const nextButton =
+        document.getElementById("nextButton");
+
+    const xpTexto =
+        document.getElementById("xp");
+
+
+    function mostrarRecuerdo() {
+
+        respondido = false;
+
+        nextButton.style.display = "none";
+
+        feedback.innerHTML = "";
+
+        const actual =
+            recuerdos[recuerdoActual];
+
+
+        memoryNumber.innerText =
+            "Recuerdo " +
+            (recuerdoActual + 1) +
+            " de " +
+            recuerdos.length;
+
+
+        memoryQuestion.innerText =
+            actual.pregunta;
+
+
+        options.innerHTML = "";
+
+
+        actual.opciones.forEach(
+            (opcion, indice) => {
+
+                const boton =
+                    document.createElement("button");
+
+                boton.className = "option";
+
+                boton.innerText = opcion;
+
+
+                boton.onclick = function() {
+
+                    seleccionarRespuesta(
+                        indice,
+                        boton
+                    );
+
+                };
+
+
+                options.appendChild(boton);
+
+            }
+        );
+
+    }
+
+
+    function seleccionarRespuesta(
+        indice,
+        boton
+    ) {
+
+        if (respondido) {
+            return;
+        }
+
+
+        respondido = true;
+
+
+        const correcta =
+            recuerdos[recuerdoActual].correcta;
+
+
+        const botones =
+            document.querySelectorAll(".option");
+
+
+        botones.forEach(b => {
+
+            b.disabled = true;
+
+        });
+
+
+        if (indice === correcta) {
+
+            boton.classList.add("correct");
+
+
+            xpGanado += 100;
+
+
+            feedback.innerHTML =
+                "💗 ¡Correcto! Ese recuerdo sí vive en tu corazón. +100 XP";
+
+
+        } else {
+
+            boton.classList.add("wrong");
+
+
+            botones[correcta]
+                .classList.add("correct");
+
+
+            feedback.innerHTML =
+                "🥺 Casi... El recuerdo correcto era: " +
+                recuerdos[recuerdoActual]
+                    .opciones[correcta];
+
+        }
+
+
+        xpTexto.innerText =
+            xpGanado;
+
+
+        nextButton.style.display =
+            "block";
+
+    }
+
+
+    function siguienteRecuerdo() {
+
+        recuerdoActual++;
+
+
+        if (
+            recuerdoActual >=
+            recuerdos.length
+        ) {
+
+            terminarNivel();
+
+        } else {
+
+            mostrarRecuerdo();
+
+        }
+
+    }
+
+
+    function terminarNivel() {
+
+        document.getElementById(
+            "gameArea"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "finished"
+        ).style.display = "block";
+
+
+        let xpAnterior =
+            parseInt(
+                localStorage.getItem("xp")
+            ) || 0;
+
+
+        let nuevoXP =
+            xpAnterior + xpGanado;
+
+
+        localStorage.setItem(
+            "xp",
+            nuevoXP
+        );
+
+
+        localStorage.setItem(
+            "nivel2Completado",
+            "true"
+        );
+
+
+        localStorage.setItem(
+            "nivel3Desbloqueado",
+            "true"
+        );
+
+    }
+
+
+    function irAlMapa() {
+
+        window.location.href =
+            "mapa.html";
+
+    }
+
+
+    mostrarRecuerdo();
+
+</script>
+
+</body>
+</html>

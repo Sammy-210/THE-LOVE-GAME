@@ -1,0 +1,891 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Conectar todos los niveles ❤️</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    color:white;
+
+    background:
+        radial-gradient(circle at top,#681c4b 0%,#241024 45%,#09070d 100%);
+
+    padding:25px;
+}
+
+.container{
+    width:100%;
+    max-width:900px;
+    margin:auto;
+}
+
+.card{
+    background:rgba(20,10,25,.94);
+    border:2px solid #ff4f9a;
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 0 30px rgba(255,60,150,.35);
+    margin-bottom:25px;
+}
+
+h1{
+    text-align:center;
+    color:#ff79b6;
+    font-size:35px;
+}
+
+h2{
+    color:#ff9ac6;
+}
+
+.subtitulo{
+    text-align:center;
+    color:#ffd2e5;
+    line-height:1.6;
+}
+
+.estado{
+    padding:15px;
+    border-radius:15px;
+    margin-top:15px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,120,180,.3);
+}
+
+.nivel{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:15px;
+    margin:10px 0;
+
+    border-radius:15px;
+    background:rgba(255,255,255,.05);
+}
+
+.completado{
+    border:1px solid #48e89a;
+}
+
+.no-completado{
+    border:1px solid #555;
+}
+
+.nombre{
+    font-weight:bold;
+}
+
+.estado-texto{
+    font-size:14px;
+}
+
+button{
+    width:100%;
+    border:none;
+    border-radius:15px;
+
+    padding:17px;
+    margin-top:15px;
+
+    font-size:17px;
+    font-weight:bold;
+
+    color:white;
+
+    background:linear-gradient(135deg,#b72c68,#ff4f9a);
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+button:hover{
+    transform:scale(1.02);
+    box-shadow:0 0 20px rgba(255,70,160,.5);
+}
+
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.progreso{
+    width:100%;
+    height:20px;
+
+    background:#241524;
+    border-radius:20px;
+
+    overflow:hidden;
+    margin-top:15px;
+}
+
+.progreso-barra{
+    height:100%;
+    width:0%;
+
+    background:linear-gradient(90deg,#ff4f9a,#ff9bc7);
+
+    transition:width .5s;
+}
+
+.log{
+    margin-top:20px;
+
+    max-height:300px;
+    overflow-y:auto;
+
+    background:#08060b;
+
+    border-radius:15px;
+    padding:15px;
+
+    font-family:monospace;
+    font-size:13px;
+}
+
+.exito{
+    color:#66f0a5;
+}
+
+.error{
+    color:#ff7070;
+}
+
+.info{
+    color:#ffd36b;
+}
+
+a{
+    display:block;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    color:white;
+
+    background:#ff4f9a;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    margin-top:15px;
+
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>🦁❤️ CONECTAR TODOS LOS NIVELES</h1>
+
+<p class="subtitulo">
+
+Este archivo conecta los datos guardados por los niveles
+del juego con la tabla:
+
+<br><br>
+
+<strong>respuestas_nivel4</strong>
+
+<br><br>
+
+Proyecto: <strong>EL JUEGO DEL AMOR</strong>
+
+</p>
+
+<div class="estado" id="estado">
+
+⏳ Preparando conexión...
+
+</div>
+
+<div class="progreso">
+
+<div class="progreso-barra" id="barra"></div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>📋 Niveles del juego</h2>
+
+<div id="niveles"></div>
+
+</div>
+
+
+<div class="card">
+
+<h2>☁️ Sincronización</h2>
+
+<p>
+
+Presiona el botón para enviar a Supabase los datos
+que estén guardados en este dispositivo.
+
+</p>
+
+<button id="btnSincronizar" onclick="sincronizarTodos()">
+
+☁️ SINCRONIZAR TODOS LOS NIVELES
+
+</button>
+
+<div class="log" id="log">
+
+Esperando sincronización...
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>📊 Resultado</h2>
+
+<div id="resultado">
+
+Todavía no se ha realizado ninguna sincronización.
+
+</div>
+
+<a href="mapa.html">
+
+🗺️ VOLVER AL MAPA
+
+</a>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONEXIÓN SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =========================================================
+   NOMBRES DE LOS NIVELES
+========================================================= */
+
+const nombresNiveles = {
+
+1:"¿Cuánto conoces a tu Samis?",
+
+2:"Nuestros recuerdos",
+
+3:"Lo que nunca te dije",
+
+4:"Verdad o reto",
+
+5:"Ruleta de citas",
+
+6:"Nuestra canción",
+
+7:"Medidor de amor",
+
+8:"Cofre de premios",
+
+9:"Logros secretos",
+
+10:"Nuestro futuro",
+
+11:"Jefe final",
+
+12:"Bonus: Samis",
+
+13:"Archivo secreto",
+
+14:"Álbum de recuerdos",
+
+15:"Final especial",
+
+16:"Lo que Samis piensa cuando te ve",
+
+17:"Compatibilidad Donovan ❤️ Samantha",
+
+18:"¿Qué tan enamorado estás?",
+
+19:"Caja negra",
+
+20:"Prueba Simba",
+
+21:"Reto de las 1000 XP",
+
+22:"Cápsula del tiempo",
+
+23:"FINAL VERDADERO"
+
+};
+
+
+/* =========================================================
+   MOSTRAR NIVELES
+========================================================= */
+
+function mostrarNiveles(){
+
+    const contenedor =
+    document.getElementById("niveles");
+
+    let completados = 0;
+
+    let html = "";
+
+    for(let i=1;i<=23;i++){
+
+        const terminado =
+        localStorage.getItem(
+            "nivel"+i+"Completado"
+        ) === "true";
+
+        if(terminado){
+            completados++;
+        }
+
+        html += `
+
+        <div class="nivel ${terminado ? "completado" : "no-completado"}">
+
+            <div>
+
+                <div class="nombre">
+                    Nivel ${i} — ${nombresNiveles[i]}
+                </div>
+
+            </div>
+
+            <div class="estado-texto">
+
+                ${terminado
+                    ? "✅ COMPLETADO"
+                    : "⚪ SIN COMPLETAR"
+                }
+
+            </div>
+
+        </div>
+
+        `;
+    }
+
+    contenedor.innerHTML = html;
+
+    const porcentaje =
+    Math.round((completados/23)*100);
+
+    document.getElementById("barra").style.width =
+    porcentaje+"%";
+
+    document.getElementById("estado").innerHTML =
+
+    "📊 <strong>"+completados+
+    "/23 niveles completados</strong>";
+
+}
+
+
+/* =========================================================
+   SISTEMA DE LOG
+========================================================= */
+
+function log(texto,tipo=""){
+
+    const caja =
+    document.getElementById("log");
+
+    const linea =
+    document.createElement("div");
+
+    linea.textContent = texto;
+
+    if(tipo){
+        linea.className = tipo;
+    }
+
+    caja.appendChild(linea);
+
+    caja.scrollTop =
+    caja.scrollHeight;
+}
+
+
+/* =========================================================
+   CREAR RESPUESTA PARA SUPABASE
+========================================================= */
+
+function crearRespuesta(
+    nivel,
+    pregunta,
+    respuesta,
+    tipo
+){
+
+    return {
+
+        pregunta:
+        "Nivel "+nivel+" - "+pregunta,
+
+        respuesta:
+        String(respuesta),
+
+        tipo:
+        tipo,
+
+        created_at:
+        new Date().toISOString()
+
+    };
+
+}
+
+
+/* =========================================================
+   OBTENER DATOS DEL LOCALSTORAGE
+========================================================= */
+
+function obtenerDatosNivel(nivel){
+
+    const datos = [];
+
+    /*
+       Buscamos diferentes formas de guardar
+       respuestas utilizadas por los niveles.
+    */
+
+    for(let i=0;i<localStorage.length;i++){
+
+        const clave =
+        localStorage.key(i);
+
+        if(!clave){
+            continue;
+        }
+
+        const valor =
+        localStorage.getItem(clave);
+
+        if(!valor){
+            continue;
+        }
+
+
+        /*
+           Respuestas generales del nivel.
+        */
+
+        if(
+            clave.startsWith(
+                "nivel"+nivel+"_respuesta_"
+            )
+        ){
+
+            datos.push(
+                crearRespuesta(
+                    nivel,
+                    clave,
+                    valor,
+                    "Nivel "+nivel+
+                    " - Respuesta sincronizada"
+                )
+            );
+
+        }
+
+
+        /*
+           Respuestas utilizadas en
+           niveles antiguos.
+        */
+
+        if(
+            clave.startsWith(
+                "nivel"+nivel+"Pregunta"
+            )
+        ){
+
+            datos.push(
+                crearRespuesta(
+                    nivel,
+                    clave,
+                    valor,
+                    "Nivel "+nivel+
+                    " - Pregunta sincronizada"
+                )
+            );
+
+        }
+
+
+        /*
+           Respuestas de la ruleta.
+        */
+
+        if(
+            nivel === 5 &&
+            clave.startsWith("nivel5Pregunta")
+        ){
+
+            datos.push(
+                crearRespuesta(
+                    5,
+                    clave,
+                    valor,
+                    "Nivel 5 - Ruleta de citas"
+                )
+            );
+
+        }
+
+
+        /*
+           Respuestas del archivo secreto.
+        */
+
+        if(
+            nivel === 13 &&
+            clave.startsWith("archivo13_respuesta_")
+        ){
+
+            datos.push(
+                crearRespuesta(
+                    13,
+                    clave,
+                    valor,
+                    "Nivel 13 - Archivo Secreto"
+                )
+            );
+
+        }
+
+
+        /*
+           Respuestas de la cápsula del tiempo.
+        */
+
+        if(
+            nivel === 22 &&
+            (
+                clave === "nivel22_mensaje" ||
+                clave === "nivel22_prediccion"
+            )
+        ){
+
+            datos.push(
+                crearRespuesta(
+                    22,
+                    clave,
+                    valor,
+                    "Nivel 22 - Cápsula del Tiempo"
+                )
+            );
+
+        }
+
+
+        /*
+           Decisión del nivel 23.
+        */
+
+        if(
+            nivel === 23 &&
+            clave === "nivel23Decision"
+        ){
+
+            datos.push(
+                crearRespuesta(
+                    23,
+                    "Decisión final",
+                    valor,
+                    "Nivel 23 - Final Verdadero"
+                )
+            );
+
+        }
+
+    }
+
+    return datos;
+
+}
+
+
+/* =========================================================
+   EVITAR DUPLICADOS
+========================================================= */
+
+function obtenerClaveRespuesta(dato){
+
+    return (
+
+        dato.pregunta+
+        "|" +
+        dato.respuesta+
+        "|" +
+        dato.tipo
+
+    );
+
+}
+
+
+/* =========================================================
+   SINCRONIZAR UN NIVEL
+========================================================= */
+
+async function sincronizarNivel(nivel){
+
+    const completado =
+    localStorage.getItem(
+        "nivel"+nivel+"Completado"
+    ) === "true";
+
+
+    if(!completado){
+
+        log(
+            "Nivel "+nivel+
+            ": no está completado.",
+            "info"
+        );
+
+        return 0;
+
+    }
+
+
+    const datos =
+    obtenerDatosNivel(nivel);
+
+
+    /*
+       Si el nivel no tiene datos en localStorage,
+       igualmente registramos que fue completado.
+    */
+
+    if(datos.length === 0){
+
+        log(
+            "Nivel "+nivel+
+            ": completado, pero no tiene respuestas guardadas en localStorage.",
+            "info"
+        );
+
+        return 0;
+
+    }
+
+
+    let enviados = 0;
+
+
+    for(const dato of datos){
+
+        try{
+
+            /*
+               Insertamos el dato en Supabase.
+            */
+
+            const {error} =
+            await supabaseClient
+            .from("respuestas_nivel4")
+            .insert([dato]);
+
+
+            if(error){
+
+                log(
+                    "❌ Nivel "+nivel+
+                    ": "+error.message,
+                    "error"
+                );
+
+            }
+            else{
+
+                enviados++;
+
+                log(
+                    "✅ Nivel "+nivel+
+                    ": respuesta enviada.",
+                    "exito"
+                );
+
+            }
+
+        }
+        catch(error){
+
+            log(
+                "❌ Error Nivel "+nivel+
+                ": "+error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    return enviados;
+
+}
+
+
+/* =========================================================
+   SINCRONIZAR TODOS
+========================================================= */
+
+async function sincronizarTodos(){
+
+    const boton =
+    document.getElementById("btnSincronizar");
+
+    const resultado =
+    document.getElementById("resultado");
+
+
+    boton.disabled = true;
+
+    boton.textContent =
+    "⏳ SINCRONIZANDO...";
+
+
+    document.getElementById("log").innerHTML = "";
+
+    resultado.innerHTML =
+    "⏳ Enviando información a Supabase...";
+
+
+    let totalEnviados = 0;
+
+
+    log(
+        "🦁 INICIANDO SINCRONIZACIÓN...",
+        "info"
+    );
+
+
+    log(
+        "☁️ Conectando con Supabase...",
+        "info"
+    );
+
+
+    for(let nivel=1;nivel<=23;nivel++){
+
+        const enviados =
+        await sincronizarNivel(nivel);
+
+        totalEnviados += enviados;
+
+    }
+
+
+    log(
+        "🏁 SINCRONIZACIÓN TERMINADA.",
+        "exito"
+    );
+
+
+    resultado.innerHTML = `
+
+        <div style="
+            padding:20px;
+            border-radius:15px;
+            background:rgba(80,230,150,.1);
+            border:1px solid #48e89a;
+        ">
+
+            <h2 style="color:#66f0a5;">
+                ✅ LISTO
+            </h2>
+
+            <p>
+                Se enviaron
+                <strong>${totalEnviados}</strong>
+                respuestas a Supabase.
+            </p>
+
+            <p>
+                Ahora puedes entrar a:
+            </p>
+
+            <p style="color:#ff9ac6;">
+                <strong>
+                Supabase → Table Editor →
+                respuestas_nivel4
+                </strong>
+            </p>
+
+        </div>
+
+    `;
+
+
+    boton.disabled = false;
+
+    boton.textContent =
+    "🔄 SINCRONIZAR NUEVAMENTE";
+
+}
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+mostrarNiveles();
+
+</script>
+
+</body>
+</html>

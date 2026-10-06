@@ -1,0 +1,608 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nivel 9 - Logros secretos</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    min-height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #100713, #241025, #160b1c);
+    color: white;
+    padding: 25px 15px 45px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    text-align: center;
+}
+
+.back {
+    display: inline-block;
+    color: #ffd6ed;
+    text-decoration: none;
+    margin-bottom: 12px;
+}
+
+h1 {
+    font-size: 42px;
+    margin: 10px 0 5px;
+}
+
+.subtitle {
+    color: #f5b7d4;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.info {
+    max-width: 760px;
+    margin: 0 auto 20px;
+    padding: 16px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 18px;
+    line-height: 1.5;
+}
+
+.xp {
+    display: inline-block;
+    background: #2b1028;
+    border: 1px solid #ff8fbe;
+    padding: 10px 18px;
+    border-radius: 30px;
+    color: #ffd8e9;
+    margin-bottom: 20px;
+}
+
+.progress-wrap {
+    max-width: 700px;
+    margin: 0 auto 28px;
+}
+
+.progress-text {
+    margin-bottom: 8px;
+    color: #ffd2e5;
+}
+
+.progress {
+    height: 13px;
+    background: #35152f;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #ff5b9d, #ffb4d3);
+    transition: .5s;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 22px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* TARJETAS */
+
+.card {
+    height: 285px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform .75s cubic-bezier(.2,.7,.2,1);
+    transform-style: preserve-3d;
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 24px;
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: 0 12px 30px rgba(0,0,0,.35);
+}
+
+.front {
+    background: linear-gradient(145deg, #30132d, #51173e);
+    border: 2px solid #ff83b7;
+}
+
+.back {
+    transform: rotateY(180deg);
+    background: linear-gradient(145deg, #211025, #40142f);
+    border: 2px solid #ffb1d0;
+}
+
+.icon {
+    font-size: 52px;
+    margin-bottom: 10px;
+}
+
+.card h2 {
+    margin: 5px 0 10px;
+    font-size: 23px;
+}
+
+.front p {
+    color: #ffc8dd;
+    margin: 5px 0;
+}
+
+.back p {
+    line-height: 1.45;
+    color: #f8dce9;
+    margin: 8px 0;
+}
+
+.status {
+    margin-top: 13px;
+    padding: 7px 13px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    background: #4b1c3e;
+    color: #fff0f7;
+}
+
+.locked {
+    filter: grayscale(.7);
+    opacity: .72;
+}
+
+.locked .front {
+    border-color: #777;
+    background: linear-gradient(145deg, #201b23, #302630);
+}
+
+.locked .status {
+    background: #555;
+}
+
+.hint {
+    margin: 25px auto;
+    color: #eabbd1;
+}
+
+.finish {
+    display: none;
+    margin: 30px auto 0;
+    max-width: 650px;
+    padding: 25px;
+    border-radius: 22px;
+    background: rgba(255,105,166,.12);
+    border: 1px solid #ff8fbe;
+}
+
+.finish.show {
+    display: block;
+}
+
+button,
+.map-btn {
+    border: 0;
+    border-radius: 25px;
+    padding: 13px 22px;
+    background: linear-gradient(90deg, #ff4f98, #ff86b8);
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 12px;
+}
+
+button:hover,
+.map-btn:hover {
+    transform: scale(1.03);
+}
+
+.small {
+    font-size: 13px;
+    color: #d8b7c8;
+    margin-top: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<a class="back" href="mapa.html">← Volver al mapa</a>
+
+<h1>🏆 LOGROS SECRETOS</h1>
+
+<div class="subtitle">
+    Nivel 9 · El archivo de todo lo que has conseguido ❤️
+</div>
+
+<div class="info">
+    Aquí no solo vas a ver tus logros... 👀<br>
+    <b>Toca cada tarjeta para descubrir su desarrollo.</b><br>
+    Algunas todavía están esperando que las desbloquees. 🦁❤️
+</div>
+
+<div class="xp">
+    ⭐ XP actual: <span id="xp">0</span>
+</div>
+
+<div class="progress-wrap">
+
+    <div class="progress-text">
+        Logros desbloqueados:
+        <b><span id="count">0</span>/8</b>
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" id="bar"></div>
+    </div>
+
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="hint">
+    💡 Toca una tarjeta para verla por detrás ·
+    Tócala otra vez para volverla a cerrar.
+</div>
+
+<div class="finish" id="finish">
+
+    <h2>❤️ ¡Nivel 9 completado!</h2>
+
+    <p>
+        Ya descubriste los logros que has conseguido.
+        Cada uno representa una parte de esta pequeña aventura
+        con tu Samis. 🦁💗
+    </p>
+
+    <a class="map-btn" href="mapa.html">
+        🗺️ CONTINUAR AL MAPA
+    </a>
+
+</div>
+
+</div>
+
+
+<script>
+
+const logros = [
+
+    {
+        icon: "🦁",
+        titulo: "Primer rugido",
+        frase: "Todo comenzó aquí...",
+        requisito: 1,
+
+        desarrollo:
+        "Completaste el Nivel 1 y demostraste cuánto conoces a tu Samis: sus gustos, su color favorito, sus miedos y hasta esas pequeñas cosas que pueden ponerla de malas. ❤️",
+
+        xp: "+100 XP"
+    },
+
+
+    {
+        icon: "💭",
+        titulo: "Recuerdos compartidos",
+        frase: "Porque nuestra historia tiene recuerdos...",
+        requisito: 2,
+
+        desarrollo:
+        "Llegaste al Nivel 2 y recordaste momentos importantes: cómo se conocieron, cuándo comenzaron a hablar, las flores, el fútbol y ese momento que sus hermanas descubrieron. 🌹⚽",
+
+        xp: "+100 XP"
+    },
+
+
+    {
+        icon: "💌",
+        titulo: "Corazón abierto",
+        frase: "Ahora sabes lo que nunca te dije...",
+        requisito: 3,
+
+        desarrollo:
+        "Completaste el Nivel 3 y descubriste pensamientos que Samis guarda en su corazón: lo que siente contigo, lo que le gusta de ti y todo lo que desea vivir a tu lado. 💗",
+
+        xp: "+100 XP"
+    },
+
+
+    {
+        icon: "💬",
+        titulo: "Simba sincero",
+        frase: "Aquí hablaste desde el corazón...",
+        requisito: 4,
+
+        desarrollo:
+        "Completaste el Nivel 4 respondiendo las preguntas de forma sincera. Tus respuestas quedaron guardadas como parte de este juego y de nuestra historia. 🥹❤️",
+
+        xp: "+100 XP"
+    },
+
+
+    {
+        icon: "🎡",
+        titulo: "Cita giratoria",
+        frase: "La ruleta decidió nuestra cita...",
+        requisito: 5,
+
+        desarrollo:
+        "Superaste el Nivel 5 y dejaste que la ruleta eligiera entre tacos, películas, fútbol, viajes, helado, atardeceres, cartas y una cita perfecta. 🎡💕",
+
+        xp: "+100 XP"
+    },
+
+
+    {
+        icon: "🎵",
+        titulo: "Nuestra canción",
+        frase: "Una canción que ahora también es nuestra...",
+        requisito: 6,
+
+        desarrollo:
+        "Completaste el Nivel 6 con 'Until I Found You' de Stephen Sanchez y respondiste preguntas relacionadas con lo que esta canción puede significar para ustedes. 🎶❤️",
+
+        xp: "+100 XP"
+    },
+
+
+    {
+        icon: "🎁",
+        titulo: "Cazador de premios",
+        frase: "El XP ahora tiene un propósito...",
+        requisito: 8,
+
+        desarrollo:
+        "Completaste el Nivel 8 y descubriste el Cofre de Premios. Ahora tus XP pueden convertirse en besitos, abrazos, tacos, películas, cartas, sorpresas y citas. 🎁💋",
+
+        xp: "+100 XP"
+    },
+
+
+    {
+        icon: "❤️",
+        titulo: "Corazón de Simba",
+        frase: "Llegaste hasta aquí por nosotros...",
+        especial: true,
+
+        desarrollo:
+        "Este es el logro especial. Representa haber avanzado por toda la aventura hasta el Nivel 8. Si llegaste hasta aquí, ya tienes una buena parte de nuestra historia guardada en este pequeño juego. 🦁❤️",
+
+        xp: "LOGRO ESPECIAL"
+    }
+
+];
+
+
+function completado(numero) {
+
+    return localStorage.getItem(
+        "nivel" + numero + "Completado"
+    ) === "true";
+
+}
+
+
+function todosHasta8() {
+
+    for (let i = 1; i <= 8; i++) {
+
+        if (!completado(i)) {
+            return false;
+        }
+
+    }
+
+    return true;
+
+}
+
+
+function render() {
+
+    const grid = document.getElementById("grid");
+
+    grid.innerHTML = "";
+
+    let desbloqueados = 0;
+
+
+    logros.forEach((logro) => {
+
+        let ok;
+
+
+        if (logro.especial) {
+
+            ok = todosHasta8();
+
+        } else {
+
+            ok = completado(logro.requisito);
+
+        }
+
+
+        if (ok) {
+
+            desbloqueados++;
+
+        }
+
+
+        const card = document.createElement("div");
+
+        card.className =
+            "card" + (ok ? "" : " locked");
+
+
+        card.innerHTML = `
+
+            <div class="card-inner">
+
+                <div class="face front">
+
+                    <div class="icon">
+                        ${ok ? logro.icon : "🔒"}
+                    </div>
+
+                    <h2>
+                        ${ok ? logro.titulo : "Logro bloqueado"}
+                    </h2>
+
+                    <p>
+                        ${
+                            ok
+                            ? logro.frase
+                            : "Completa el nivel correspondiente"
+                        }
+                    </p>
+
+                    <div class="status">
+                        ${
+                            ok
+                            ? "✅ DESBLOQUEADO"
+                            : "🔒 BLOQUEADO"
+                        }
+                    </div>
+
+                    <div class="small">
+                        Toca para descubrir
+                    </div>
+
+                </div>
+
+
+                <div class="face back">
+
+                    <div class="icon">
+                        ${ok ? logro.icon : "🔒"}
+                    </div>
+
+                    <h2>
+                        ${ok ? logro.titulo : "Todavía no..."}
+                    </h2>
+
+                    <p>
+
+                        ${
+                            ok
+                            ? logro.desarrollo
+                            : "Este logro todavía está esperando. Completa el nivel necesario para poder descubrir su historia."
+                        }
+
+                    </p>
+
+                    <div class="status">
+
+                        ${
+                            ok
+                            ? logro.xp
+                            : "🔒 Sigue jugando"
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        card.addEventListener("click", () => {
+
+            card.classList.toggle("flipped");
+
+        });
+
+
+        grid.appendChild(card);
+
+    });
+
+
+    document.getElementById("count").textContent =
+        desbloqueados;
+
+
+    document.getElementById("bar").style.width =
+        (desbloqueados / 8 * 100) + "%";
+
+
+    document.getElementById("xp").textContent =
+        Number(localStorage.getItem("xp") || 0);
+
+
+    if (desbloqueados >= 7) {
+
+        localStorage.setItem(
+            "nivel9Completado",
+            "true"
+        );
+
+        document
+            .getElementById("finish")
+            .classList.add("show");
+
+    }
+
+}
+
+
+render();
+
+</script>
+
+</body>
+</html>
+```

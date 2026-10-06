@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Nivel 5 - Ruleta de Citas ❤️
+    </title>
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://hefospvuiewnrcnjslpi.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+    </script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            min-height: 100%;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #10000c,
+                    #30001d,
+                    #10000c
+                );
+
+            color: white;
+
+            padding: 25px;
+        }
+
+
+        .container {
+
+            max-width: 850px;
+
+            margin: auto;
+
+            text-align: center;
+        }
+
+
+        .lion {
+
+            font-size: 60px;
+        }
+
+
+        h1 {
+
+            color: #ff6fae;
+
+            font-size: 38px;
+
+            margin: 10px 0;
+        }
+
+
+        .subtitle {
+
+            color: #ffd1e4;
+
+            font-size: 19px;
+        }
+
+
+        .xp-box {
+
+            background:
+                rgba(
+                    255,
+                    105,
+                    170,
+                    0.15
+                );
+
+            border:
+                1px solid #ff6fae;
+
+            border-radius: 15px;
+
+            padding: 14px;
+
+            margin: 20px auto;
+
+            max-width: 600px;
+        }
+
+
+        /* ==========================
+           RULETA
+        ========================== */
+
+
+        .roulette-container {
+
+            position: relative;
+
+            width: 340px;
+
+            height: 340px;
+
+            margin: 40px auto 25px;
+        }
+
+
+        .pointer {
+
+            position: absolute;
+
+            top: -18px;
+
+            left: 50%;
+
+            transform:
+                translateX(-50%);
+
+            z-index: 20;
+
+            width: 0;
+
+            height: 0;
+
+            border-left:
+                20px solid transparent;
+
+            border-right:
+                20px solid transparent;
+
+            border-top:
+                38px solid white;
+
+            filter:
+                drop-shadow(
+                    0 0 6px #ff6fae
+                );
+        }
+
+
+        .wheel {
+
+            width: 330px;
+
+            height: 330px;
+
+            position: absolute;
+
+            left: 5px;
+
+            top: 5px;
+
+            border-radius: 50%;
+
+            border:
+                8px solid #ff6fae;
+
+            background:
+
+                conic-gradient(
+
+                    #ff4f9a 0deg 45deg,
+
+                    #6e1748 45deg 90deg,
+
+                    #ff78b5 90deg 135deg,
+
+                    #4c1235 135deg 180deg,
+
+                    #ff4f9a 180deg 225deg,
+
+                    #6e1748 225deg 270deg,
+
+                    #ff78b5 270deg 315deg,
+
+                    #4c1235 315deg 360deg
+
+                );
+
+            transition:
+
+                transform
+                4s cubic-bezier(
+                    0.15,
+                    0.85,
+                    0.2,
+                    1
+                );
+
+            transform-origin:
+                50% 50%;
+
+            box-shadow:
+
+                0 0 30px
+                rgba(
+                    255,
+                    105,
+                    174,
+                    0.45
+                );
+        }
+
+
+        .option {
+
+            position: absolute;
+
+            width: 90px;
+
+            height: 30px;
+
+            left: 50%;
+
+            top: 50%;
+
+            margin-left: -45px;
+
+            margin-top: -15px;
+
+            color: white;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            text-align: center;
+
+            line-height: 13px;
+
+            transform-origin:
+                45px 15px;
+
+            pointer-events: none;
+        }
+
+
+        .option1 {
+
+            transform:
+                rotate(22.5deg)
+                translateY(-110px);
+        }
+
+
+        .option2 {
+
+            transform:
+                rotate(67.5deg)
+                translateY(-110px);
+        }
+
+
+        .option3 {
+
+            transform:
+                rotate(112.5deg)
+                translateY(-110px);
+        }
+
+
+        .option4 {
+
+            transform:
+                rotate(157.5deg)
+                translateY(-110px);
+        }
+
+
+        .option5 {
+
+            transform:
+                rotate(202.5deg)
+                translateY(-110px);
+        }
+
+
+        .option6 {
+
+            transform:
+                rotate(247.5deg)
+                translateY(-110px);
+        }
+
+
+        .option7 {
+
+            transform:
+                rotate(292.5deg)
+                translateY(-110px);
+        }
+
+
+        .option8 {
+
+            transform:
+                rotate(337.5deg)
+                translateY(-110px);
+        }
+
+
+        .center {
+
+            position: absolute;
+
+            width: 68px;
+
+            height: 68px;
+
+            left: 50%;
+
+            top: 50%;
+
+            transform:
+                translate(
+                    -50%,
+                    -50%
+                );
+
+            border-radius: 50%;
+
+            background: white;
+
+            color: #ff4f9a;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 28px;
+
+            z-index: 10;
+        }
+
+
+        /* ==========================
+           BOTONES
+        ========================== */
+
+
+        button {
+
+            border: none;
+
+            border-radius: 14px;
+
+            padding:
+                15px 28px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff4f9a,
+                    #ff78b5
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        button:hover {
+
+            transform:
+                scale(1.04);
+        }
+
+
+        button:disabled {
+
+            opacity: 0.5;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+
+        /* BOTÓN REINICIAR */
+
+
+        .reset-button {
+
+            margin-top: 18px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.10
+                );
+
+            border:
+                1px solid #ff6fae;
+
+            color: #ffc4dc;
+
+            font-size: 14px;
+
+            padding:
+                10px 18px;
+        }
+
+
+        .reset-button:hover {
+
+            background:
+                rgba(
+                    255,
+                    105,
+                    170,
+                    0.20
+                );
+        }
+
+
+        /* ==========================
+           RESULTADO
+        ========================== */
+
+
+        .result {
+
+            display: none;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
+
+            border:
+                1px solid #ff6fae;
+
+            border-radius: 20px;
+
+            padding: 28px;
+
+            margin:
+                25px auto;
+
+            max-width: 650px;
+        }
+
+
+        .result h2 {
+
+            color: #ff8fbe;
+        }
+
+
+        .challenge {
+
+            font-size: 19px;
+
+            line-height: 1.6;
+
+            color: #ffe1ed;
+
+            margin-bottom: 20px;
+        }
+
+
+        textarea {
+
+            width: 100%;
+
+            min-height: 120px;
+
+            resize: vertical;
+
+            border: none;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            font-size: 16px;
+
+            outline: none;
+
+            margin-bottom: 15px;
+        }
+
+
+        .xp-earned {
+
+            color: #8dffbf;
+
+            font-size: 19px;
+
+            font-weight: bold;
+        }
+
+
+        .counter {
+
+            margin-top: 20px;
+
+            color: #ffc6dc;
+
+            font-size: 16px;
+        }
+
+
+        .message {
+
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+        }
+
+
+        .error {
+
+            color: #ff9aaa;
+
+            background:
+                rgba(
+                    255,
+                    0,
+                    70,
+                    0.12
+                );
+        }
+
+
+        .success {
+
+            color: #8dffbf;
+
+            background:
+                rgba(
+                    0,
+                    255,
+                    130,
+                    0.10
+                );
+        }
+
+
+        /* ==========================
+           FINAL
+        ========================== */
+
+
+        .finish {
+
+            display: none;
+
+            margin-top: 35px;
+
+            padding: 30px;
+
+            background:
+                rgba(
+                    255,
+                    105,
+                    170,
+                    0.12
+                );
+
+            border:
+                1px solid #ff6fae;
+
+            border-radius: 20px;
+        }
+
+
+        .finish h2 {
+
+            color: #ff77b2;
+        }
+
+
+        .map-button {
+
+            display: inline-block;
+
+            margin-top: 20px;
+
+            text-decoration: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff4f9a,
+                    #ff78b5
+                );
+
+            color: white;
+
+            padding:
+                15px 25px;
+
+            border-radius: 12px;
+
+            font-weight: bold;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="lion">
+        🦁❤️
+    </div>
+
+
+    <h1>
+        NIVEL 5
+    </h1>
+
+
+    <div class="subtitle">
+        🎡 RULETA DE CITAS 🎡
+    </div>
+
+
+    <p>
+        Mi pequeño Simba, gira la ruleta
+        y descubre qué pregunta romántica
+        te toca. 🥰
+    </p>
+
+
+    <div class="xp-box">
+
+        ⭐ Cada respuesta completada:
+        <strong>100 XP</strong>
+
+        <br>
+
+        Completa las 8 para terminar
+        el nivel. ❤️
+
+    </div>
+
+
+    <!-- ==========================
+         RULETA
+    ========================== -->
+
+
+    <div class="roulette-container">
+
+
+        <div class="pointer"></div>
+
+
+        <div
+            class="wheel"
+            id="wheel"
+        >
+
+
+            <div class="option option1">
+                🌮<br>TACOS
+            </div>
+
+
+            <div class="option option2">
+                🎬<br>PELÍCULA
+            </div>
+
+
+            <div class="option option3">
+                ⚽<br>FÚTBOL
+            </div>
+
+
+            <div class="option option4">
+                🌎<br>VIAJE
+            </div>
+
+
+            <div class="option option5">
+                🍦<br>HELADO
+            </div>
+
+
+            <div class="option option6">
+                🌅<br>ATARDECER
+            </div>
+
+
+            <div class="option option7">
+                💌<br>CARTA
+            </div>
+
+
+            <div class="option option8">
+                ❤️<br>CITA PERFECTA
+            </div>
+
+
+            <div class="center">
+                ❤️
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <button
+        id="girarBtn"
+        onclick="girarRuleta()"
+    >
+
+        🎡 GIRAR LA RULETA
+
+    </button>
+
+
+    <br>
+
+
+    <!-- BOTÓN PARA PRUEBAS -->
+
+    <button
+        class="reset-button"
+        onclick="reiniciarNivel5()"
+    >
+
+        🔄 Reiniciar Nivel 5
+
+    </button>
+
+
+    <!-- ==========================
+         RESULTADO
+    ========================== -->
+
+
+    <div
+        class="result"
+        id="resultado"
+    >
+
+
+        <h2>
+            🎉 ¡TE TOCÓ!
+        </h2>
+
+
+        <div
+            class="challenge"
+            id="retoTexto"
+        ></div>
+
+
+        <textarea
+            id="respuesta"
+            placeholder="Escribe aquí tu respuesta para tu Samis... ❤️"
+        ></textarea>
+
+
+        <button
+            id="guardarBtn"
+            onclick="guardarRespuesta()"
+        >
+
+            💌 GUARDAR RESPUESTA
+
+        </button>
+
+
+        <div
+            class="message"
+            id="mensaje"
+        ></div>
+
+
+        <p class="xp-earned">
+
+            +100 XP ⭐
+
+        </p>
+
+
+    </div>
+
+
+    <div class="counter">
+
+        Preguntas completadas:
+
+        <strong id="contador">
+            0
+        </strong>
+
+        / 8
+
+    </div>
+
+
+    <!-- ==========================
+         FINAL
+    ========================== -->
+
+
+    <div
+        class="finish"
+        id="finalNivel"
+    >
+
+
+        <div style="font-size:60px;">
+            🦁❤️🎡
+        </div>
+
+
+        <h2>
+            ¡NIVEL 5 COMPLETADO!
+        </h2>
+
+
+        <p>
+            Mi pequeño Simba...
+        </p>
+
+
+        <p>
+            Ya conoces algunas de las citas
+            y momentos que algún día podríamos
+            vivir juntos. 🥺❤️
+        </p>
+
+
+        <h2>
+            +800 XP ⭐
+        </h2>
+
+
+        <p>
+            Todas tus respuestas quedaron
+            guardadas para que tu Samis
+            pueda leerlas después. 💌
+        </p>
+
+
+        <a
+            href="mapa.html"
+            class="map-button"
+        >
+
+            🗺️ VOLVER AL MAPA
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    /* =================================
+       PREGUNTAS
+    ================================= */
+
+
+    const preguntas = [
+
+        {
+
+            nombre: "🌮 TACOS",
+
+            texto:
+                "Si estuviéramos juntos ahora mismo comiendo tacos 🌮❤️, ¿qué tacos pedirías para los dos?"
+
+        },
+
+
+        {
+
+            nombre: "🎬 PELÍCULA",
+
+            texto:
+                "Si pudiéramos pasar una noche juntos viendo una película 🎬❤️, ¿qué película escogerías para ver conmigo y por qué?"
+
+        },
+
+
+        {
+
+            nombre: "⚽ FÚTBOL",
+
+            texto:
+                "Si tu Samis fuera a verte jugar fútbol ⚽❤️, ¿qué te gustaría que hiciera o te dijera después del partido?"
+
+        },
+
+
+        {
+
+            nombre: "🌎 VIAJE",
+
+            texto:
+                "Si pudiéramos viajar juntos a cualquier lugar del mundo 🌎❤️, ¿a dónde me llevarías y qué haríamos ahí?"
+
+        },
+
+
+        {
+
+            nombre: "🍦 HELADO",
+
+            texto:
+                "Si saliéramos juntos por un helado 🍦❤️, ¿qué sabor escogerías para ti y cuál escogerías para mí?"
+
+        },
+
+
+        {
+
+            nombre: "🌅 ATARDECER",
+
+            texto:
+                "Si estuviéramos juntos viendo un atardecer 🌅❤️, ¿qué me dirías en ese momento?"
+
+        },
+
+
+        {
+
+            nombre: "💌 CARTA",
+
+            texto:
+                "Si tuvieras que escribirme una pequeña carta 💌❤️, ¿qué me dirías que nunca quisieras que olvidara?"
+
+        },
+
+
+        {
+
+            nombre: "❤️ CITA PERFECTA",
+
+            texto:
+                "Imagina nuestra cita perfecta ❤️. ¿Cómo sería desde que nos vemos hasta que nos despedimos?"
+
+        }
+
+    ];
+
+
+    /* =================================
+       VARIABLES
+    ================================= */
+
+
+    let vueltas = 0;
+
+    let indiceActual = null;
+
+    let girando = false;
+
+
+    /* =================================
+       CONTADOR
+    ================================= */
+
+
+    function actualizarContador() {
+
+
+        let total = 0;
+
+
+        for (
+            let i = 0;
+            i < 8;
+            i++
+        ) {
+
+
+            if (
+
+                localStorage.getItem(
+                    "nivel5Pregunta" + i
+                )
+
+                ===
+
+                "true"
+
+            ) {
+
+                total++;
+
+            }
+
+        }
+
+
+        document.getElementById(
+            "contador"
+        ).textContent = total;
+
+
+        return total;
+
+    }
+
+
+    /* =================================
+       AL CARGAR
+    ================================= */
+
+
+    window.onload = function() {
+
+
+        const total =
+            actualizarContador();
+
+
+        if (total >= 8) {
+
+            terminarNivel();
+
+        }
+
+    };
+
+
+    /* =================================
+       GIRAR RULETA
+    ================================= */
+
+
+    function girarRuleta() {
+
+
+        if (girando) {
+
+            return;
+
+        }
+
+
+        const total =
+            actualizarContador();
+
+
+        if (total >= 8) {
+
+            terminarNivel();
+
+            return;
+
+        }
+
+
+        girando = true;
+
+
+        document.getElementById(
+            "girarBtn"
+        ).disabled = true;
+
+
+        /*
+        BUSCAR LAS OPCIONES QUE
+        TODAVÍA NO SE HAN CONTESTADO
+        */
+
+
+        let disponibles = [];
+
+
+        for (
+            let i = 0;
+            i < 8;
+            i++
+        ) {
+
+
+            if (
+
+                localStorage.getItem(
+                    "nivel5Pregunta" + i
+                )
+
+                !==
+
+                "true"
+
+            ) {
+
+                disponibles.push(i);
+
+            }
+
+        }
+
+
+        /*
+        ELEGIR UNA OPCIÓN
+        */
+
+
+        const posicion =
+            Math.floor(
+                Math.random() *
+                disponibles.length
+            );
+
+
+        indiceActual =
+            disponibles[posicion];
+
+
+        /*
+        CADA SEGMENTO MIDE 45°
+        */
+
+
+        const centroOpcion =
+            (indiceActual * 45)
+            + 22.5;
+
+
+        /*
+        ÁNGULO DONDE QUEREMOS
+        QUE TERMINE LA OPCIÓN
+        */
+
+
+        const anguloDeseado =
+            (
+                360 -
+                centroOpcion
+            ) % 360;
+
+
+        /*
+        POSICIÓN ACTUAL
+        */
+
+
+        const posicionActual =
+            (
+                vueltas % 360
+                + 360
+            ) % 360;
+
+
+        /*
+        DIFERENCIA NECESARIA
+        */
+
+
+        const diferencia =
+            (
+                anguloDeseado
+                -
+                posicionActual
+                +
+                360
+            ) % 360;
+
+
+        /*
+        CINCO VUELTAS COMPLETAS
+        MÁS LA DIFERENCIA
+        */
+
+
+        vueltas +=
+            (360 * 5)
+            +
+            diferencia;
+
+
+        /*
+        GIRAR
+        */
+
+
+        document.getElementById(
+            "wheel"
+        ).style.transform =
+            "rotate(" +
+            vueltas +
+            "deg)";
+
+
+        /*
+        ESPERAR A QUE TERMINE
+        */
+
+
+        setTimeout(
+
+            function() {
+
+                mostrarPregunta();
+
+            },
+
+            4200
+
+        );
+
+    }
+
+
+    /* =================================
+       MOSTRAR PREGUNTA
+    ================================= */
+
+
+    function mostrarPregunta() {
+
+
+        const pregunta =
+            preguntas[indiceActual];
+
+
+        document.getElementById(
+            "retoTexto"
+        ).innerHTML =
+
+            "<strong>" +
+
+            pregunta.nombre +
+
+            "</strong>" +
+
+            "<br><br>" +
+
+            pregunta.texto;
+
+
+        document.getElementById(
+            "resultado"
+        ).style.display =
+            "block";
+
+
+        document.getElementById(
+            "respuesta"
+        ).value = "";
+
+
+        document.getElementById(
+            "respuesta"
+        ).disabled = false;
+
+
+        document.getElementById(
+            "guardarBtn"
+        ).disabled = false;
+
+
+        document.getElementById(
+            "mensaje"
+        ).style.display =
+            "none";
+
+
+        girando = false;
+
+
+        document.getElementById(
+            "resultado"
+        ).scrollIntoView({
+
+            behavior: "smooth"
+
+        });
+
+    }
+
+
+    /* =================================
+       GUARDAR RESPUESTA
+    ================================= */
+
+
+    async function guardarRespuesta() {
+
+
+        if (
+            indiceActual === null
+        ) {
+
+            return;
+
+        }
+
+
+        const textarea =
+            document.getElementById(
+                "respuesta"
+            );
+
+
+        const respuesta =
+            textarea.value.trim();
+
+
+        const mensaje =
+            document.getElementById(
+                "mensaje"
+            );
+
+
+        const boton =
+            document.getElementById(
+                "guardarBtn"
+            );
+
+
+        if (
+            respuesta === ""
+        ) {
+
+
+            mensaje.style.display =
+                "block";
+
+
+            mensaje.className =
+                "message error";
+
+
+            mensaje.textContent =
+                "💗 Primero escribe tu respuesta.";
+
+
+            return;
+
+        }
+
+
+        boton.disabled = true;
+
+
+        mensaje.style.display =
+            "block";
+
+
+        mensaje.className =
+            "message";
+
+
+        mensaje.textContent =
+            "💌 Guardando tu respuesta...";
+
+
+        /*
+        GUARDAR EN SUPABASE
+        */
+
+
+        const { error } =
+
+            await supabaseClient
+
+                .from(
+                    "respuestas_nivel4"
+                )
+
+                .insert([
+
+                    {
+
+                        pregunta:
+
+                            preguntas[
+                                indiceActual
+                            ].nombre
+
+                            +
+
+                            " — "
+
+                            +
+
+                            preguntas[
+                                indiceActual
+                            ].texto,
+
+
+                        respuesta:
+                            respuesta,
+
+
+                        tipo:
+                            "Nivel 5 - Ruleta de citas"
+
+                    }
+
+                ]);
+
+
+        if (error) {
+
+
+            console.error(error);
+
+
+            boton.disabled =
+                false;
+
+
+            mensaje.className =
+                "message error";
+
+
+            mensaje.textContent =
+                "❌ No se pudo guardar la respuesta. Inténtalo otra vez.";
+
+
+            return;
+
+        }
+
+
+        /*
+        MARCAR PREGUNTA COMO COMPLETADA
+        */
+
+
+        localStorage.setItem(
+
+            "nivel5Pregunta" +
+            indiceActual,
+
+            "true"
+
+        );
+
+
+        /*
+        SUMAR XP
+        */
+
+
+        let xpAnterior =
+
+            parseInt(
+                localStorage.getItem(
+                    "xp"
+                )
+            ) || 0;
+
+
+        let nuevoXP =
+
+            xpAnterior + 100;
+
+
+        localStorage.setItem(
+            "xp",
+            nuevoXP
+        );
+
+
+        textarea.disabled =
+            true;
+
+
+        mensaje.className =
+            "message success";
+
+
+        mensaje.innerHTML =
+            "❤️ ¡Respuesta guardada! Tu Samis podrá leerla después.";
+
+
+        const total =
+            actualizarContador();
+
+
+        /*
+        TERMINÓ LAS 8
+        */
+
+
+        if (
+            total >= 8
+        ) {
+
+
+            setTimeout(
+
+                function() {
+
+                    terminarNivel();
+
+                },
+
+                1500
+
+            );
+
+
+        }
+
+        else {
+
+
+            setTimeout(
+
+                function() {
+
+
+                    document.getElementById(
+                        "resultado"
+                    ).style.display =
+                        "none";
+
+
+                    document.getElementById(
+                        "girarBtn"
+                    ).disabled =
+                        false;
+
+
+                    indiceActual =
+                        null;
+
+
+                },
+
+                1500
+
+            );
+
+        }
+
+    }
+
+
+    /* =================================
+       REINICIAR NIVEL 5
+    ================================= */
+
+
+    function reiniciarNivel5() {
+
+
+        const confirmar =
+
+            confirm(
+
+                "❤️ ¿Quieres reiniciar el Nivel 5?\n\n" +
+
+                "Se borrará únicamente el progreso " +
+                "de las 8 preguntas de este nivel.\n\n" +
+
+                "Tu XP y los niveles anteriores " +
+                "NO se borrarán."
+
+            );
+
+
+        if (!confirmar) {
+
+            return;
+
+        }
+
+
+        /*
+        BORRAR ÚNICAMENTE
+        LAS 8 PREGUNTAS
+        */
+
+
+        for (
+            let i = 0;
+            i < 8;
+            i++
+        ) {
+
+            localStorage.removeItem(
+                "nivel5Pregunta" + i
+            );
+
+        }
+
+
+        /*
+        BORRAR ESTADO DEL NIVEL 5
+        */
+
+
+        localStorage.removeItem(
+            "nivel5Completado"
+        );
+
+
+        /*
+        REINICIAR VARIABLES
+        */
+
+
+        vueltas = 0;
+
+        indiceActual = null;
+
+        girando = false;
+
+
+        /*
+        REGRESAR LA RULETA
+        A SU POSICIÓN ORIGINAL
+        */
+
+
+        document.getElementById(
+            "wheel"
+        ).style.transition =
+            "none";
+
+
+        document.getElementById(
+            "wheel"
+        ).style.transform =
+            "rotate(0deg)";
+
+
+        setTimeout(
+
+            function() {
+
+                document.getElementById(
+                    "wheel"
+                ).style.transition =
+                    "transform 4s cubic-bezier(0.15, 0.85, 0.2, 1)";
+
+            },
+
+            50
+
+        );
+
+
+        /*
+        OCULTAR RESULTADO
+        */
+
+
+        document.getElementById(
+            "resultado"
+        ).style.display =
+            "none";
+
+
+        /*
+        OCULTAR FINAL
+        */
+
+
+        document.getElementById(
+            "finalNivel"
+        ).style.display =
+            "none";
+
+
+        /*
+        ACTIVAR BOTÓN
+        */
+
+
+        document.getElementById(
+            "girarBtn"
+        ).disabled =
+            false;
+
+
+        /*
+        ACTUALIZAR CONTADOR
+        */
+
+
+        actualizarContador();
+
+
+        alert(
+            "🎡 ¡Nivel 5 reiniciado!\n\n" +
+            "Ahora puedes comenzar nuevamente desde 0/8. ❤️"
+        );
+
+    }
+
+
+    /* =================================
+       TERMINAR NIVEL
+    ================================= */
+
+
+    function terminarNivel() {
+
+
+        localStorage.setItem(
+            "nivel5Completado",
+            "true"
+        );
+
+
+        document.getElementById(
+            "resultado"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "girarBtn"
+        ).disabled =
+            true;
+
+
+        document.getElementById(
+            "finalNivel"
+        ).style.display =
+            "block";
+
+
+        document.getElementById(
+            "finalNivel"
+        ).scrollIntoView({
+
+            behavior: "smooth"
+
+        });
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

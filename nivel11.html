@@ -1,0 +1,1110 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nivel 11 - Jefe Final</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    min-height:100%;
+    font-family:Arial,sans-serif;
+}
+
+body{
+
+    background:
+    radial-gradient(circle at top,#5b1748 0%,#241025 35%,#0b060e 100%);
+
+    color:white;
+
+    padding:25px 15px 50px;
+}
+
+.container{
+
+    max-width:900px;
+
+    margin:auto;
+
+    text-align:center;
+}
+
+
+/* REGRESAR */
+
+.back{
+
+    color:#ffd5e8;
+
+    text-decoration:none;
+
+    display:inline-block;
+
+    margin-bottom:15px;
+}
+
+
+/* TITULO */
+
+h1{
+
+    font-size:43px;
+
+    margin:10px 0 5px;
+
+    text-shadow:
+    0 0 15px rgba(255,120,180,.5);
+}
+
+.subtitle{
+
+    color:#f7b9d6;
+
+    font-size:18px;
+
+    margin-bottom:25px;
+}
+
+
+/* JEFE */
+
+.boss{
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(75,17,61,.95),
+        rgba(30,10,29,.95)
+    );
+
+    border:2px solid #ff79b1;
+
+    border-radius:28px;
+
+    padding:25px;
+
+    box-shadow:
+    0 0 35px rgba(255,70,160,.2);
+
+    margin-bottom:25px;
+}
+
+.boss-icon{
+
+    font-size:75px;
+
+    animation:flotar 2s infinite ease-in-out;
+}
+
+@keyframes flotar{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+}
+
+.boss h2{
+
+    margin:10px 0;
+
+    color:#ffc5dc;
+}
+
+.boss p{
+
+    color:#f2d5e3;
+
+    line-height:1.5;
+}
+
+
+/* XP */
+
+.xp{
+
+    display:inline-block;
+
+    padding:10px 20px;
+
+    border-radius:30px;
+
+    background:#2c1028;
+
+    border:1px solid #ff8dbd;
+
+    color:#ffd8e8;
+}
+
+
+/* PROGRESO */
+
+.progress{
+
+    max-width:650px;
+
+    margin:25px auto;
+}
+
+.progress-text{
+
+    margin-bottom:9px;
+
+    color:#ffd5e7;
+}
+
+.bar{
+
+    width:100%;
+
+    height:14px;
+
+    background:#37152f;
+
+    border-radius:20px;
+
+    overflow:hidden;
+}
+
+.bar-fill{
+
+    width:0%;
+
+    height:100%;
+
+    background:
+    linear-gradient(
+        90deg,
+        #ff4f98,
+        #ffb3d3
+    );
+
+    transition:.5s;
+}
+
+
+/* DESAFIO */
+
+.challenge{
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(44,14,42,.98),
+        rgba(27,10,28,.98)
+    );
+
+    border:2px solid #ff79b1;
+
+    border-radius:28px;
+
+    padding:30px 25px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.35);
+
+    min-height:400px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+.challenge-number{
+
+    color:#ff9bc3;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+}
+
+.challenge-icon{
+
+    font-size:60px;
+
+    margin-bottom:10px;
+}
+
+.challenge h2{
+
+    margin:5px 0 15px;
+
+    color:#ffd0e2;
+}
+
+.question{
+
+    font-size:20px;
+
+    line-height:1.5;
+
+    max-width:700px;
+
+    margin-bottom:25px;
+}
+
+
+/* OPCIONES */
+
+.options{
+
+    width:100%;
+
+    max-width:650px;
+
+    display:grid;
+
+    gap:12px;
+}
+
+.option{
+
+    width:100%;
+
+    padding:15px;
+
+    border-radius:18px;
+
+    border:1px solid #ff75ad;
+
+    background:#35132f;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.option:hover{
+
+    transform:scale(1.02);
+
+    background:#53183f;
+
+    border-color:#ffc0d9;
+}
+
+
+/* TEXTAREA */
+
+textarea{
+
+    width:100%;
+
+    max-width:650px;
+
+    min-height:130px;
+
+    resize:vertical;
+
+    border-radius:18px;
+
+    border:1px solid #ff75ad;
+
+    background:#211022;
+
+    color:white;
+
+    padding:15px;
+
+    font-size:16px;
+
+    outline:none;
+}
+
+textarea:focus{
+
+    border-color:#ffc0d9;
+
+}
+
+
+/* BOTON */
+
+.main-button{
+
+    border:none;
+
+    border-radius:25px;
+
+    padding:13px 25px;
+
+    margin-top:18px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #ff4f98,
+        #ff86b8
+    );
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+
+/* MENSAJE RESULTADO */
+
+.feedback{
+
+    margin-top:20px;
+
+    padding:14px;
+
+    border-radius:18px;
+
+    display:none;
+
+    max-width:650px;
+}
+
+.feedback.show{
+
+    display:block;
+}
+
+.feedback.good{
+
+    background:rgba(60,190,130,.15);
+
+    border:1px solid #68e0aa;
+
+    color:#baffdc;
+}
+
+.feedback.wrong{
+
+    background:rgba(255,80,130,.12);
+
+    border:1px solid #ff719e;
+
+    color:#ffc4d7;
+}
+
+
+/* VICTORIA */
+
+.victory{
+
+    display:none;
+
+    background:
+    linear-gradient(
+        145deg,
+        #481333,
+        #210d22
+    );
+
+    border:2px solid #ff9ac4;
+
+    border-radius:30px;
+
+    padding:35px 25px;
+
+    box-shadow:
+    0 0 40px rgba(255,70,160,.25);
+
+    animation:aparecer .6s ease;
+}
+
+.victory.show{
+
+    display:block;
+}
+
+@keyframes aparecer{
+
+    from{
+        opacity:0;
+        transform:scale(.9);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.victory-icon{
+
+    font-size:80px;
+}
+
+.victory h2{
+
+    color:#ffc4dc;
+
+    font-size:30px;
+}
+
+.victory p{
+
+    color:#f5d8e6;
+
+    line-height:1.7;
+}
+
+.continue{
+
+    display:inline-block;
+
+    margin-top:15px;
+
+    padding:14px 25px;
+
+    border-radius:25px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #ff4f98,
+        #ff86b8
+    );
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:bold;
+}
+
+.note{
+
+    margin-top:22px;
+
+    color:#cfaec1;
+
+    font-size:13px;
+}
+
+
+/* CONFETI */
+
+.confeti{
+
+    position:fixed;
+
+    top:-20px;
+
+    font-size:22px;
+
+    animation:caer 3s linear forwards;
+
+    pointer-events:none;
+}
+
+@keyframes caer{
+
+    to{
+
+        transform:
+        translateY(110vh)
+        rotate(720deg);
+
+        opacity:0;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<a class="back" href="mapa.html">
+    ← Volver al mapa
+</a>
+
+
+<h1>
+    👑 JEFE FINAL
+</h1>
+
+
+<div class="subtitle">
+    Nivel 11 · El último desafío de Simba 🦁❤️
+</div>
+
+
+<div class="boss">
+
+    <div class="boss-icon">
+        🦁👑
+    </div>
+
+    <h2>
+        EL JEFE FINAL: EL CORAZÓN DE SIMBA
+    </h2>
+
+    <p>
+        Has llegado hasta aquí. Ahora tendrás que superar
+        <b>6 desafíos finales</b> para demostrar cuánto
+        conoces a tu Samis y todo lo que has vivido en esta aventura.
+    </p>
+
+    <div class="xp">
+        ⭐ XP actual:
+        <span id="xp">0</span>
+    </div>
+
+</div>
+
+
+<div class="progress">
+
+    <div class="progress-text">
+
+        Desafíos superados:
+        <b>
+            <span id="progreso">0</span>/6
+        </b>
+
+    </div>
+
+    <div class="bar">
+
+        <div
+            class="bar-fill"
+            id="barra">
+        </div>
+
+    </div>
+
+</div>
+
+
+<div id="game">
+
+
+    <div class="challenge">
+
+        <div
+            class="challenge-number"
+            id="numero">
+        </div>
+
+
+        <div
+            class="challenge-icon"
+            id="icono">
+        </div>
+
+
+        <h2 id="titulo">
+        </h2>
+
+
+        <div
+            class="question"
+            id="pregunta">
+        </div>
+
+
+        <div
+            class="options"
+            id="opciones">
+        </div>
+
+
+        <div
+            class="feedback"
+            id="feedback">
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div
+    class="victory"
+    id="victory"
+>
+
+    <div class="victory-icon">
+        👑🦁❤️
+    </div>
+
+    <h2>
+        ¡DERROTASTE AL JEFE FINAL!
+    </h2>
+
+    <p>
+        Simba... llegaste hasta el final. 🥹❤️
+    </p>
+
+    <p>
+        No derrotaste al jefe por tener más XP.
+        Lo derrotaste porque llegaste hasta aquí
+        conociendo, recordando y queriendo a tu Samis.
+    </p>
+
+    <p>
+        Y recuerda:
+        <b>
+            esto no es el final de nuestra historia...
+            apenas estamos escribiendo nuevos capítulos.
+        </b>
+    </p>
+
+    <a
+        class="continue"
+        href="mapa.html"
+    >
+        🗺️ CONTINUAR AL MAPA
+    </a>
+
+</div>
+
+
+<div class="note">
+
+    💡 Responde los 6 desafíos para completar el nivel.
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+const desafios = [
+
+    {
+        icon:"🧠",
+
+        titulo:"¿Cuánto aprendiste de Samis?",
+
+        pregunta:
+        "¿Cuál es la comida favorita de Samis?",
+
+        opciones:[
+            "🍕 Pizza",
+            "🌮 Tacos",
+            "🍔 Hamburguesa",
+            "🍣 Sushi"
+        ],
+
+        correcta:1
+    },
+
+
+    {
+        icon:"💭",
+
+        titulo:"Recuerdo secreto",
+
+        pregunta:
+        "¿Cuál de estos momentos se convirtió en un recuerdo especial para ustedes?",
+
+        opciones:[
+            "🌹 Cuando recibió flores",
+            "⚽ Cuando fueron a verlo jugar fútbol",
+            "💋 Cuando sus hermanas los vieron besándose",
+            "❤️ Todas las anteriores"
+        ],
+
+        correcta:3
+    },
+
+
+    {
+        icon:"❤️",
+
+        titulo:"El corazón de Simba",
+
+        pregunta:
+        "Cuando Samis está contigo, ¿qué puede sentir al mismo tiempo?",
+
+        opciones:[
+            "😴 Aburrimiento",
+            "😡 Enojo",
+            "🥹 Nervios, felicidad y tranquilidad",
+            "🤷 Nada"
+        ],
+
+        correcta:2
+    },
+
+
+    {
+        icon:"🎵",
+
+        titulo:"Nuestra canción",
+
+        pregunta:
+        "¿Qué canción forma parte de este pequeño juego de amor?",
+
+        opciones:[
+            "🎵 Until I Found You",
+            "🎵 Perfect",
+            "🎵 Disfruto",
+            "🎵 Another Love"
+        ],
+
+        correcta:0
+    },
+
+
+    {
+        icon:"🔮",
+
+        titulo:"Nuestro futuro",
+
+        pregunta:
+        "Si pudieran vivir muchos momentos juntos en el futuro, ¿qué sería lo más importante?",
+
+        opciones:[
+            "✈️ Viajar juntos",
+            "🌅 Conocer muchos lugares",
+            "❤️ Crear recuerdos juntos",
+            "🥹 Todas las anteriores"
+        ],
+
+        correcta:3
+    },
+
+
+    {
+        icon:"👑",
+
+        titulo:"El golpe final",
+
+        pregunta:
+        "¿Qué quiere Samis que nunca termine entre ustedes?",
+
+        opciones:[
+            "🎮 El juego",
+            "📱 Las conversaciones",
+            "❤️ Lo que tienen juntos",
+            "🌮 Los tacos"
+        ],
+
+        correcta:2
+    }
+
+];
+
+
+let actual = 0;
+
+let xpGanado = 0;
+
+
+/* ELEMENTOS */
+
+const numero =
+document.getElementById("numero");
+
+const icono =
+document.getElementById("icono");
+
+const titulo =
+document.getElementById("titulo");
+
+const pregunta =
+document.getElementById("pregunta");
+
+const opciones =
+document.getElementById("opciones");
+
+const feedback =
+document.getElementById("feedback");
+
+
+/* MOSTRAR DESAFIO */
+
+function mostrarDesafio(){
+
+    const desafio =
+    desafios[actual];
+
+
+    numero.textContent =
+    "DESAFÍO " + (actual + 1) + " DE 6";
+
+
+    icono.textContent =
+    desafio.icon;
+
+
+    titulo.textContent =
+    desafio.titulo;
+
+
+    pregunta.textContent =
+    desafio.pregunta;
+
+
+    opciones.innerHTML = "";
+
+
+    feedback.className =
+    "feedback";
+
+
+    feedback.textContent =
+    "";
+
+
+    desafio.opciones.forEach(
+    (opcion,index)=>{
+
+        const boton =
+        document.createElement("button");
+
+
+        boton.className =
+        "option";
+
+
+        boton.textContent =
+        opcion;
+
+
+        boton.onclick =
+        function(){
+
+            responder(index);
+
+        };
+
+
+        opciones.appendChild(boton);
+
+    });
+
+
+    actualizarProgreso();
+
+}
+
+
+/* RESPONDER */
+
+function responder(indice){
+
+    const desafio =
+    desafios[actual];
+
+
+    if(indice === desafio.correcta){
+
+        feedback.className =
+        "feedback show good";
+
+
+        feedback.textContent =
+        "✅ ¡CORRECTO! ¡Desafío superado! ❤️";
+
+
+        xpGanado += 250;
+
+
+        setTimeout(()=>{
+
+            actual++;
+
+
+            if(actual >= desafios.length){
+
+                terminarNivel();
+
+            }else{
+
+                mostrarDesafio();
+
+            }
+
+        },1000);
+
+
+    }else{
+
+        feedback.className =
+        "feedback show wrong";
+
+
+        feedback.textContent =
+        "💗 Casi... piensa un poquito más en tu Samis e inténtalo otra vez.";
+
+    }
+
+}
+
+
+/* PROGRESO */
+
+function actualizarProgreso(){
+
+    document.getElementById("progreso")
+    .textContent = actual;
+
+
+    document.getElementById("barra")
+    .style.width =
+    (actual / desafios.length * 100) + "%";
+
+
+    document.getElementById("xp")
+    .textContent =
+    Number(localStorage.getItem("xp") || 0)
+    + xpGanado;
+
+}
+
+
+/* FINAL */
+
+function terminarNivel(){
+
+    let xpActual =
+    Number(localStorage.getItem("xp") || 0);
+
+
+    localStorage.setItem(
+        "xp",
+        xpActual + xpGanado
+    );
+
+
+    localStorage.setItem(
+        "nivel11Completado",
+        "true"
+    );
+
+
+    document.getElementById("progreso")
+    .textContent = "6";
+
+
+    document.getElementById("barra")
+    .style.width = "100%";
+
+
+    document.getElementById("game")
+    .style.display = "none";
+
+
+    document.getElementById("victory")
+    .classList.add("show");
+
+
+    lanzarConfeti();
+
+}
+
+
+/* CONFETI */
+
+function lanzarConfeti(){
+
+    const simbolos=[
+        "❤️",
+        "💗",
+        "🦁",
+        "✨",
+        "💕",
+        "👑"
+    ];
+
+
+    for(let i=0;i<35;i++){
+
+        const pieza =
+        document.createElement("div");
+
+
+        pieza.className =
+        "confeti";
+
+
+        pieza.textContent =
+        simbolos[
+            Math.floor(
+                Math.random()*simbolos.length
+            )
+        ];
+
+
+        pieza.style.left =
+        Math.random()*100 + "vw";
+
+
+        pieza.style.animationDelay =
+        Math.random()*1.5 + "s";
+
+
+        pieza.style.animationDuration =
+        (2.5 + Math.random()*2) + "s";
+
+
+        document.body.appendChild(pieza);
+
+
+        setTimeout(()=>{
+
+            pieza.remove();
+
+        },5000);
+
+    }
+
+}
+
+
+/* INICIAR */
+
+mostrarDesafio();
+
+</script>
+
+</body>
+</html>

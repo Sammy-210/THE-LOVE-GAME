@@ -1,0 +1,883 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nivel 22 — Cápsula del Tiempo ⏳</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top,#43132e,transparent 40%),
+        linear-gradient(135deg,#030303,#180914,#050505);
+    padding:25px;
+}
+
+.container{
+    max-width:850px;
+    margin:auto;
+    text-align:center;
+}
+
+h1{
+    font-size:42px;
+    color:#ff9ac5;
+    text-shadow:0 0 20px #ff4f9a;
+    margin-bottom:5px;
+}
+
+.subtitulo{
+    color:#ffc5dd;
+    margin-bottom:20px;
+}
+
+.xp{
+    display:inline-block;
+    padding:10px 25px;
+    border:2px solid #ff4f9a;
+    border-radius:25px;
+    background:#10090d;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,100,160,.5);
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 0 35px rgba(255,40,120,.25);
+}
+
+.icono{
+    font-size:70px;
+}
+
+h2{
+    color:#ff9ac5;
+    font-size:28px;
+}
+
+.texto{
+    color:#ddd;
+    line-height:1.7;
+    font-size:17px;
+}
+
+.boton{
+    padding:15px 28px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(90deg,#b71961,#ef4d91);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin:8px;
+}
+
+.boton:hover{
+    transform:scale(1.04);
+    box-shadow:0 0 20px #ff4f9a;
+}
+
+.paso{
+    display:none;
+}
+
+.pregunta{
+    font-size:23px;
+    line-height:1.5;
+    margin:25px 0;
+}
+
+.opciones{
+    display:grid;
+    gap:13px;
+}
+
+.opcion{
+    padding:17px;
+    border:none;
+    border-radius:15px;
+    background:linear-gradient(90deg,#67143b,#c72d70);
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+}
+
+.opcion:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 18px #ff4f9a;
+}
+
+textarea{
+    width:100%;
+    min-height:150px;
+    resize:vertical;
+    padding:16px;
+    border-radius:15px;
+    border:2px solid #81355b;
+    background:#0d080b;
+    color:white;
+    font-size:17px;
+    outline:none;
+    font-family:Arial,sans-serif;
+}
+
+textarea:focus{
+    border-color:#ff4f9a;
+    box-shadow:0 0 15px rgba(255,70,150,.4);
+}
+
+.mensaje{
+    min-height:30px;
+    margin-top:20px;
+    color:#ffb6d5;
+    font-weight:bold;
+}
+
+.progreso{
+    margin-top:20px;
+    color:#ccc;
+}
+
+.barra{
+    height:12px;
+    background:#29151e;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.barraInterna{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#ff4f9a,#ffb1d1);
+    transition:.5s;
+}
+
+.capsula{
+    width:220px;
+    height:220px;
+    margin:25px auto;
+    border-radius:50%;
+    background:
+        radial-gradient(circle,#ff9ac5,#9e174f 65%,#35091d);
+    border:5px solid #ff9ac5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:80px;
+    box-shadow:0 0 35px rgba(255,70,160,.6);
+    cursor:pointer;
+    transition:.4s;
+}
+
+.capsula:hover{
+    transform:scale(1.06) rotate(3deg);
+}
+
+.reloj{
+    font-size:45px;
+    color:#ff9ac5;
+    margin:20px;
+}
+
+.tarjeta{
+    background:#0e080c;
+    border:1px dashed #ff4f9a;
+    border-radius:18px;
+    padding:20px;
+    margin-top:20px;
+}
+
+.final{
+    display:none;
+}
+
+.final h2{
+    font-size:38px;
+}
+
+.corazon{
+    font-size:95px;
+    animation:latir 1.1s infinite;
+}
+
+@keyframes latir{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.15);}
+}
+
+.finalTexto{
+    font-size:19px;
+    line-height:1.8;
+}
+
+@media(max-width:600px){
+
+    h1{
+        font-size:32px;
+    }
+
+    .card{
+        padding:22px;
+    }
+
+    .pregunta{
+        font-size:20px;
+    }
+
+    .capsula{
+        width:180px;
+        height:180px;
+        font-size:65px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>⏳ CÁPSULA DEL TIEMPO</h1>
+
+<div class="subtitulo">
+    NIVEL 22 — MENSAJES PARA EL FUTURO ❤️
+</div>
+
+<div class="xp">
+    ⭐ XP: <span id="xp">0</span>
+</div>
+
+
+<!-- INICIO -->
+
+<div id="inicio" class="card">
+
+    <div class="icono">
+        ⏳
+    </div>
+
+    <h2>
+        UNA CÁPSULA PARA EL FUTURO
+    </h2>
+
+    <p class="texto">
+
+        Pequeño Simba...
+
+        <br><br>
+
+        Llegaste a una cápsula que puede guardar
+        mensajes para momentos que todavía
+        no han ocurrido.
+
+        <br><br>
+
+        En este nivel vas a dejar pequeñas
+        partes de este momento para que
+        algún día puedan volver a abrirse.
+
+        <br><br>
+
+        No hay respuestas correctas.
+
+        <br>
+
+        Lo importante es que lo que escribas
+        sea tuyo.
+
+        <br><br>
+
+        🔐 La cápsula tendrá <strong>5 compartimentos</strong>.
+
+    </p>
+
+    <button
+        class="boton"
+        onclick="iniciar()">
+
+        ⏳ ABRIR CÁPSULA
+
+    </button>
+
+</div>
+
+
+<!-- PASOS -->
+
+<div id="paso" class="card paso">
+
+    <div class="icono" id="icono">
+        📦
+    </div>
+
+    <h2 id="titulo"></h2>
+
+    <div class="pregunta" id="pregunta"></div>
+
+    <div id="contenido"></div>
+
+    <div class="opciones" id="opciones"></div>
+
+    <div class="mensaje" id="mensaje"></div>
+
+    <div class="progreso">
+        Compartimento
+        <span id="numero">1</span> de 5
+    </div>
+
+    <div class="barra">
+        <div
+            class="barraInterna"
+            id="barra">
+        </div>
+    </div>
+
+</div>
+
+
+<!-- FINAL -->
+
+<div id="final" class="card final">
+
+    <div class="corazon">
+        ⏳❤️
+    </div>
+
+    <h2>
+        CÁPSULA CERRADA
+    </h2>
+
+    <div class="finalTexto">
+
+        <p>
+            🔐 Todos los compartimentos han sido
+            sellados.
+        </p>
+
+        <p>
+            Lo que escribiste queda guardado
+            dentro de tu cápsula.
+        </p>
+
+        <p>
+            Quizá algún día vuelvas a leerlo
+            y descubras cuánto han cambiado
+            las cosas.
+        </p>
+
+        <p>
+            O quizá algunas cosas sigan
+            exactamente igual. ❤️
+        </p>
+
+        <p>
+            ⭐ <strong>+1000 XP</strong>
+        </p>
+
+        <p>
+            Y ahora solo queda una última cosa...
+        </p>
+
+        <p>
+            🔓 <strong>El verdadero final está cerca.</strong>
+        </p>
+
+        <p>
+            🦁 Nos vemos en el Nivel 23.
+        </p>
+
+    </div>
+
+    <a
+        href="mapa.html"
+        class="boton">
+
+        🗺️ IR AL NIVEL 23
+
+    </a>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   XP
+========================= */
+
+let xp=parseInt(
+    localStorage.getItem("xp") || "0"
+);
+
+document.getElementById("xp")
+    .textContent=xp;
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let pasoActual=0;
+
+const totalPasos=5;
+
+
+/* =========================
+   INICIAR
+========================= */
+
+function iniciar(){
+
+    document.getElementById("inicio")
+        .style.display="none";
+
+    document.getElementById("paso")
+        .style.display="block";
+
+    mostrarPaso();
+
+}
+
+
+/* =========================
+   MOSTRAR PASO
+========================= */
+
+function mostrarPaso(){
+
+    document.getElementById("numero")
+        .textContent=pasoActual+1;
+
+    document.getElementById("barra")
+        .style.width=
+        (pasoActual/totalPasos*100)+"%";
+
+    document.getElementById("mensaje")
+        .textContent="";
+
+    document.getElementById("contenido")
+        .innerHTML="";
+
+    document.getElementById("opciones")
+        .innerHTML="";
+
+
+    if(pasoActual===0){
+
+        paso1();
+
+    }
+
+    else if(pasoActual===1){
+
+        paso2();
+
+    }
+
+    else if(pasoActual===2){
+
+        paso3();
+
+    }
+
+    else if(pasoActual===3){
+
+        paso4();
+
+    }
+
+    else if(pasoActual===4){
+
+        paso5();
+
+    }
+
+}
+
+
+/* =========================
+   PASO 1
+========================= */
+
+function paso1(){
+
+    document.getElementById("icono")
+        .textContent="📅";
+
+    document.getElementById("titulo")
+        .textContent=
+        "COMPARTIMENTO 1 — EL MOMENTO";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Elige cuándo te gustaría volver a abrir esta cápsula.";
+
+    crearOpciones([
+
+        ["📅 En 1 año",true],
+
+        ["📅 En 5 años",true],
+
+        ["📅 En 10 años",true],
+
+        ["📅 Algún día inesperado",true]
+
+    ]);
+
+}
+
+
+/* =========================
+   PASO 2
+========================= */
+
+function paso2(){
+
+    document.getElementById("icono")
+        .textContent="✉️";
+
+    document.getElementById("titulo")
+        .textContent=
+        "COMPARTIMENTO 2 — MENSAJE";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Escribe algo que quieras que tu yo del futuro lea cuando abra esta cápsula.";
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <textarea
+            id="mensajeFuturo"
+            placeholder="Escribe aquí tu mensaje...">
+        </textarea>
+
+        <br>
+
+        <button
+            class="boton"
+            onclick="guardarMensaje()">
+
+            💌 SELLAR MENSAJE
+
+        </button>
+
+    `;
+
+}
+
+
+/* =========================
+   PASO 3
+========================= */
+
+function paso3(){
+
+    document.getElementById("icono")
+        .textContent="🎁";
+
+    document.getElementById("titulo")
+        .textContent=
+        "COMPARTIMENTO 3 — OBJETO DEL FUTURO";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Si pudieras guardar un objeto simbólico dentro de la cápsula, ¿cuál elegirías?";
+
+    crearOpciones([
+
+        ["📸 Una fotografía",true],
+
+        ["🎟️ Un boleto de una salida",true],
+
+        ["💌 Una carta",true],
+
+        ["🧸 Un pequeño regalo",true],
+
+        ["🎵 Algo relacionado con una canción",true]
+
+    ]);
+
+}
+
+
+/* =========================
+   PASO 4
+========================= */
+
+function paso4(){
+
+    document.getElementById("icono")
+        .textContent="🔮";
+
+    document.getElementById("titulo")
+        .textContent=
+        "COMPARTIMENTO 4 — PREDICCIÓN";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Haz una predicción: ¿qué crees que será diferente cuando vuelvas a abrir esta cápsula?";
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <textarea
+            id="prediccion"
+            placeholder="Escribe tu predicción...">
+        </textarea>
+
+        <br>
+
+        <button
+            class="boton"
+            onclick="guardarPrediccion()">
+
+            🔮 GUARDAR PREDICCIÓN
+
+        </button>
+
+    `;
+
+}
+
+
+/* =========================
+   PASO 5
+========================= */
+
+function paso5(){
+
+    document.getElementById("icono")
+        .textContent="🔐";
+
+    document.getElementById("titulo")
+        .textContent=
+        "COMPARTIMENTO FINAL — SELLO";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Antes de cerrar la cápsula, elige el sello que quieres dejarle.";
+
+    crearOpciones([
+
+        ["❤️ SIEMPRE",true],
+
+        ["🦁 SIMBA",true],
+
+        ["🔐 SECRETO",true],
+
+        ["✨ PARA SIEMPRE",true]
+
+    ]);
+
+}
+
+
+/* =========================
+   MENSAJE
+========================= */
+
+function guardarMensaje(){
+
+    const texto=
+        document.getElementById(
+            "mensajeFuturo"
+        ).value.trim();
+
+    if(texto.length<3){
+
+        document.getElementById("mensaje")
+            .textContent=
+            "💌 Escribe un mensaje antes de sellarlo.";
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        "nivel22_mensaje",
+        texto
+    );
+
+    completarPaso();
+
+}
+
+
+/* =========================
+   PREDICCIÓN
+========================= */
+
+function guardarPrediccion(){
+
+    const texto=
+        document.getElementById(
+            "prediccion"
+        ).value.trim();
+
+    if(texto.length<3){
+
+        document.getElementById("mensaje")
+            .textContent=
+            "🔮 Escribe tu predicción antes de guardarla.";
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        "nivel22_prediccion",
+        texto
+    );
+
+    completarPaso();
+
+}
+
+
+/* =========================
+   OPCIONES
+========================= */
+
+function crearOpciones(lista){
+
+    const contenedor=
+        document.getElementById("opciones");
+
+    contenedor.innerHTML="";
+
+    lista.forEach(item=>{
+
+        const boton=
+            document.createElement("button");
+
+        boton.className="opcion";
+
+        boton.textContent=item[0];
+
+        boton.onclick=()=>{
+
+            completarPaso();
+
+        };
+
+        contenedor.appendChild(boton);
+
+    });
+
+}
+
+
+/* =========================
+   COMPLETAR
+========================= */
+
+function completarPaso(){
+
+    xp+=200;
+
+    localStorage.setItem(
+        "xp",
+        xp
+    );
+
+    document.getElementById("xp")
+        .textContent=xp;
+
+    document.getElementById("mensaje")
+        .textContent=
+        "🔐 Compartimento sellado. +200 XP";
+
+    document
+        .querySelectorAll(".opcion")
+        .forEach(b=>{
+            b.disabled=true;
+        });
+
+    setTimeout(()=>{
+
+        pasoActual++;
+
+        if(pasoActual>=totalPasos){
+
+            terminar();
+
+        }
+
+        else{
+
+            mostrarPaso();
+
+        }
+
+    },900);
+
+}
+
+
+/* =========================
+   FINAL
+========================= */
+
+function terminar(){
+
+    localStorage.setItem(
+        "nivel22Completado",
+        "true"
+    );
+
+    localStorage.setItem(
+        "nivel22XP",
+        "1000"
+    );
+
+    document.getElementById("paso")
+        .style.display="none";
+
+    document.getElementById("final")
+        .style.display="block";
+
+    document.getElementById("barra")
+        .style.width="100%";
+
+}
+
+</script>
+
+</body>
+</html>

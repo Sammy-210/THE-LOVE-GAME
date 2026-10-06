@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nivel 7 - Medidor de amor ❤️</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    min-height:100%;
+    overflow-y:auto;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top,#641447 0%,#2b0b30 48%,#09030d 100%);
+}
+
+.container{
+    width:100%;
+    max-width:900px;
+    margin:auto;
+    padding:30px 20px 60px;
+}
+
+.back{
+    display:inline-block;
+    color:white;
+    text-decoration:none;
+    background:rgba(255,255,255,.1);
+    padding:10px 18px;
+    border-radius:20px;
+    margin-bottom:20px;
+}
+
+.header{
+    text-align:center;
+}
+
+.heart{
+    font-size:70px;
+    animation:latido 1.2s infinite;
+}
+
+@keyframes latido{
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.12);
+    }
+}
+
+h1{
+    font-size:42px;
+    margin:10px 0;
+}
+
+.subtitle{
+    color:#ff9bd7;
+    font-size:22px;
+}
+
+.intro{
+    margin-top:30px;
+    padding:25px;
+    background:rgba(255,255,255,.08);
+    border-radius:25px;
+    text-align:center;
+    line-height:1.7;
+}
+
+.question{
+    display:none;
+    margin-top:25px;
+    padding:25px;
+    background:rgba(255,255,255,.08);
+    border-radius:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.question.active{
+    display:block;
+}
+
+.question h2{
+    font-size:23px;
+    line-height:1.5;
+}
+
+.option{
+    width:100%;
+    margin-top:12px;
+    padding:16px;
+    border:0;
+    border-radius:16px;
+    background:#8e245f;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.option:hover{
+    background:#bd347d;
+    transform:scale(1.02);
+}
+
+.progress{
+    text-align:center;
+    margin-top:25px;
+    color:#ffb8df;
+    font-size:18px;
+}
+
+.xp{
+    text-align:center;
+    margin-top:10px;
+}
+
+.resultado{
+    display:none;
+    margin-top:30px;
+    padding:35px 25px;
+    background:rgba(255,255,255,.09);
+    border-radius:28px;
+    text-align:center;
+}
+
+.resultado h2{
+    color:#ff9bd7;
+    font-size:32px;
+}
+
+.porcentaje{
+    font-size:70px;
+    font-weight:bold;
+    color:#ff6db4;
+    margin:15px 0;
+}
+
+.corazones{
+    font-size:35px;
+    letter-spacing:5px;
+    margin:20px 0;
+}
+
+.mensaje-final{
+    font-size:19px;
+    line-height:1.7;
+    color:#ffd3ec;
+}
+
+.continuar{
+    display:block;
+    width:100%;
+    margin-top:25px;
+    padding:17px;
+    border:0;
+    border-radius:18px;
+    background:linear-gradient(90deg,#e83e91,#ff6db4);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<a href="mapa.html" class="back">
+    ← Volver al mapa
+</a>
+
+<div class="header">
+
+    <div class="heart">
+        ❤️
+    </div>
+
+    <h1>
+        Medidor de amor
+    </h1>
+
+    <div class="subtitle">
+        Nivel 7 💘
+    </div>
+
+</div>
+
+
+<div class="intro">
+
+    <h2>
+        💕 ¿Qué tan enamorado está mi pequeño Simba?
+    </h2>
+
+    <p>
+        Aquí no tienes que mover ninguna barra.
+        Solo responde con sinceridad y el juego calculará
+        automáticamente tu nivel de amor. 👀❤️
+    </p>
+
+    <p>
+        Cada respuesta suma puntos secretos...
+        pero cuidado, Simba: <b>Samis está observando. 👀</b>
+    </p>
+
+</div>
+
+
+<div class="progress" id="progreso">
+    Pregunta 1 de 8
+</div>
+
+<div class="xp">
+    ⭐ XP: <span id="xp">0</span> / 800
+</div>
+
+
+<!-- PREGUNTA 1 -->
+
+<div class="question active" id="q0">
+
+<h2>
+1. Si tuvieras un día libre y pudieras elegir cualquier plan conmigo,
+¿qué escogerías?
+</h2>
+
+<button class="option"
+onclick="responder(0,'Pasar todo el día contigo',100,this)">
+❤️ Pasar todo el día contigo
+</button>
+
+<button class="option"
+onclick="responder(0,'Verte un ratito',70,this)">
+💕 Verte un ratito
+</button>
+
+<button class="option"
+onclick="responder(0,'Depende del día',40,this)">
+🤔 Depende del día
+</button>
+
+<button class="option"
+onclick="responder(0,'Dormir todo el día',10,this)">
+😴 Dormir todo el día
+</button>
+
+</div>
+
+
+<!-- PREGUNTA 2 -->
+
+<div class="question" id="q1">
+
+<h2>
+2. Si Samis tiene un día difícil, ¿qué harías?
+</h2>
+
+<button class="option"
+onclick="responder(1,'Escucharla y abrazarla',100,this)">
+🫂 Escucharla y abrazarla
+</button>
+
+<button class="option"
+onclick="responder(1,'Intentar hacerla reír',80,this)">
+😂 Intentar hacerla reír
+</button>
+
+<button class="option"
+onclick="responder(1,'Preguntarle qué necesita',70,this)">
+💗 Preguntarle qué necesita
+</button>
+
+<button class="option"
+onclick="responder(1,'Dejarla sola sin preguntar',20,this)">
+😶 Dejarla sola sin preguntar
+</button>
+
+</div>
+
+
+<!-- PREGUNTA 3 -->
+
+<div class="question" id="q2">
+
+<h2>
+3. Si pudiéramos viajar juntos a cualquier lugar,
+¿qué te gustaría hacer?
+</h2>
+
+<button class="option"
+onclick="responder(2,'Conocer muchos lugares juntos',100,this)">
+🌎 Conocer muchos lugares juntos
+</button>
+
+<button class="option"
+onclick="responder(2,'Comer y recorrer el lugar',85,this)">
+🌮 Comer y recorrer el lugar
+</button>
+
+<button class="option"
+onclick="responder(2,'Tomarnos muchas fotos',80,this)">
+📸 Tomarnos muchas fotos
+</button>
+
+<button class="option"
+onclick="responder(2,'Dormir en el hotel',40,this)">
+😴 Dormir en el hotel
+</button>
+
+</div>
+
+
+<!-- PREGUNTA 4 -->
+
+<div class="question" id="q3">
+
+<h2>
+4. Samis te dice: “Tengo algo importante que contarte”.
+¿Qué haces primero?
+</h2>
+
+<button class="option"
+onclick="responder(3,'Le presto toda mi atención',100,this)">
+❤️ Le presto toda mi atención
+</button>
+
+<button class="option"
+onclick="responder(3,'Le pregunto qué pasó',90,this)">
+💬 Le pregunto qué pasó
+</button>
+
+<button class="option"
+onclick="responder(3,'Espero a que me lo cuente',70,this)">
+🙂 Espero a que me lo cuente
+</button>
+
+<button class="option"
+onclick="responder(3,'Le digo que después',20,this)">
+📱 Le digo que después
+</button>
+
+</div>
+
+
+<!-- PREGUNTA 5 -->
+
+<div class="question" id="q4">
+
+<h2>
+5. Si tuvieras que elegir una cosa que nunca quieres
+que falte entre nosotros, ¿cuál sería?
+</h2>
+
+<button class="option"
+onclick="responder(4,'El cariño',100,this)">
+❤️ El cariño
+</button>
+
+<button class="option"
+onclick="responder(4,'La confianza',100,this)">
+🤝 La confianza
+</button>
+
+<button class="option"
+onclick="responder(4,'Las risas',90,this)">
+😂 Las risas
+</button>
+
+<button class="option"
+onclick="responder(4,'Los memes',70,this)">
+🤣 Los memes
+</button>
+
+</div>
+
+
+<!-- PREGUNTA 6 -->
+
+<div class="question" id="q5">
+
+<h2>
+6. Si estamos juntos viendo una película y Samis
+se queda dormida en tu hombro, ¿qué haces?
+</h2>
+
+<button class="option"
+onclick="responder(5,'La dejo dormir y me quedo ahí',100,this)">
+🥹 La dejo dormir y me quedo ahí
+</button>
+
+<button class="option"
+onclick="responder(5,'Le acomodo el cabello',100,this)">
+💕 Le acomodo el cabello
+</button>
+
+<button class="option"
+onclick="responder(5,'Le tomo una foto',80,this)">
+📸 Le tomo una foto
+</button>
+
+<button class="option"
+onclick="responder(5,'La despierto',30,this)">
+😂 La despierto
+</button>
+
+</div>
+
+
+<!-- PREGUNTA 7 -->
+
+<div class="question" id="q6">
+
+<h2>
+7. ¿Qué frase describe mejor lo que quieres para
+el futuro con Samis?
+</h2>
+
+<button class="option"
+onclick="responder(6,'Seguir creando recuerdos juntos',100,this)">
+❤️ Seguir creando recuerdos juntos
+</button>
+
+<button class="option"
+onclick="responder(6,'Conocer muchos lugares juntos',95,this)">
+✈️ Conocer muchos lugares juntos
+</button>
+
+<button class="option"
+onclick="responder(6,'Ver qué pasa',50,this)">
+🤔 Ver qué pasa
+</button>
+
+<button class="option"
+onclick="responder(6,'No sé todavía',20,this)">
+😶 No sé todavía
+</button>
+
+</div>
+
+
+<!-- PREGUNTA 8 -->
+
+<div class="question" id="q7">
+
+<h2>
+8. La pregunta más importante... 👀❤️
+<br><br>
+Si pudieras elegir una sola cosa para hacer
+con Samis ahora mismo, ¿qué elegirías?
+</h2>
+
+<button class="option"
+onclick="responder(7,'Abrazarla y decirle que la quiero',100,this)">
+🫂 Abrazarla y decirle que la quiero
+</button>
+
+<button class="option"
+onclick="responder(7,'Dar una vuelta juntos',85,this)">
+🚶 Dar una vuelta juntos
+</button>
+
+<button class="option"
+onclick="responder(7,'Ir por tacos',80,this)">
+🌮 Ir por tacos
+</button>
+
+<button class="option"
+onclick="responder(7,'Jugar algo juntos',70,this)">
+🎮 Jugar algo juntos
+</button>
+
+</div>
+
+
+<!-- RESULTADO -->
+
+<div class="resultado" id="resultado">
+
+    <div style="font-size:65px;">
+        💘
+    </div>
+
+    <h2>
+        ¡Tu resultado está listo!
+    </h2>
+
+    <div class="porcentaje" id="porcentaje">
+        0%
+    </div>
+
+    <div class="corazones" id="corazones">
+        ❤️❤️❤️❤️❤️
+    </div>
+
+    <p class="mensaje-final" id="mensajeFinal"></p>
+
+    <h3>
+        ⭐ +800 XP
+    </h3>
+
+    <button
+        class="continuar"
+        onclick="irAlMapa()"
+    >
+        🗺️ CONTINUAR AL MAPA
+    </button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let preguntaActual = 0;
+
+let puntosAmor = 0;
+
+let xpNivel = 0;
+
+let respondidas = 0;
+
+
+/* =========================
+   PREGUNTAS
+========================= */
+
+const preguntas = [
+
+    "Si tuvieras un día libre y pudieras elegir cualquier plan conmigo, ¿qué escogerías?",
+
+    "Si Samis tiene un día difícil, ¿qué harías?",
+
+    "Si pudiéramos viajar juntos a cualquier lugar, ¿qué te gustaría hacer?",
+
+    "Samis te dice: Tengo algo importante que contarte. ¿Qué haces primero?",
+
+    "Si tuvieras que elegir una cosa que nunca quieres que falte entre nosotros, ¿cuál sería?",
+
+    "Si estamos juntos viendo una película y Samis se queda dormida en tu hombro, ¿qué haces?",
+
+    "¿Qué frase describe mejor lo que quieres para el futuro con Samis?",
+
+    "La pregunta más importante: Si pudieras elegir una sola cosa para hacer con Samis ahora mismo, ¿qué elegirías?"
+
+];
+
+
+/* =========================
+   RESPONDER
+========================= */
+
+async function responder(
+    numero,
+    respuesta,
+    puntos,
+    boton
+){
+
+    if(
+        localStorage.getItem(
+            "nivel7Pregunta" + numero
+        ) === "true"
+    ){
+
+        return;
+
+    }
+
+
+    boton.style.background =
+        "#26734d";
+
+
+    puntosAmor += puntos;
+
+    xpNivel += 100;
+
+    respondidas++;
+
+
+    document.getElementById(
+        "xp"
+    ).textContent = xpNivel;
+
+
+    localStorage.setItem(
+        "nivel7Pregunta" + numero,
+        "true"
+    );
+
+
+    await guardarRespuesta(
+        preguntas[numero],
+        respuesta,
+        puntos
+    );
+
+
+    setTimeout(function(){
+
+        document.getElementById(
+            "q" + numero
+        ).style.display = "none";
+
+
+        if(
+            respondidas === 8
+        ){
+
+            mostrarResultado();
+
+        }else{
+
+            mostrarSiguiente();
+
+        }
+
+    },450);
+
+}
+
+
+/* =========================
+   GUARDAR RESPUESTA
+========================= */
+
+async function guardarRespuesta(
+    pregunta,
+    respuesta,
+    puntos
+){
+
+    try{
+
+        const {error} =
+            await supabaseClient
+            .from("respuestas_nivel4")
+            .insert([{
+
+                pregunta: pregunta,
+
+                respuesta:
+                    respuesta +
+                    " | Puntos: " +
+                    puntos,
+
+                tipo:
+                    "Nivel 7 - Medidor de amor"
+
+            }]);
+
+
+        if(error){
+
+            console.error(
+                "Error:",
+                error
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================
+   SIGUIENTE
+========================= */
+
+function mostrarSiguiente(){
+
+    for(
+        let i = 0;
+        i < 8;
+        i++
+    ){
+
+        if(
+            localStorage.getItem(
+                "nivel7Pregunta" + i
+            ) !== "true"
+        ){
+
+            document.getElementById(
+                "q" + i
+            ).classList.add("active");
+
+
+            document.getElementById(
+                "progreso"
+            ).textContent =
+                "Pregunta " +
+                (i + 1) +
+                " de 8";
+
+
+            return;
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   RESULTADO
+========================= */
+
+function mostrarResultado(){
+
+    /*
+       Máximo:
+       800 puntos
+
+       Convertimos a porcentaje.
+    */
+
+    const porcentaje =
+        Math.round(
+            (puntosAmor / 800) * 100
+        );
+
+
+    document.getElementById(
+        "porcentaje"
+    ).textContent =
+        porcentaje + "%";
+
+
+    let corazones = "";
+
+    if(porcentaje >= 90){
+
+        corazones =
+            "❤️❤️❤️❤️❤️";
+
+        document.getElementById(
+            "mensajeFinal"
+        ).innerHTML =
+            "🔥 <b>NIVEL SIMBA ENAMORADO.</b><br><br>" +
+            "Creo que alguien está demasiado enamorado de su Samis... 👀❤️<br><br>" +
+            "Resultado oficial: " +
+            "<b>¡Samis ocupa demasiado espacio en tu corazón!</b> 🥹";
+
+    }
+
+    else if(porcentaje >= 75){
+
+        corazones =
+            "❤️❤️❤️❤️🤍";
+
+        document.getElementById(
+            "mensajeFinal"
+        ).innerHTML =
+            "💕 <b>AMOR MUY FUERTE.</b><br><br>" +
+            "Definitivamente hay alguien que piensa muchísimo en su Samis. ❤️";
+
+    }
+
+    else if(porcentaje >= 50){
+
+        corazones =
+            "❤️❤️❤️🤍🤍";
+
+        document.getElementById(
+            "mensajeFinal"
+        ).innerHTML =
+            "💗 <b>HAY SENTIMIENTOS.</b><br><br>" +
+            "Pero todavía podemos investigar qué tan enamorado está este Simba... 👀";
+
+    }
+
+    else{
+
+        corazones =
+            "❤️❤️🤍🤍🤍";
+
+        document.getElementById(
+            "mensajeFinal"
+        ).innerHTML =
+            "👀 <b>RESULTADO SOSPECHOSO.</b><br><br>" +
+            "Samis tendrá que investigar personalmente este caso. 😂❤️";
+
+    }
+
+
+    document.getElementById(
+        "corazones"
+    ).textContent =
+        corazones;
+
+
+    document.getElementById(
+        "progreso"
+    ).textContent =
+        "💘 ¡Medición completada!";
+
+
+    if(
+        localStorage.getItem(
+            "nivel7Completado"
+        ) !== "true"
+    ){
+
+        let xpActual =
+            parseInt(
+                localStorage.getItem(
+                    "xp"
+                ) || "0"
+            );
+
+
+        xpActual += 800;
+
+
+        localStorage.setItem(
+            "xp",
+            xpActual
+        );
+
+
+        localStorage.setItem(
+            "nivel7Completado",
+            "true"
+        );
+
+    }
+
+
+    for(
+        let i = 0;
+        i < 8;
+        i++
+    ){
+
+        document.getElementById(
+            "q" + i
+        ).style.display =
+            "none";
+
+    }
+
+
+    document.getElementById(
+        "resultado"
+    ).style.display =
+        "block";
+
+}
+
+
+/* =========================
+   MAPA
+========================= */
+
+function irAlMapa(){
+
+    window.location.href =
+        "mapa.html";
+
+}
+
+</script>
+
+</body>
+</html>

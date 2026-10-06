@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nivel 10 - Nuestro futuro ❤️</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    overflow-y: auto;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    color: white;
+    background: radial-gradient(
+        circle at top,
+        #5a123f 0%,
+        #260b2b 45%,
+        #09030d 100%
+    );
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    padding: 30px 20px 70px;
+}
+
+.back {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    background: rgba(255,255,255,0.1);
+    padding: 10px 18px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.header {
+    text-align: center;
+}
+
+.icon {
+    font-size: 75px;
+}
+
+h1 {
+    font-size: 42px;
+    margin: 10px 0;
+}
+
+.subtitle {
+    color: #ff9bd7;
+    font-size: 21px;
+}
+
+.intro {
+    text-align: center;
+    color: #ffd9ec;
+    line-height: 1.7;
+    margin: 25px auto 35px;
+    max-width: 700px;
+}
+
+.progress {
+    text-align: center;
+    margin: 20px 0;
+    color: #ffb8df;
+    font-size: 18px;
+}
+
+.question {
+    display: none;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 25px;
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.question.active {
+    display: block;
+}
+
+.question h2 {
+    font-size: 24px;
+    line-height: 1.5;
+    margin-top: 0;
+}
+
+.option {
+    width: 100%;
+    margin-top: 13px;
+    padding: 16px;
+    border: 0;
+    border-radius: 16px;
+    background: #8e245f;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.option:hover {
+    background: #b82d79;
+    transform: scale(1.01);
+}
+
+textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 15px;
+    margin-top: 15px;
+    border: 0;
+    border-radius: 16px;
+    background: rgba(255,255,255,.1);
+    color: white;
+    font-size: 16px;
+    resize: vertical;
+    outline: none;
+}
+
+.next-btn,
+.finish-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 16px;
+    border: 0;
+    border-radius: 17px;
+    background: linear-gradient(90deg,#e83e91,#ff6db4);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.next-btn:hover,
+.finish-btn:hover {
+    transform: scale(1.02);
+}
+
+.xp {
+    text-align: center;
+    margin: 18px 0;
+    color: #ffd166;
+    font-weight: bold;
+}
+
+#resultado {
+    display: none;
+    margin-top: 30px;
+    padding: 35px;
+    border-radius: 28px;
+    background: rgba(255,255,255,.08);
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.big {
+    font-size: 75px;
+}
+
+#resultado h2 {
+    color: #ff9bd7;
+    font-size: 32px;
+}
+
+#resultado p {
+    line-height: 1.7;
+    color: #ffd9ec;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<a href="mapa.html" class="back">
+    ← Volver al mapa
+</a>
+
+<div class="header">
+
+    <div class="icon">
+        🔮
+    </div>
+
+    <h1>
+        Nuestro futuro
+    </h1>
+
+    <div class="subtitle">
+        Nivel 10 ❤️
+    </div>
+
+</div>
+
+<div class="intro">
+
+    <p>
+        Ahora vamos a imaginar algunos momentos que
+        podrían formar parte de nuestra historia. 🥹
+    </p>
+
+    <p>
+        Elige las opciones que más te gustaría vivir
+        con tu Samis.
+    </p>
+
+</div>
+
+
+<div class="progress" id="progreso">
+    Pregunta 1 de 8
+</div>
+
+<div class="xp">
+    ⭐ XP del nivel:
+    <span id="xpNivel">0</span> / 1200
+</div>
+
+
+<!-- PREGUNTA 1 -->
+
+<div class="question active" id="q0">
+
+    <h2>
+        1. Si pudiéramos viajar juntos a cualquier lugar,
+        ¿qué elegirías?
+    </h2>
+
+    <button class="option" onclick="responder(0,'Playa')">
+        🏖️ Una playa bonita
+    </button>
+
+    <button class="option" onclick="responder(0,'Ciudad')">
+        🌆 Una ciudad que nunca hayamos visitado
+    </button>
+
+    <button class="option" onclick="responder(0,'Montaña')">
+        🏔️ Un lugar rodeado de naturaleza
+    </button>
+
+    <button class="option" onclick="responder(0,'Cualquiera')">
+        ❤️ Me importa más estar contigo
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 2 -->
+
+<div class="question" id="q1">
+
+    <h2>
+        2. ¿Qué plan te gustaría hacer conmigo
+        en una tarde tranquila?
+    </h2>
+
+    <button class="option" onclick="responder(1,'Peli')">
+        🎬 Ver una película juntos
+    </button>
+
+    <button class="option" onclick="responder(1,'Comida')">
+        🌮 Salir a comer algo
+    </button>
+
+    <button class="option" onclick="responder(1,'Paseo')">
+        🌅 Salir a caminar y platicar
+    </button>
+
+    <button class="option" onclick="responder(1,'Casa')">
+        🫂 Quedarnos juntos descansando
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 3 -->
+
+<div class="question" id="q2">
+
+    <h2>
+        3. Si algún día pasamos una Navidad juntos,
+        ¿qué te gustaría hacer?
+    </h2>
+
+    <button class="option" onclick="responder(2,'Familia')">
+        🎄 Pasarla juntos con nuestras familias
+    </button>
+
+    <button class="option" onclick="responder(2,'Cena')">
+        🍽️ Tener una cena especial
+    </button>
+
+    <button class="option" onclick="responder(2,'Regalos')">
+        🎁 Intercambiar regalos
+    </button>
+
+    <button class="option" onclick="responder(2,'Todo')">
+        ❤️ Todo lo anterior
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 4 -->
+
+<div class="question" id="q3">
+
+    <h2>
+        4. ¿Qué recuerdo te gustaría que algún día
+        podamos decir: “¿te acuerdas cuando...?”
+    </h2>
+
+    <button class="option" onclick="responder(3,'Viaje')">
+        ✈️ De un viaje juntos
+    </button>
+
+    <button class="option" onclick="responder(3,'Cita')">
+        💕 De nuestra cita favorita
+    </button>
+
+    <button class="option" onclick="responder(3,'Concierto')">
+        🎵 De una experiencia especial juntos
+    </button>
+
+    <button class="option" onclick="responder(3,'Todos')">
+        🥹 De todos nuestros momentos
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 5 -->
+
+<div class="question" id="q4">
+
+    <h2>
+        5. Si pudieras elegir un lugar para una
+        cita perfecta conmigo, ¿cuál sería?
+    </h2>
+
+    <button class="option" onclick="responder(4,'Restaurante')">
+        🍽️ Un restaurante bonito
+    </button>
+
+    <button class="option" onclick="responder(4,'Parque')">
+        🌳 Un parque tranquilo
+    </button>
+
+    <button class="option" onclick="responder(4,'Playa')">
+        🌊 La playa al atardecer
+    </button>
+
+    <button class="option" onclick="responder(4,'Sorpresa')">
+        🎀 Una cita sorpresa
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 6 -->
+
+<div class="question" id="q5">
+
+    <h2>
+        6. ¿Qué te gustaría que nunca cambiara
+        entre nosotros?
+    </h2>
+
+    <button class="option" onclick="responder(5,'Confianza')">
+        🤝 La confianza
+    </button>
+
+    <button class="option" onclick="responder(5,'Risas')">
+        😂 Las risas y nuestras bromas
+    </button>
+
+    <button class="option" onclick="responder(5,'Cariño')">
+        ❤️ La forma en que nos tratamos
+    </button>
+
+    <button class="option" onclick="responder(5,'Todo')">
+        🥹 Todo lo que tenemos
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 7 -->
+
+<div class="question" id="q6">
+
+    <h2>
+        7. Si pudieras cumplir un sueño conmigo,
+        ¿cuál elegirías?
+    </h2>
+
+    <button class="option" onclick="responder(6,'Viajar')">
+        ✈️ Viajar juntos
+    </button>
+
+    <button class="option" onclick="responder(6,'Conocer')">
+        🌎 Conocer muchos lugares
+    </button>
+
+    <button class="option" onclick="responder(6,'Momentos')">
+        💕 Crear muchísimos recuerdos
+    </button>
+
+    <button class="option" onclick="responder(6,'Todo')">
+        ❤️ Cumplir todos nuestros sueños
+    </button>
+
+</div>
+
+
+<!-- PREGUNTA 8 -->
+
+<div class="question" id="q7">
+
+    <h2>
+        8. Completa esta frase:
+        “En el futuro me gustaría que Samis y yo...”
+    </h2>
+
+    <textarea
+        id="respuestaLibre"
+        placeholder="Escribe aquí lo que te gustaría vivir con tu Samis... ❤️"
+    ></textarea>
+
+    <button
+        class="next-btn"
+        onclick="responderLibre()"
+    >
+        💕 GUARDAR MI RESPUESTA
+    </button>
+
+</div>
+
+
+<!-- RESULTADO -->
+
+<div id="resultado">
+
+    <div class="big">
+        💕
+    </div>
+
+    <h2>
+        ¡Nuestro futuro quedó escrito!
+    </h2>
+
+    <p>
+        Pequeño Simba, todavía nos quedan muchísimos
+        lugares por conocer, momentos por vivir y
+        recuerdos por crear juntos. ❤️
+    </p>
+
+    <h3>
+        ⭐ +1200 XP
+    </h3>
+
+    <button
+        class="finish-btn"
+        onclick="terminarNivel()"
+    >
+        🗺️ CONTINUAR AL MAPA
+    </button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   VARIABLES
+========================= */
+
+let preguntaActual = 0;
+let xpNivel = 0;
+let nivelTerminado = false;
+
+
+/* =========================
+   MOSTRAR PREGUNTA
+========================= */
+
+function mostrarPregunta(numero) {
+
+    for (let i = 0; i < 8; i++) {
+
+        document
+            .getElementById("q" + i)
+            .classList.remove("active");
+
+    }
+
+    document
+        .getElementById("q" + numero)
+        .classList.add("active");
+
+    document
+        .getElementById("progreso")
+        .textContent =
+        "Pregunta " + (numero + 1) + " de 8";
+
+}
+
+
+/* =========================
+   RESPONDER
+========================= */
+
+function responder(numero, respuesta) {
+
+    if (numero !== preguntaActual) {
+        return;
+    }
+
+    /*
+     * Todas las respuestas son válidas.
+     * Este nivel trata de imaginar
+     * el futuro juntos.
+     */
+
+    xpNivel += 150;
+
+    document
+        .getElementById("xpNivel")
+        .textContent = xpNivel;
+
+
+    setTimeout(function() {
+
+        preguntaActual++;
+
+
+        if (preguntaActual >= 8) {
+
+            completarNivel();
+
+        } else {
+
+            mostrarPregunta(
+                preguntaActual
+            );
+
+        }
+
+    }, 300);
+
+}
+
+
+/* =========================
+   RESPUESTA ABIERTA
+========================= */
+
+function responderLibre() {
+
+    if (preguntaActual !== 7) {
+        return;
+    }
+
+
+    const respuesta =
+        document
+            .getElementById("respuestaLibre")
+            .value
+            .trim();
+
+
+    if (!respuesta) {
+
+        alert(
+            "Escribe algo bonito sobre nuestro futuro ❤️"
+        );
+
+        return;
+    }
+
+
+    xpNivel += 150;
+
+    document
+        .getElementById("xpNivel")
+        .textContent = xpNivel;
+
+
+    completarNivel();
+
+}
+
+
+/* =========================
+   COMPLETAR NIVEL
+========================= */
+
+function completarNivel() {
+
+    if (nivelTerminado) {
+        return;
+    }
+
+    nivelTerminado = true;
+
+
+    let xpActual =
+        parseInt(
+            localStorage.getItem("xp") || "0"
+        );
+
+
+    xpActual += 1200;
+
+
+    localStorage.setItem(
+        "xp",
+        xpActual
+    );
+
+
+    localStorage.setItem(
+        "nivel10Completado",
+        "true"
+    );
+
+
+    for (let i = 0; i < 8; i++) {
+
+        document
+            .getElementById("q" + i)
+            .style.display = "none";
+
+    }
+
+
+    document
+        .getElementById("progreso")
+        .textContent =
+        "🎉 ¡Completaste las 8 preguntas!";
+
+
+    document
+        .getElementById("xpNivel")
+        .textContent =
+        "1200";
+
+
+    document
+        .getElementById("resultado")
+        .style.display =
+        "block";
+
+}
+
+
+/* =========================
+   MAPA
+========================= */
+
+function terminarNivel() {
+
+    window.location.href =
+        "mapa.html";
+
+}
+
+
+/* =========================
+   INICIAR
+========================= */
+
+mostrarPregunta(0);
+
+</script>
+
+</body>
+</html>

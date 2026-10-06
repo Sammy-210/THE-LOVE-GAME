@@ -1,0 +1,1076 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nivel 19 — Caja Negra 🖤</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+
+    background:
+        radial-gradient(circle at top,#48122d 0%,transparent 40%),
+        linear-gradient(135deg,#030303,#170812,#050505);
+
+    padding:25px;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+    margin:auto;
+    text-align:center;
+}
+
+h1{
+    font-size:42px;
+    margin-bottom:8px;
+
+    color:#ff9ac5;
+
+    text-shadow:
+        0 0 10px #ff4f9a,
+        0 0 25px #ff4f9a;
+}
+
+.subtitulo{
+    color:#ffc2db;
+    font-size:18px;
+    margin-bottom:20px;
+}
+
+.xp{
+    display:inline-block;
+
+    background:#0d080b;
+    border:2px solid #ff4f9a;
+
+    border-radius:20px;
+
+    padding:10px 22px;
+
+    margin-bottom:20px;
+
+    font-weight:bold;
+}
+
+.card{
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,105,160,.5);
+
+    border-radius:25px;
+
+    padding:30px;
+
+    box-shadow:
+        0 0 35px rgba(255,40,120,.25);
+
+    animation:entrada .5s ease;
+}
+
+@keyframes entrada{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+/* CAJA */
+
+.caja{
+    width:240px;
+    height:190px;
+
+    margin:30px auto;
+
+    background:
+        linear-gradient(145deg,#151515,#050505);
+
+    border:3px solid #555;
+
+    border-radius:20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:85px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 0 25px rgba(255,50,140,.3),
+        inset 0 0 25px #000;
+
+    transition:.4s;
+}
+
+.caja:hover{
+
+    transform:scale(1.05);
+
+    border-color:#ff4f9a;
+
+    box-shadow:
+        0 0 35px rgba(255,50,140,.6),
+        inset 0 0 25px #000;
+
+}
+
+.caja.abierta{
+
+    transform:scale(1.08) rotateX(10deg);
+
+    border-color:#ff4f9a;
+}
+
+/* MISION */
+
+.mision{
+    display:none;
+}
+
+.icono{
+    font-size:60px;
+    margin-bottom:10px;
+}
+
+.tituloMision{
+    font-size:28px;
+    color:#ff9ac5;
+    margin-bottom:15px;
+}
+
+.texto{
+    color:#ddd;
+    line-height:1.7;
+    font-size:17px;
+}
+
+.pregunta{
+    font-size:25px;
+    line-height:1.45;
+
+    margin:25px 0;
+}
+
+.opciones{
+    display:grid;
+    gap:13px;
+}
+
+.opcion{
+    width:100%;
+
+    border:none;
+
+    border-radius:15px;
+
+    padding:17px;
+
+    background:
+        linear-gradient(90deg,#72133d,#c92c6e);
+
+    color:white;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.opcion:hover{
+
+    transform:scale(1.03);
+
+    box-shadow:
+        0 0 18px #ff4f9a;
+}
+
+.opcion:disabled{
+    opacity:.6;
+    cursor:default;
+}
+
+.mensaje{
+
+    min-height:30px;
+
+    margin-top:20px;
+
+    color:#ffb6d5;
+
+    font-size:17px;
+}
+
+.progreso{
+
+    margin-top:22px;
+
+    color:#ccc;
+}
+
+.barra{
+
+    height:12px;
+
+    background:#24131b;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin-top:10px;
+}
+
+.barraInterna{
+
+    height:100%;
+
+    width:0%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff4f9a,
+            #ff9ac5
+        );
+
+    transition:.5s;
+}
+
+/* CODIGO */
+
+.codigo{
+
+    font-size:38px;
+
+    letter-spacing:12px;
+
+    color:#ff9ac5;
+
+    margin:25px 0;
+
+    text-shadow:0 0 15px #ff4f9a;
+}
+
+input{
+
+    width:100%;
+
+    padding:16px;
+
+    border-radius:12px;
+
+    border:2px solid #7d3154;
+
+    background:#0d080b;
+
+    color:white;
+
+    font-size:20px;
+
+    text-align:center;
+
+    outline:none;
+}
+
+input:focus{
+
+    border-color:#ff4f9a;
+
+    box-shadow:0 0 15px rgba(255,70,150,.4);
+}
+
+.boton{
+
+    display:inline-block;
+
+    margin-top:20px;
+
+    padding:15px 28px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #b71961,
+            #ef4d91
+        );
+
+    border-radius:30px;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:16px;
+}
+
+/* FINAL */
+
+.final{
+    display:none;
+}
+
+.final h2{
+
+    color:#ff9ac5;
+
+    font-size:38px;
+
+}
+
+.corazon{
+
+    font-size:85px;
+
+    animation:latir 1s infinite;
+}
+
+@keyframes latir{
+
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.18);
+    }
+
+}
+
+.mensajeFinal{
+
+    font-size:19px;
+
+    line-height:1.8;
+
+}
+
+.clave{
+
+    display:inline-block;
+
+    margin:20px 0;
+
+    padding:15px 25px;
+
+    border:2px dashed #ff4f9a;
+
+    border-radius:15px;
+
+    color:#ff9ac5;
+
+    font-size:25px;
+
+    font-weight:bold;
+
+}
+
+/* CORAZONES */
+
+.corazonFlotante{
+
+    position:fixed;
+
+    font-size:25px;
+
+    pointer-events:none;
+
+    animation:subir 4s linear forwards;
+}
+
+@keyframes subir{
+
+    0%{
+
+        transform:
+            translateY(0)
+            scale(.7);
+
+        opacity:1;
+    }
+
+    100%{
+
+        transform:
+            translateY(-100vh)
+            scale(1.5);
+
+        opacity:0;
+    }
+
+}
+
+@media(max-width:600px){
+
+    h1{
+        font-size:31px;
+    }
+
+    .card{
+        padding:22px;
+    }
+
+    .caja{
+
+        width:190px;
+        height:160px;
+
+        font-size:70px;
+    }
+
+    .pregunta{
+        font-size:21px;
+    }
+
+    .codigo{
+        font-size:28px;
+        letter-spacing:7px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🖤 CAJA NEGRA</h1>
+
+<div class="subtitulo">
+    OPERACIÓN: PEQUEÑO SIMBA 🦁
+</div>
+
+<div class="xp">
+    ⭐ XP: <span id="xp">0</span>
+</div>
+
+
+<!-- INTRO -->
+
+<div id="inicio" class="card">
+
+    <div class="icono">
+        🔐
+    </div>
+
+    <h2>
+        ARCHIVO ULTRASECRETO
+    </h2>
+
+    <p class="texto">
+
+        Simba, encontraste una caja que no debería
+        estar aquí... 👀
+
+        <br><br>
+
+        Dentro hay información clasificada sobre
+        una misión muy importante.
+
+        <br><br>
+
+        Para abrirla tendrás que demostrar que
+        puedes superar las pruebas.
+
+        <br><br>
+
+        <strong>
+            ¿Te atreves?
+        </strong>
+
+    </p>
+
+    <div
+        id="caja"
+        class="caja"
+        onclick="abrirCaja()"
+    >
+        🔒
+    </div>
+
+    <p id="instruccion">
+
+        👆 Haz clic en la caja para iniciar
+        la misión.
+    </p>
+
+</div>
+
+
+<!-- MISION -->
+
+<div id="mision" class="card">
+
+    <div class="icono" id="icono">
+        🕵️
+    </div>
+
+    <div
+        class="tituloMision"
+        id="tituloMision">
+    </div>
+
+    <div
+        class="pregunta"
+        id="pregunta">
+    </div>
+
+    <div
+        id="contenidoExtra">
+    </div>
+
+    <div
+        class="opciones"
+        id="opciones">
+    </div>
+
+    <div
+        class="mensaje"
+        id="mensaje">
+    </div>
+
+    <div class="progreso">
+
+        Misión
+        <span id="numero">1</span>
+        de 6
+
+    </div>
+
+    <div class="barra">
+
+        <div
+            class="barraInterna"
+            id="barra">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FINAL -->
+
+<div id="final" class="card final">
+
+    <div class="corazon">
+        🖤
+    </div>
+
+    <h2>
+        MISIÓN COMPLETADA
+    </h2>
+
+    <div class="clave">
+        SIMBA-LOVE-21
+    </div>
+
+    <div class="mensajeFinal">
+
+        <p>
+            🦁 Has conseguido abrir la Caja Negra.
+        </p>
+
+        <p>
+            Pero descubriste algo que no estaba
+            escrito en ningún archivo...
+        </p>
+
+        <p>
+            La misión nunca fue encontrar un objeto.
+        </p>
+
+        <p>
+            Era descubrir cuánto puede significar
+            una persona cuando se convierte en
+            una parte importante de tu vida. ❤️
+        </p>
+
+        <p>
+            Y sí, pequeño Simba...
+        </p>
+
+        <p>
+            <strong>
+                esta caja tenía un secreto:
+                Samis te quiere muchísimo. 💗
+            </strong>
+        </p>
+
+        <p>
+            🔓 Has conseguido la clave para
+            continuar con la siguiente misión.
+        </p>
+
+    </div>
+
+    <a
+        href="mapa.html"
+        class="boton">
+
+        🗺️ CONTINUAR AL NIVEL 20
+
+    </a>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   DATOS DE LA MISIÓN
+========================= */
+
+const misiones=[
+
+{
+
+    icono:"🔢",
+
+    titulo:"PRUEBA 1 — EL CÓDIGO",
+
+    pregunta:
+        "La caja tiene un código de 3 números. ¿Cuál elegirías como contraseña para una misión secreta?",
+
+    opciones:[
+        ["123",5],
+        ["777",10],
+        ["021",15],
+        ["999",5]
+    ],
+
+    correcta:2
+
+},
+
+{
+
+    icono:"🎒",
+
+    titulo:"PRUEBA 2 — EQUIPO DE MISIÓN",
+
+    pregunta:
+        "Solo puedes llevar UNA cosa a una misión de aventura. ¿Cuál eliges?",
+
+    opciones:[
+        ["📱 El celular",8],
+        ["🍕 Comida",10],
+        ["🧸 Un objeto especial",15],
+        ["🗺️ Un mapa",12]
+    ],
+
+    correcta:2
+
+},
+
+{
+
+    icono:"🚪",
+
+    titulo:"PRUEBA 3 — LA PUERTA",
+
+    pregunta:
+        "Llegas a una puerta con tres botones. Solo uno abre el camino. ¿Cuál presionas?",
+
+    opciones:[
+        ["❤️ Corazón",15],
+        ["💀 Calavera",2],
+        ["⚡ Rayo",8]
+    ],
+
+    correcta:0
+
+},
+
+{
+
+    icono:"⏰",
+
+    titulo:"PRUEBA 4 — DECISIÓN RÁPIDA",
+
+    pregunta:
+        "Tienes solamente 10 segundos para elegir qué hacer antes de continuar la misión.",
+
+    opciones:[
+        ["🏃 Correr sin pensar",5],
+        ["🧠 Pensar rápido y elegir",15],
+        ["😂 Hacer una broma",8],
+        ["😴 Dormirme",0]
+    ],
+
+    correcta:1
+
+},
+
+{
+
+    icono:"🧩",
+
+    titulo:"PRUEBA 5 — LA PISTA",
+
+    pregunta:
+        "La siguiente pista dice: “No es un lugar, no es una cosa y no se puede comprar. Pero puede hacer que un día normal sea especial”. ¿Qué es?",
+
+    opciones:[
+        ["💰 Dinero",2],
+        ["❤️ Un momento especial",15],
+        ["📱 Un celular",3],
+        ["🍔 Comida",6]
+    ],
+
+    correcta:1
+
+},
+
+{
+
+    icono:"🔐",
+
+    titulo:"PRUEBA FINAL — LA CAJA",
+
+    pregunta:
+        "La última cerradura pregunta: ¿qué debe llevar siempre una aventura para convertirse en un recuerdo inolvidable?",
+
+    opciones:[
+        ["🗺️ Un destino",7],
+        ["📸 Una cámara",8],
+        ["❤️ Una persona especial",15],
+        ["💰 Mucho dinero",2]
+    ],
+
+    correcta:2
+
+}
+
+];
+
+
+let actual=0;
+
+let xp=parseInt(
+    localStorage.getItem("xp") || "0"
+);
+
+let puntos=0;
+
+let respuestas=[];
+
+
+/* =========================
+   XP
+========================= */
+
+document.getElementById("xp").textContent=xp;
+
+
+/* =========================
+   ABRIR CAJA
+========================= */
+
+function abrirCaja(){
+
+    const caja=
+        document.getElementById("caja");
+
+    caja.classList.add("abierta");
+
+    caja.textContent="🔓";
+
+    document.getElementById("instruccion")
+        .textContent=
+        "🔓 Acceso autorizado...";
+
+    crearCorazones();
+
+    setTimeout(()=>{
+
+        document.getElementById("inicio")
+            .style.display="none";
+
+        document.getElementById("mision")
+            .style.display="block";
+
+        mostrarMision();
+
+    },900);
+
+}
+
+
+/* =========================
+   MOSTRAR MISIÓN
+========================= */
+
+function mostrarMision(){
+
+    const m=
+        misiones[actual];
+
+    document.getElementById("icono")
+        .textContent=m.icono;
+
+    document.getElementById("tituloMision")
+        .textContent=m.titulo;
+
+    document.getElementById("pregunta")
+        .textContent=m.pregunta;
+
+    document.getElementById("numero")
+        .textContent=actual+1;
+
+    document.getElementById("barra")
+        .style.width=
+        ((actual/misiones.length)*100)+"%";
+
+    document.getElementById("mensaje")
+        .textContent="";
+
+    document.getElementById("contenidoExtra")
+        .innerHTML="";
+
+    const contenedor=
+        document.getElementById("opciones");
+
+    contenedor.innerHTML="";
+
+
+    m.opciones.forEach((opcion,i)=>{
+
+        const boton=
+            document.createElement("button");
+
+        boton.className="opcion";
+
+        boton.textContent=
+            opcion[0];
+
+        boton.onclick=()=>{
+
+            responder(
+                i,
+                opcion[0],
+                opcion[1]
+            );
+
+        };
+
+        contenedor.appendChild(boton);
+
+    });
+
+}
+
+
+/* =========================
+   RESPONDER
+========================= */
+
+function responder(
+    indice,
+    respuesta,
+    valor
+){
+
+    const m=
+        misiones[actual];
+
+    document
+        .querySelectorAll(".opcion")
+        .forEach(boton=>{
+            boton.disabled=true;
+        });
+
+
+    respuestas.push({
+        mision:actual+1,
+        respuesta:respuesta
+    });
+
+
+    if(indice===m.correcta){
+
+        puntos+=valor;
+
+        xp+=250;
+
+        localStorage.setItem(
+            "xp",
+            xp
+        );
+
+        document.getElementById("xp")
+            .textContent=xp;
+
+        document.getElementById("mensaje")
+            .textContent=
+            "🔓 ¡Prueba superada! +250 XP";
+
+        crearCorazones();
+
+    }
+
+    else{
+
+        document.getElementById("mensaje")
+            .textContent=
+            "👀 Esa opción no abre la cerradura...";
+
+    }
+
+
+    localStorage.setItem(
+        "nivel19_respuesta_"+(actual+1),
+        respuesta
+    );
+
+
+    setTimeout(()=>{
+
+        actual++;
+
+        if(
+            actual>=misiones.length
+        ){
+
+            terminarMision();
+
+        }
+
+        else{
+
+            mostrarMision();
+
+        }
+
+    },900);
+
+}
+
+
+/* =========================
+   FINAL
+========================= */
+
+function terminarMision(){
+
+    document.getElementById("mision")
+        .style.display="none";
+
+    document.getElementById("final")
+        .style.display="block";
+
+    document.getElementById("barra")
+        .style.width="100%";
+
+    localStorage.setItem(
+        "nivel19Completado",
+        "true"
+    );
+
+    localStorage.setItem(
+        "nivel19Puntos",
+        puntos
+    );
+
+    crearCorazones();
+
+}
+
+
+/* =========================
+   CORAZONES
+========================= */
+
+function crearCorazones(){
+
+    for(let i=0;i<12;i++){
+
+        const c=
+            document.createElement("div");
+
+        c.className=
+            "corazonFlotante";
+
+        c.textContent=
+            [
+                "❤️",
+                "💕",
+                "💗",
+                "🖤",
+                "💖"
+            ][
+                Math.floor(
+                    Math.random()*5
+                )
+            ];
+
+        c.style.left=
+            Math.random()*100+"vw";
+
+        c.style.bottom=
+            "-30px";
+
+        c.style.animationDuration=
+            (3+Math.random()*2)+"s";
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>{
+            c.remove();
+        },5000);
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

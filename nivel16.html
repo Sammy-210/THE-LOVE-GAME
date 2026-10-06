@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nivel 16 — Lo que Samis piensa cuando te ve ❤️</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top,#6d123d 0%,transparent 40%),
+        linear-gradient(135deg,#080808,#250817,#080808);
+    padding:25px;
+}
+
+.container{
+    max-width:850px;
+    margin:auto;
+    text-align:center;
+}
+
+h1{
+    font-size:40px;
+    margin-bottom:8px;
+    text-shadow:0 0 20px #ff4f9a;
+}
+
+.subtitulo{
+    color:#ffb6d5;
+    font-size:19px;
+    margin-bottom:20px;
+}
+
+.xp{
+    display:inline-block;
+    background:#160a11;
+    border:2px solid #ff4f9a;
+    border-radius:20px;
+    padding:10px 22px;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+.card{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,105,160,.5);
+    border-radius:25px;
+    padding:32px;
+    box-shadow:0 0 35px rgba(255,40,120,.25);
+}
+
+.escena{
+    font-size:55px;
+    margin-bottom:10px;
+}
+
+.pregunta{
+    font-size:25px;
+    line-height:1.4;
+    margin-bottom:25px;
+}
+
+.opciones{
+    display:grid;
+    gap:13px;
+}
+
+.opcion{
+    border:none;
+    border-radius:15px;
+    padding:17px;
+    background:linear-gradient(90deg,#8f174d,#d52d75);
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.opcion:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 18px #ff4f9a;
+}
+
+.resultado{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:18px;
+    background:rgba(255,70,140,.12);
+    border:1px solid #ff6fa8;
+    line-height:1.7;
+}
+
+.barra{
+    height:12px;
+    background:#2b1722;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:20px;
+}
+
+.barraInterna{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#ff4f9a,#ff9ac5);
+    transition:.5s;
+}
+
+.progreso{
+    margin-top:12px;
+    color:#ddd;
+}
+
+.final{
+    display:none;
+}
+
+.final h2{
+    color:#ff9ac5;
+    font-size:35px;
+}
+
+.corazon{
+    font-size:75px;
+    animation:latir 1s infinite;
+}
+
+.boton{
+    display:inline-block;
+    margin-top:25px;
+    padding:15px 28px;
+    background:linear-gradient(90deg,#b71961,#ef4d91);
+    border-radius:30px;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+@keyframes latir{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.18);}
+}
+
+.corazonFlotante{
+    position:fixed;
+    font-size:25px;
+    pointer-events:none;
+    animation:subir 4s linear forwards;
+}
+
+@keyframes subir{
+    0%{
+        transform:translateY(0);
+        opacity:1;
+    }
+    100%{
+        transform:translateY(-100vh);
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>💭 LO QUE SAMIS PIENSA CUANDO TE VE</h1>
+
+<div class="subtitulo">
+    ¿De verdad sabes lo que pasa por la cabeza de tu niña? 👀❤️
+</div>
+
+<div class="xp">
+    ⭐ XP: <span id="xp">0</span>
+</div>
+
+<div id="juego" class="card">
+
+    <div class="escena" id="escena">👀❤️</div>
+
+    <div class="pregunta" id="pregunta"></div>
+
+    <div class="opciones" id="opciones"></div>
+
+    <div class="resultado" id="resultado"></div>
+
+    <div class="progreso">
+        Situación <span id="numero">1</span> de 8
+    </div>
+
+    <div class="barra">
+        <div class="barraInterna" id="barra"></div>
+    </div>
+
+</div>
+
+<div id="final" class="card final">
+
+    <div class="corazon">❤️</div>
+
+    <h2>¡Terminaste el nivel, Simba! 🦁</h2>
+
+    <p id="mensajeFinal"></p>
+
+    <p>
+        Parece que ya conoces bastante bien lo que pasa
+        por la cabeza de tu Samis cuando te ve. 🥹❤️
+    </p>
+
+    <p>
+        Pero recuerda...
+        <br><br>
+        <strong>
+        cada vez que te veo, siempre hay algo nuevo
+        que me haces sentir. 💗
+        </strong>
+    </p>
+
+    <a href="mapa.html" class="boton">
+        🗺️ CONTINUAR AL NIVEL 17
+    </a>
+
+</div>
+
+</div>
+
+<script>
+
+const situaciones = [
+
+{
+    emoji:"👀",
+    pregunta:"Cuando Samis te ve llegar, ¿qué crees que piensa primero?",
+    opciones:[
+        "😐 Ahí viene...",
+        "😍 Qué guapo está mi niño",
+        "🤔 A ver qué hace ahora",
+        "😂 Seguro viene a molestarme"
+    ],
+    correcta:1
+},
+
+{
+    emoji:"😊",
+    pregunta:"Cuando le sonríes directamente, ¿qué crees que pasa por su cabeza?",
+    opciones:[
+        "🥹 Se pone nerviosa y feliz",
+        "😴 Le da sueño",
+        "😂 Se empieza a reír de ti",
+        "🤨 Se pregunta qué quieres"
+    ],
+    correcta:0
+},
+
+{
+    emoji:"🫂",
+    pregunta:"Cuando la abrazas fuerte, ¿qué crees que quiere hacer Samis?",
+    opciones:[
+        "Salir corriendo",
+        "🫂 Quedarse abrazada contigo",
+        "😂 Hacerte cosquillas",
+        "📱 Sacar el celular"
+    ],
+    correcta:1
+},
+
+{
+    emoji:"😍",
+    pregunta:"Cuando Samis se queda mirándote a los ojos, ¿qué crees que piensa?",
+    opciones:[
+        "👀 Qué bonitos ojos tiene",
+        "🍕 Tengo hambre",
+        "📚 Tengo tarea",
+        "😂 Qué raro está"
+    ],
+    correcta:0
+},
+
+{
+    emoji:"⚽",
+    pregunta:"Cuando va a verte jugar fútbol, ¿qué crees que siente?",
+    opciones:[
+        "😴 Aburrimiento",
+        "❤️ Orgullo y felicidad de verte",
+        "🤨 Nada",
+        "😂 Solo quiere irse"
+    ],
+    correcta:1
+},
+
+{
+    emoji:"🌹",
+    pregunta:"Cuando recuerda que le diste flores, ¿qué crees que siente?",
+    opciones:[
+        "🥹 Un recuerdo muy bonito",
+        "😐 Nada",
+        "😂 Se arrepiente",
+        "😴 Se duerme"
+    ],
+    correcta:0
+},
+
+{
+    emoji:"💋",
+    pregunta:"Después de un momento romántico contigo, ¿qué crees que piensa Samis?",
+    opciones:[
+        "😂 Qué vergüenza",
+        "❤️ Quiero volver a vivirlo",
+        "🏃 Me voy",
+        "📚 Necesito estudiar"
+    ],
+    correcta:1
+},
+
+{
+    emoji:"🦁❤️",
+    pregunta:"Y cuando piensa en su pequeño Simba, ¿qué crees que siente?",
+    opciones:[
+        "🥰 Muchísimo cariño",
+        "❤️ Amor, felicidad y tranquilidad",
+        "🫂 Ganas de estar contigo",
+        "💗 Todas las anteriores"
+    ],
+    correcta:3
+}
+
+];
+
+let actual=0;
+let puntos=0;
+let xp=parseInt(localStorage.getItem("xp")||"0");
+
+document.getElementById("xp").textContent=xp;
+
+function mostrar(){
+
+    const s=situaciones[actual];
+
+    document.getElementById("escena").textContent=s.emoji;
+
+    document.getElementById("pregunta").textContent=s.pregunta;
+
+    document.getElementById("numero").textContent=actual+1;
+
+    document.getElementById("barra").style.width=
+        ((actual/situaciones.length)*100)+"%";
+
+    document.getElementById("resultado").style.display="none";
+
+    const opciones=document.getElementById("opciones");
+
+    opciones.innerHTML="";
+
+    s.opciones.forEach((texto,i)=>{
+
+        const boton=document.createElement("button");
+
+        boton.className="opcion";
+
+        boton.textContent=texto;
+
+        boton.onclick=()=>responder(i);
+
+        opciones.appendChild(boton);
+
+    });
+}
+
+function responder(indice){
+
+    const s=situaciones[actual];
+
+    const resultado=document.getElementById("resultado");
+
+    document.querySelectorAll(".opcion")
+    .forEach(b=>b.disabled=true);
+
+    if(indice===s.correcta){
+
+        puntos++;
+
+        resultado.innerHTML=
+        "💗 ¡Exacto! Esa es bastante parecida a lo que Samis pensaría. 🥹";
+
+        resultado.style.display="block";
+
+        xp+=200;
+
+        localStorage.setItem("xp",xp);
+
+        document.getElementById("xp").textContent=xp;
+
+        crearCorazones();
+
+    }else{
+
+        resultado.innerHTML=
+        "👀 Mmm... esa no era la que pensaba Samis. Pero puedes seguir intentando conocerla. ❤️";
+
+        resultado.style.display="block";
+
+    }
+
+    localStorage.setItem(
+        "nivel16_respuesta_"+(actual+1),
+        s.opciones[indice]
+    );
+
+    setTimeout(()=>{
+
+        actual++;
+
+        if(actual>=situaciones.length){
+
+            terminar();
+
+        }else{
+
+            mostrar();
+
+        }
+
+    },1000);
+
+}
+
+function terminar(){
+
+    document.getElementById("juego").style.display="none";
+
+    document.getElementById("final").style.display="block";
+
+    document.getElementById("barra").style.width="100%";
+
+    let mensaje="";
+
+    if(puntos===8){
+        mensaje=
+        "🏆 ¡PERFECTO! 8/8. Simba, parece que conoces demasiado bien a tu Samis. ❤️";
+    }
+    else if(puntos>=6){
+        mensaje=
+        "🥰 ¡Muy bien! "+puntos+"/8. Conoces muchísimo a tu Samis.";
+    }
+    else if(puntos>=4){
+        mensaje=
+        "💗 Sacaste "+puntos+"/8. Todavía tienes algunas cosas que descubrir sobre tu niña.";
+    }
+    else{
+        mensaje=
+        "😂 Sacaste "+puntos+"/8. Parece que toca conocer mucho más a tu Samis, Simba.";
+    }
+
+    document.getElementById("mensajeFinal").textContent=mensaje;
+
+    localStorage.setItem("nivel16Completado","true");
+
+    crearCorazones();
+
+}
+
+function crearCorazones(){
+
+    for(let i=0;i<10;i++){
+
+        const c=document.createElement("div");
+
+        c.className="corazonFlotante";
+
+        c.textContent=
+        ["❤️","💕","💗","💖","💘"][Math.floor(Math.random()*5)];
+
+        c.style.left=Math.random()*100+"vw";
+
+        c.style.bottom="-30px";
+
+        c.style.animationDuration=
+        (3+Math.random()*2)+"s";
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>c.remove(),5000);
+    }
+}
+
+mostrar();
+
+</script>
+
+</body>
+</html>

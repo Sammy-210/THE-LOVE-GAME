@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FINAL VERDADERO — Mi pequeño Simba</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top, #5a163f 0%, #220d20 45%, #09070d 100%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+    text-align:center;
+}
+
+.hidden{
+    display:none;
+}
+
+.card{
+    background:rgba(20,10,25,.92);
+    border:2px solid #ff4f9a;
+    border-radius:25px;
+    padding:35px 25px;
+    box-shadow:0 0 35px rgba(255,60,150,.35);
+}
+
+.crown{
+    font-size:70px;
+    animation:float 2s infinite ease-in-out;
+}
+
+.lion{
+    font-size:80px;
+    margin:10px;
+}
+
+h1{
+    color:#ff78b5;
+    font-size:42px;
+    margin:10px 0;
+}
+
+h2{
+    color:#ffd0e5;
+}
+
+.subtitle{
+    color:#ffb5d2;
+    font-size:18px;
+}
+
+.story{
+    text-align:left;
+    line-height:1.8;
+    font-size:17px;
+    margin-top:25px;
+}
+
+.story p{
+    margin-bottom:18px;
+}
+
+.highlight{
+    color:#ff79b6;
+    font-weight:bold;
+}
+
+.choice-container{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    margin-top:25px;
+}
+
+.choice{
+    border:none;
+    border-radius:15px;
+    padding:17px;
+    font-size:17px;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(135deg,#b72c68,#ff4f9a);
+    transition:.25s;
+}
+
+.choice:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 20px rgba(255,80,160,.6);
+}
+
+.message{
+    margin-top:25px;
+    padding:20px;
+    border-radius:18px;
+    background:rgba(255,70,150,.12);
+    border:1px solid #ff4f9a;
+    line-height:1.7;
+}
+
+.final-letter{
+    text-align:left;
+    background:rgba(255,255,255,.04);
+    padding:25px;
+    border-radius:20px;
+    border:1px solid rgba(255,120,180,.4);
+    line-height:1.9;
+    margin-top:25px;
+}
+
+.signature{
+    text-align:center;
+    color:#ff82ba;
+    font-size:22px;
+    font-weight:bold;
+    margin-top:25px;
+}
+
+button{
+    font-family:inherit;
+}
+
+.end{
+    margin-top:25px;
+    padding:25px;
+    border-radius:20px;
+    background:linear-gradient(135deg,rgba(255,50,130,.2),rgba(120,30,90,.2));
+    border:2px solid #ff4f9a;
+}
+
+.end h2{
+    color:#ff79b6;
+    font-size:30px;
+}
+
+.big-heart{
+    font-size:65px;
+    animation:pulse 1.2s infinite;
+}
+
+.xp{
+    color:#ffd1e5;
+    font-size:18px;
+    margin-top:15px;
+}
+
+a{
+    display:inline-block;
+    margin-top:20px;
+    text-decoration:none;
+    color:white;
+    background:#ff4f9a;
+    padding:15px 25px;
+    border-radius:14px;
+    font-weight:bold;
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+@keyframes pulse{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.18);}
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<!-- INTRO -->
+<div class="card" id="intro">
+
+    <div class="crown">👑</div>
+    <div class="lion">🦁❤️</div>
+
+    <h1>FINAL VERDADERO</h1>
+
+    <div class="subtitle">
+        Mi pequeño Simba...
+    </div>
+
+    <div class="story">
+
+        <p>
+            Si llegaste hasta aquí significa que recorriste
+            <span class="highlight">todo el juego</span>.
+        </p>
+
+        <p>
+            Contestaste preguntas, superaste retos, descubriste secretos,
+            juntaste XP, abriste archivos, guardaste recuerdos
+            y llegaste hasta el último nivel.
+        </p>
+
+        <p>
+            Pero había algo que ningún nivel podía preguntarte...
+        </p>
+
+        <p style="text-align:center;font-size:22px;color:#ff9ac6;">
+            ❤️ ¿Qué quieres hacer con esta historia? ❤️
+        </p>
+
+    </div>
+
+    <div class="choice-container">
+
+        <button class="choice" onclick="elegir('seguir')">
+            🦁❤️ Seguir escribiendo nuestra historia
+        </button>
+
+        <button class="choice" onclick="elegir('siempre')">
+            💕 Elegirte una y otra vez
+        </button>
+
+        <button class="choice" onclick="elegir('simba')">
+            👑 Seguir siendo mi pequeño Simba
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- DESPUÉS DE LA DECISIÓN -->
+<div class="card hidden" id="carta">
+
+    <div class="big-heart">❤️</div>
+
+    <h1>Mi pequeño Simba...</h1>
+
+    <div class="final-letter">
+
+        <p>
+            Si estás leyendo esto, llegaste hasta el final.
+            Y aunque este juego tenga un último nivel,
+            <span class="highlight">yo no quiero que nuestra historia tenga un último nivel.</span>
+        </p>
+
+        <p>
+            Quiero que sigamos teniendo momentos que todavía no existen,
+            lugares que todavía no conocemos,
+            fotos que todavía no tomamos y recuerdos que todavía
+            nos faltan por vivir.
+        </p>
+
+        <p>
+            Quiero seguir riéndome contigo, molestándote,
+            abrazándote, acompañándote y compartiendo contigo
+            todas esas pequeñas cosas que terminan convirtiéndose
+            en recuerdos enormes.
+        </p>
+
+        <p>
+            Me gusta la manera en la que me haces sentir.
+            A tu lado puedo sentir nervios, felicidad y tranquilidad
+            al mismo tiempo.
+        </p>
+
+        <p>
+            Y si algún día dudas de lo importante que eres para mí,
+            quiero que recuerdes algo:
+        </p>
+
+        <p style="text-align:center;font-size:22px;color:#ff8fbe;">
+            Tú eres mi pequeño Simba. 🦁❤️
+        </p>
+
+        <p>
+            Gracias por cada momento, por cada sonrisa,
+            por cada abrazo, por las flores, por el fútbol,
+            por las risas y por todas esas cosas que hicieron
+            que nuestra historia fuera nuestra.
+        </p>
+
+        <p>
+            Todavía nos quedan muchísimos lugares por conocer,
+            muchas citas por tener, muchas películas por ver,
+            muchos tacos por comer y muchísimas historias
+            que todavía no hemos escrito.
+        </p>
+
+        <p>
+            Y sinceramente...
+            <span class="highlight">quiero vivirlas contigo.</span>
+        </p>
+
+        <p>
+            Te amo muchísimo, mi niño.
+            Más de lo que probablemente pueda explicar
+            en una pantalla.
+        </p>
+
+        <p style="text-align:center;font-size:23px;color:#ff8fbe;">
+            ¿Quieres seguir siendo mi pequeño Simba? 🦁❤️
+        </p>
+
+        <div class="signature">
+            Con muchísimo amor,<br>
+            tu Samis ❤️
+        </div>
+
+    </div>
+
+
+    <div class="end">
+
+        <h2>🎉 HAS COMPLETADO TODO EL JUEGO 🎉</h2>
+
+        <p>
+            Ya no existen más niveles secretos.
+        </p>
+
+        <p>
+            Porque el verdadero final...
+        </p>
+
+        <p style="font-size:24px;color:#ff8fbe;">
+            es seguir escribiendo nuestra historia. ❤️
+        </p>
+
+        <div class="xp" id="xpFinal"></div>
+
+        <a href="mapa.html">🗺️ VOLVER AL MAPA</a>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<script>
+
+function elegir(decision){
+
+    localStorage.setItem("nivel23Decision", decision);
+
+    let xpActual = Number(localStorage.getItem("xp")) || 0;
+
+    /*
+      El final verdadero entrega 3000 XP.
+      Solo se entregan una vez.
+    */
+
+    if(localStorage.getItem("nivel23XP") !== "true"){
+
+        xpActual += 3000;
+
+        localStorage.setItem("xp", xpActual);
+        localStorage.setItem("nivel23XP", "true");
+
+    }
+
+    localStorage.setItem("nivel23Completado", "true");
+
+    document.getElementById("intro").classList.add("hidden");
+    document.getElementById("carta").classList.remove("hidden");
+
+    document.getElementById("xpFinal").innerHTML =
+        "⭐ XP total: " + xpActual + "<br>" +
+        "🏆 FINAL VERDADERO DESBLOQUEADO";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+</script>
+
+</body>
+</html>

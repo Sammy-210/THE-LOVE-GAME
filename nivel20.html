@@ -1,0 +1,988 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nivel 20 — Prueba Simba 🦁</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top,#4a1230,transparent 40%),
+        linear-gradient(135deg,#030303,#170812,#050505);
+    padding:25px;
+}
+
+.container{
+    max-width:850px;
+    margin:auto;
+    text-align:center;
+}
+
+h1{
+    font-size:42px;
+    color:#ff9ac5;
+    text-shadow:0 0 20px #ff4f9a;
+    margin-bottom:5px;
+}
+
+.subtitulo{
+    color:#ffc5dd;
+    margin-bottom:20px;
+}
+
+.xp{
+    display:inline-block;
+    padding:10px 25px;
+    border:2px solid #ff4f9a;
+    border-radius:25px;
+    margin-bottom:20px;
+    background:#10090d;
+    font-weight:bold;
+}
+
+.card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,100,160,.5);
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 0 35px rgba(255,40,120,.25);
+}
+
+.icono{
+    font-size:65px;
+}
+
+h2{
+    color:#ff9ac5;
+    font-size:28px;
+}
+
+.texto{
+    color:#ddd;
+    line-height:1.7;
+    font-size:17px;
+}
+
+.boton{
+    display:inline-block;
+    padding:15px 28px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(90deg,#b71961,#ef4d91);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin:8px;
+}
+
+.boton:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 20px #ff4f9a;
+}
+
+.prueba{
+    display:none;
+}
+
+.pregunta{
+    font-size:24px;
+    margin:25px 0;
+    line-height:1.5;
+}
+
+.opciones{
+    display:grid;
+    gap:14px;
+}
+
+.opcion{
+    padding:18px;
+    border:none;
+    border-radius:15px;
+    background:linear-gradient(90deg,#661338,#c52d6d);
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+}
+
+.opcion:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 18px #ff4f9a;
+}
+
+.opcion:disabled{
+    opacity:.6;
+}
+
+.mensaje{
+    min-height:30px;
+    margin-top:20px;
+    color:#ffb7d6;
+    font-weight:bold;
+}
+
+.progreso{
+    margin-top:20px;
+    color:#ccc;
+}
+
+.barra{
+    height:12px;
+    background:#29151e;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.barraInterna{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#ff4f9a,#ffb1d1);
+    transition:.5s;
+}
+
+/* SECUENCIA */
+
+.secuencia{
+    font-size:40px;
+    letter-spacing:12px;
+    margin:25px 0;
+    color:#ff9ac5;
+}
+
+.numero{
+    width:100%;
+    max-width:300px;
+    padding:15px;
+    border-radius:12px;
+    border:2px solid #8d3560;
+    background:#0d080b;
+    color:white;
+    font-size:22px;
+    text-align:center;
+    outline:none;
+}
+
+/* REACCION */
+
+.botonReaccion{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    border:none;
+    background:linear-gradient(145deg,#ff4f9a,#9e174f);
+    color:white;
+    font-size:25px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 0 30px rgba(255,60,150,.6);
+    transition:.15s;
+}
+
+.botonReaccion:active{
+    transform:scale(.9);
+}
+
+/* FINAL */
+
+.final{
+    display:none;
+}
+
+.final h2{
+    font-size:38px;
+}
+
+.corazon{
+    font-size:90px;
+    animation:latir 1s infinite;
+}
+
+@keyframes latir{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.18);}
+}
+
+.finalTexto{
+    font-size:19px;
+    line-height:1.8;
+}
+
+@media(max-width:600px){
+
+    h1{
+        font-size:32px;
+    }
+
+    .card{
+        padding:22px;
+    }
+
+    .pregunta{
+        font-size:20px;
+    }
+
+    .secuencia{
+        font-size:28px;
+        letter-spacing:7px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🦁 PRUEBA SIMBA</h1>
+
+<div class="subtitulo">
+    NIVEL 20 — SOLO LOS MÁS VALIENTES LLEGAN HASTA AQUÍ
+</div>
+
+<div class="xp">
+    ⭐ XP: <span id="xp">0</span>
+</div>
+
+
+<!-- INTRO -->
+
+<div id="inicio" class="card">
+
+    <div class="icono">
+        🦁
+    </div>
+
+    <h2>
+        ¿ESTÁS LISTO, SIMBA?
+    </h2>
+
+    <p class="texto">
+
+        Esta vez no tendrás que recordar fechas,
+        responder preguntas románticas ni elegir
+        lo que más te gusta.
+
+        <br><br>
+
+        Esta es una prueba diferente.
+
+        <br><br>
+
+        Tendrás que usar tu
+        <strong>memoria, rapidez y estrategia</strong>.
+
+        <br><br>
+
+        Completa las 6 pruebas para conseguir
+        <strong>1500 XP</strong>.
+
+        <br><br>
+
+        🦁 <strong>Que comience la Prueba Simba.</strong>
+
+    </p>
+
+    <button class="boton" onclick="iniciar()">
+        🦁 COMENZAR PRUEBA
+    </button>
+
+</div>
+
+
+<!-- PRUEBAS -->
+
+<div id="prueba" class="card prueba">
+
+    <div class="icono" id="icono">
+        🧠
+    </div>
+
+    <h2 id="titulo"></h2>
+
+    <div class="pregunta" id="pregunta"></div>
+
+    <div id="contenido"></div>
+
+    <div class="opciones" id="opciones"></div>
+
+    <div class="mensaje" id="mensaje"></div>
+
+    <div class="progreso">
+        Prueba <span id="numero">1</span> de 6
+    </div>
+
+    <div class="barra">
+        <div class="barraInterna" id="barra"></div>
+    </div>
+
+</div>
+
+
+<!-- FINAL -->
+
+<div id="final" class="card final">
+
+    <div class="corazon">
+        🦁❤️
+    </div>
+
+    <h2>
+        ¡PRUEBA SIMBA SUPERADA!
+    </h2>
+
+    <div class="finalTexto">
+
+        <p>
+            Lo lograste, pequeño Simba. 🦁
+        </p>
+
+        <p>
+            Has demostrado que tienes rapidez,
+            memoria, estrategia y paciencia.
+        </p>
+
+        <p>
+            Pero todavía quedan secretos
+            escondidos en este juego...
+        </p>
+
+        <p>
+            ⭐ <strong>Has ganado 1500 XP.</strong>
+        </p>
+
+        <p>
+            Y ahora estás un paso más cerca
+            del verdadero final.
+        </p>
+
+        <p>
+            🔓 <strong>Nivel 21 desbloqueado.</strong>
+        </p>
+
+    </div>
+
+    <a href="mapa.html" class="boton">
+        🗺️ CONTINUAR AL NIVEL 21
+    </a>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   XP
+========================= */
+
+let xp=parseInt(
+    localStorage.getItem("xp") || "0"
+);
+
+document.getElementById("xp").textContent=xp;
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let pruebaActual=0;
+
+let puntos=0;
+
+let reaccionIniciada=false;
+
+let reaccionTerminada=false;
+
+
+/* =========================
+   INICIAR
+========================= */
+
+function iniciar(){
+
+    document.getElementById("inicio")
+        .style.display="none";
+
+    document.getElementById("prueba")
+        .style.display="block";
+
+    mostrarPrueba();
+
+}
+
+
+/* =========================
+   MOSTRAR PRUEBA
+========================= */
+
+function mostrarPrueba(){
+
+    const contenido=
+        document.getElementById("contenido");
+
+    const opciones=
+        document.getElementById("opciones");
+
+    contenido.innerHTML="";
+    opciones.innerHTML="";
+
+    document.getElementById("mensaje")
+        .textContent="";
+
+    document.getElementById("numero")
+        .textContent=pruebaActual+1;
+
+    document.getElementById("barra")
+        .style.width=
+        (pruebaActual/6*100)+"%";
+
+
+    if(pruebaActual===0){
+
+        pruebaMemoria();
+
+    }
+
+    else if(pruebaActual===1){
+
+        pruebaPuertas();
+
+    }
+
+    else if(pruebaActual===2){
+
+        pruebaSecuencia();
+
+    }
+
+    else if(pruebaActual===3){
+
+        pruebaReaccion();
+
+    }
+
+    else if(pruebaActual===4){
+
+        pruebaCodigo();
+
+    }
+
+    else if(pruebaActual===5){
+
+        pruebaFinal();
+
+    }
+
+}
+
+
+/* =========================
+   PRUEBA 1
+   MEMORIA
+========================= */
+
+function pruebaMemoria(){
+
+    document.getElementById("icono")
+        .textContent="🧠";
+
+    document.getElementById("titulo")
+        .textContent="PRUEBA 1 — MEMORIA RÁPIDA";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Mira la secuencia durante unos segundos. Después desaparecerá.";
+
+    const contenido=
+        document.getElementById("contenido");
+
+    contenido.innerHTML=`
+
+        <div class="secuencia" id="secuencia">
+            🦁 💗 ⭐ 🌙
+        </div>
+
+        <p class="texto">
+            Memorízala...
+        </p>
+
+    `;
+
+    setTimeout(()=>{
+
+        contenido.innerHTML=`
+
+            <div class="pregunta">
+                ¿Cuál era el tercer símbolo?
+            </div>
+
+        `;
+
+        crearOpciones([
+
+            ["🦁",false],
+            ["⭐",true],
+            ["🌙",false],
+            ["💗",false]
+
+        ]);
+
+    },3000);
+
+}
+
+
+/* =========================
+   PRUEBA 2
+   PUERTAS
+========================= */
+
+function pruebaPuertas(){
+
+    document.getElementById("icono")
+        .textContent="🚪";
+
+    document.getElementById("titulo")
+        .textContent="PRUEBA 2 — LAS TRES PUERTAS";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Solo una puerta permite continuar. La pista dice: “El camino correcto no siempre es el más obvio”.";
+
+    crearOpciones([
+
+        ["🚪 PUERTA ROJA",false],
+        ["🚪 PUERTA NEGRA",true],
+        ["🚪 PUERTA ROSA",false]
+
+    ]);
+
+}
+
+
+/* =========================
+   PRUEBA 3
+   SECUENCIA
+========================= */
+
+function pruebaSecuencia(){
+
+    document.getElementById("icono")
+        .textContent="🔢";
+
+    document.getElementById("titulo")
+        .textContent="PRUEBA 3 — COMPLETA LA SECUENCIA";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Observa la secuencia y descubre qué número falta.";
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <div class="secuencia">
+            2 — 4 — 8 — 16 — ?
+        </div>
+
+        <input
+            class="numero"
+            id="respuestaNumero"
+            type="number"
+            placeholder="Escribe el número"
+        >
+
+        <br>
+
+        <button
+            class="boton"
+            onclick="comprobarSecuencia()">
+
+            🔓 COMPROBAR
+
+        </button>
+
+    `;
+
+}
+
+
+function comprobarSecuencia(){
+
+    const respuesta=
+        document.getElementById(
+            "respuestaNumero"
+        ).value;
+
+    if(respuesta==="32"){
+
+        pruebaCorrecta();
+
+    }
+
+    else{
+
+        document.getElementById("mensaje")
+            .textContent=
+            "❌ No se abre. Pista: cada número se multiplica por 2.";
+
+    }
+
+}
+
+
+/* =========================
+   PRUEBA 4
+   REACCIÓN
+========================= */
+
+function pruebaReaccion(){
+
+    document.getElementById("icono")
+        .textContent="⚡";
+
+    document.getElementById("titulo")
+        .textContent="PRUEBA 4 — REFLEJOS SIMBA";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Espera... cuando aparezca “¡AHORA!”, presiona el botón lo más rápido posible.";
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <button
+            class="botonReaccion"
+            id="botonReaccion"
+            onclick="reaccionar()">
+
+            ESPERA...
+
+        </button>
+
+        `;
+
+    reaccionIniciada=false;
+    reaccionTerminada=false;
+
+    const espera=
+        2000+Math.random()*3000;
+
+    setTimeout(()=>{
+
+        reaccionIniciada=true;
+
+        document.getElementById(
+            "botonReaccion"
+        ).textContent="¡AHORA!";
+
+    },espera);
+
+}
+
+
+function reaccionar(){
+
+    if(!reaccionIniciada){
+
+        document.getElementById("mensaje")
+            .textContent=
+            "😂 ¡Demasiado pronto! Espera a que diga AHORA.";
+
+        return;
+
+    }
+
+    if(reaccionTerminada)return;
+
+    reaccionTerminada=true;
+
+    pruebaCorrecta();
+
+}
+
+
+/* =========================
+   PRUEBA 5
+   CÓDIGO
+========================= */
+
+function pruebaCodigo(){
+
+    document.getElementById("icono")
+        .textContent="🔐";
+
+    document.getElementById("titulo")
+        .textContent="PRUEBA 5 — EL CÓDIGO OCULTO";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Encuentra el código usando estas tres pistas.";
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <div class="texto">
+
+            🔹 Primer número:
+            ¿Cuántos lados tiene un triángulo?
+
+            <br><br>
+
+            🔹 Segundo número:
+            ¿Cuántos corazones aparecen en ❤️?
+
+            <br><br>
+
+            🔹 Tercer número:
+            ¿Cuántas letras tiene la palabra
+            <strong>SIMBA</strong>?
+
+        </div>
+
+        <br>
+
+        <input
+            class="numero"
+            id="codigo"
+            maxlength="3"
+            placeholder="___"
+        >
+
+        <br>
+
+        <button
+            class="boton"
+            onclick="comprobarCodigo()">
+
+            🔐 ABRIR CERRADURA
+
+        </button>
+
+    `;
+
+}
+
+
+function comprobarCodigo(){
+
+    const codigo=
+        document.getElementById("codigo")
+        .value.trim();
+
+    if(codigo==="315"){
+
+        pruebaCorrecta();
+
+    }
+
+    else{
+
+        document.getElementById("mensaje")
+            .textContent=
+            "❌ Código incorrecto. Lee las tres pistas nuevamente.";
+
+    }
+
+}
+
+
+/* =========================
+   PRUEBA 6
+   FINAL
+========================= */
+
+function pruebaFinal(){
+
+    document.getElementById("icono")
+        .textContent="👑";
+
+    document.getElementById("titulo")
+        .textContent="PRUEBA 6 — EL ÚLTIMO RETO";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Solo queda una decisión. ¿Qué camino eliges para llegar al final?";
+
+    crearOpciones([
+
+        ["🏃 Ir rápido y no mirar atrás",false],
+
+        ["🧠 Pensarlo demasiado",false],
+
+        ["🦁 Avanzar con valentía",true],
+
+        ["😴 Darme por vencido",false]
+
+    ]);
+
+}
+
+
+/* =========================
+   OPCIONES
+========================= */
+
+function crearOpciones(lista){
+
+    const contenedor=
+        document.getElementById("opciones");
+
+    contenedor.innerHTML="";
+
+    lista.forEach(item=>{
+
+        const boton=
+            document.createElement("button");
+
+        boton.className="opcion";
+
+        boton.textContent=item[0];
+
+        boton.onclick=()=>{
+
+            document
+                .querySelectorAll(".opcion")
+                .forEach(b=>{
+                    b.disabled=true;
+                });
+
+            if(item[1]){
+
+                pruebaCorrecta();
+
+            }
+
+            else{
+
+                document.getElementById("mensaje")
+                    .textContent=
+                    "❌ Esa opción no supera la prueba. Inténtalo de nuevo.";
+
+                setTimeout(()=>{
+
+                    document
+                        .querySelectorAll(".opcion")
+                        .forEach(b=>{
+                            b.disabled=false;
+                        });
+
+                },800);
+
+            }
+
+        };
+
+        contenedor.appendChild(boton);
+
+    });
+
+}
+
+
+/* =========================
+   PRUEBA CORRECTA
+========================= */
+
+function pruebaCorrecta(){
+
+    puntos++;
+
+    xp+=250;
+
+    localStorage.setItem(
+        "xp",
+        xp
+    );
+
+    document.getElementById("xp")
+        .textContent=xp;
+
+    document.getElementById("mensaje")
+        .textContent=
+        "🦁 ¡PRUEBA SUPERADA! +250 XP";
+
+    setTimeout(()=>{
+
+        pruebaActual++;
+
+        if(pruebaActual>=6){
+
+            terminar();
+
+        }
+
+        else{
+
+            mostrarPrueba();
+
+        }
+
+    },900);
+
+}
+
+
+/* =========================
+   TERMINAR
+========================= */
+
+function terminar(){
+
+    localStorage.setItem(
+        "nivel20Completado",
+        "true"
+    );
+
+    localStorage.setItem(
+        "nivel20Puntos",
+        puntos
+    );
+
+    document.getElementById("prueba")
+        .style.display="none";
+
+    document.getElementById("final")
+        .style.display="block";
+
+    document.getElementById("barra")
+        .style.width="100%";
+
+}
+
+</script>
+
+</body>
+</html>

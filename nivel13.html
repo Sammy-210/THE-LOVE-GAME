@@ -1,0 +1,1076 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🔐 Archivo Secreto</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top,#4b1238,transparent 45%),
+        linear-gradient(135deg,#120014,#28001f,#100010);
+    padding:30px 15px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    text-align:center;
+}
+
+h1{
+    font-size:42px;
+    margin:10px 0;
+    color:#ff8fcf;
+    text-shadow:0 0 15px #ff4fae;
+}
+
+.subtitle{
+    color:#ffd1eb;
+    font-size:18px;
+    margin-bottom:25px;
+}
+
+.xp{
+    display:inline-block;
+    background:#251020;
+    border:1px solid #ff5eb7;
+    border-radius:20px;
+    padding:10px 20px;
+    margin-bottom:25px;
+    color:#ffd4ec;
+    font-weight:bold;
+}
+
+.archivos{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:20px;
+}
+
+.archivo{
+    background:rgba(45,15,39,.95);
+    border:2px solid #7d285d;
+    border-radius:20px;
+    padding:25px 18px;
+    min-height:230px;
+    transition:.3s;
+    box-shadow:0 8px 25px rgba(0,0,0,.35);
+}
+
+.archivo:hover:not(.bloqueado){
+    transform:translateY(-7px);
+    border-color:#ff65b9;
+    box-shadow:0 0 25px rgba(255,80,175,.35);
+}
+
+.icono{
+    font-size:55px;
+    margin-bottom:10px;
+}
+
+.archivo h2{
+    color:#ff9ed3;
+    font-size:21px;
+    margin:8px 0;
+}
+
+.estado{
+    margin:12px 0;
+    font-weight:bold;
+    color:#ffd2e9;
+}
+
+.boton{
+    border:0;
+    border-radius:25px;
+    padding:12px 22px;
+    background:linear-gradient(90deg,#ff3d9d,#ff76bc);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.boton:hover{
+    transform:scale(1.05);
+}
+
+.bloqueado{
+    opacity:.45;
+    filter:grayscale(.7);
+}
+
+.completado{
+    border-color:#66e6a5;
+    background:rgba(25,60,48,.95);
+}
+
+.completado .estado{
+    color:#73f0ae;
+}
+
+.completado .boton{
+    background:#287b55;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.82);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:100;
+}
+
+.modal-contenido{
+    width:min(650px,100%);
+    max-height:90vh;
+    overflow-y:auto;
+    background:linear-gradient(145deg,#35142f,#160016);
+    border:2px solid #ff62b6;
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 0 40px rgba(255,75,175,.35);
+}
+
+.modal h2{
+    color:#ff9bd1;
+    margin-top:0;
+}
+
+.pregunta{
+    color:#ffe0ef;
+    font-size:18px;
+    line-height:1.5;
+    margin:20px 0;
+}
+
+.etiqueta-respuesta{
+    text-align:left;
+    color:#ff9ed3;
+    font-weight:bold;
+    margin:20px 0 8px;
+}
+
+textarea{
+    width:100%;
+    min-height:150px;
+    resize:vertical;
+    border-radius:15px;
+    border:2px solid #843263;
+    background:#180b17;
+    color:white;
+    padding:15px;
+    font-size:16px;
+    outline:none;
+}
+
+textarea:focus{
+    border-color:#ff69ba;
+}
+
+textarea:disabled{
+    opacity:1;
+    color:#fff;
+    cursor:default;
+}
+
+.botones{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:18px;
+}
+
+.cerrar{
+    background:#543746;
+}
+
+.mensaje{
+    margin-top:15px;
+    min-height:25px;
+    color:#ffb4d9;
+}
+
+.modo-lectura{
+    color:#73f0ae;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.final{
+    display:none;
+    margin-top:30px;
+    padding:30px;
+    border:2px solid #ff69ba;
+    border-radius:25px;
+    background:rgba(40,10,34,.95);
+}
+
+.final h2{
+    color:#ff9ed3;
+}
+
+.confeti{
+    font-size:35px;
+    margin:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🔐 ARCHIVO SECRETO</h1>
+
+<div class="subtitle">
+Nivel 13 · Hay cosas que solo mi pequeño Simba puede descubrir 🦁❤️
+</div>
+
+<div class="xp">
+⭐ XP actual: <span id="xp">0</span>
+</div>
+
+
+<div class="archivos">
+
+<!-- ARCHIVO 1 -->
+<div class="archivo" id="archivo1">
+
+<div class="icono" id="icono1">📂</div>
+
+<h2>ARCHIVO 01</h2>
+
+<div class="estado" id="estado1">
+🔓 Disponible
+</div>
+
+<button
+class="boton"
+id="boton1"
+onclick="abrirArchivo(1)">
+ABRIR ARCHIVO
+</button>
+
+</div>
+
+
+<!-- ARCHIVO 2 -->
+<div class="archivo bloqueado" id="archivo2">
+
+<div class="icono" id="icono2">🔒</div>
+
+<h2>ARCHIVO 02</h2>
+
+<div class="estado" id="estado2">
+🔒 Bloqueado
+</div>
+
+<button
+class="boton"
+id="boton2"
+onclick="abrirArchivo(2)">
+BLOQUEADO
+</button>
+
+</div>
+
+
+<!-- ARCHIVO 3 -->
+<div class="archivo bloqueado" id="archivo3">
+
+<div class="icono" id="icono3">🔒</div>
+
+<h2>ARCHIVO 03</h2>
+
+<div class="estado" id="estado3">
+🔒 Bloqueado
+</div>
+
+<button
+class="boton"
+id="boton3"
+onclick="abrirArchivo(3)">
+BLOQUEADO
+</button>
+
+</div>
+
+
+<!-- ARCHIVO 4 -->
+<div class="archivo bloqueado" id="archivo4">
+
+<div class="icono" id="icono4">🔒</div>
+
+<h2>ARCHIVO 04</h2>
+
+<div class="estado" id="estado4">
+🔒 Bloqueado
+</div>
+
+<button
+class="boton"
+id="boton4"
+onclick="abrirArchivo(4)">
+BLOQUEADO
+</button>
+
+</div>
+
+
+<!-- ARCHIVO 5 -->
+<div class="archivo bloqueado" id="archivo5">
+
+<div class="icono" id="icono5">🔒</div>
+
+<h2>ARCHIVO 05</h2>
+
+<div class="estado" id="estado5">
+🔒 Bloqueado
+</div>
+
+<button
+class="boton"
+id="boton5"
+onclick="abrirArchivo(5)">
+BLOQUEADO
+</button>
+
+</div>
+
+</div>
+
+
+<div class="final" id="final">
+
+<div class="confeti">
+🦁 ❤️ 💕 🥳 💕 ❤️ 🦁
+</div>
+
+<h2>
+¡ARCHIVO SECRETO COMPLETADO!
+</h2>
+
+<p>
+Mi pequeño Simba logró abrir todos los archivos.
+Ahora conoce algunos de los secretos más bonitos de su Samis. 💌
+</p>
+
+<button
+class="boton"
+onclick="window.location.href='mapa.html'">
+❤️ VOLVER AL MAPA
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     MODAL
+========================= -->
+
+<div class="modal" id="modal">
+
+<div class="modal-contenido">
+
+<h2 id="modalTitulo"></h2>
+
+<div class="pregunta" id="modalPregunta"></div>
+
+<div class="etiqueta-respuesta">
+💌 RESPUESTA DE SIMBA:
+</div>
+
+<textarea
+id="respuesta"
+placeholder="Escribe aquí lo que piensas... ❤️">
+</textarea>
+
+<div
+class="modo-lectura"
+id="modoLectura">
+</div>
+
+<div
+class="mensaje"
+id="mensaje">
+</div>
+
+<div class="botones">
+
+<button
+class="boton"
+id="guardarBtn"
+onclick="guardarArchivo()">
+💌 GUARDAR RESPUESTA
+</button>
+
+<button
+class="boton cerrar"
+onclick="cerrarModal()">
+CERRAR
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+// =====================================================
+// SUPABASE
+// =====================================================
+
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+// =====================================================
+// ARCHIVOS
+// =====================================================
+
+const archivos = {
+
+1:{
+titulo:"💭 ARCHIVO 01 · LO QUE PIENSA SAMIS",
+
+pregunta:
+"Si pudieras leer la mente de Samis durante uno de esos momentos en los que se queda mirándote, ¿qué crees que estaría pensando?"
+},
+
+2:{
+titulo:"💗 ARCHIVO 02 · LO QUE SIENTE",
+
+pregunta:
+"¿Qué crees que siente Samis cuando está contigo?"
+},
+
+3:{
+titulo:"🌎 ARCHIVO 03 · EL FUTURO",
+
+pregunta:
+"Si pudieras elegir un lugar para crear un recuerdo inolvidable con Samis, ¿a dónde la llevarías y por qué?"
+},
+
+4:{
+titulo:"💌 ARCHIVO 04 · UNA PROMESA",
+
+pregunta:
+"Escribe una promesa que te gustaría hacerle a Samis."
+},
+
+5:{
+titulo:"🦁 ARCHIVO 05 · EL ARCHIVO FINAL",
+
+pregunta:
+"Si pudieras decirle una sola cosa a Samis que quieres que recuerde para siempre, ¿qué le dirías?"
+}
+
+};
+
+
+let archivoActual = 0;
+
+
+// =====================================================
+// XP
+// =====================================================
+
+function obtenerXP(){
+
+return parseInt(
+localStorage.getItem("xp") || "0"
+);
+
+}
+
+
+function actualizarXP(){
+
+document.getElementById("xp").textContent =
+obtenerXP();
+
+}
+
+
+function agregarXP(cantidad){
+
+let xp = obtenerXP();
+
+xp += cantidad;
+
+localStorage.setItem("xp",xp);
+
+actualizarXP();
+
+}
+
+
+// =====================================================
+// ABRIR ARCHIVO
+// =====================================================
+
+async function abrirArchivo(numero){
+
+// Comprobar que el archivo anterior esté completado
+
+if(numero > 1){
+
+const anterior =
+localStorage.getItem(
+"archivo13_" + (numero - 1)
+);
+
+if(anterior !== "true"){
+
+alert(
+"🔒 Primero debes completar el Archivo " +
+(numero - 1) +
+" ❤️"
+);
+
+return;
+
+}
+
+}
+
+
+archivoActual = numero;
+
+
+// Mostrar pregunta
+
+document.getElementById(
+"modalTitulo"
+).textContent =
+archivos[numero].titulo;
+
+document.getElementById(
+"modalPregunta"
+).textContent =
+archivos[numero].pregunta;
+
+
+const textarea =
+document.getElementById("respuesta");
+
+const guardarBtn =
+document.getElementById("guardarBtn");
+
+const modoLectura =
+document.getElementById("modoLectura");
+
+const mensaje =
+document.getElementById("mensaje");
+
+
+// Limpiar
+
+textarea.value = "";
+
+modoLectura.textContent = "";
+
+mensaje.textContent = "";
+
+textarea.disabled = false;
+
+guardarBtn.style.display = "inline-block";
+
+
+// =====================================================
+// ¿YA ESTÁ COMPLETADO?
+// =====================================================
+
+const completado =
+localStorage.getItem(
+"archivo13_" + numero
+) === "true";
+
+
+if(completado){
+
+modoLectura.textContent =
+"✅ ARCHIVO COMPLETADO · AQUÍ ESTÁ TU RESPUESTA";
+
+
+textarea.disabled = true;
+
+guardarBtn.style.display = "none";
+
+
+// =====================================================
+// BUSCAR RESPUESTA EN SUPABASE
+// =====================================================
+
+mensaje.textContent =
+"🔎 Cargando tu respuesta...";
+
+
+try{
+
+const preguntaExacta =
+"Nivel 13 - Archivo " +
+numero +
+": " +
+archivos[numero].pregunta;
+
+
+const {data,error} =
+await supabaseClient
+.from("respuestas_nivel4")
+.select("respuesta")
+.eq(
+"pregunta",
+preguntaExacta
+)
+.eq(
+"tipo",
+"Nivel 13 - Archivo Secreto"
+)
+.order(
+"created_at",
+{ascending:false}
+)
+.limit(1);
+
+
+if(error){
+
+console.error(error);
+
+mensaje.textContent =
+"❌ No se pudo cargar la respuesta.";
+
+return;
+
+}
+
+
+if(data && data.length > 0){
+
+textarea.value =
+data[0].respuesta;
+
+mensaje.textContent = "";
+
+}else{
+
+// Como respaldo, buscar en localStorage
+
+const respaldo =
+localStorage.getItem(
+"archivo13_respuesta_" + numero
+);
+
+if(respaldo){
+
+textarea.value = respaldo;
+
+mensaje.textContent = "";
+
+}else{
+
+mensaje.textContent =
+"💗 No se encontró la respuesta guardada.";
+
+}
+
+}
+
+
+}catch(error){
+
+console.error(error);
+
+mensaje.textContent =
+"❌ Ocurrió un error al cargar la respuesta.";
+
+}
+
+}
+
+
+// =====================================================
+// MOSTRAR MODAL
+// =====================================================
+
+document.getElementById(
+"modal"
+).style.display =
+"flex";
+
+}
+
+
+// =====================================================
+// CERRAR
+// =====================================================
+
+function cerrarModal(){
+
+document.getElementById(
+"modal"
+).style.display =
+"none";
+
+}
+
+
+// =====================================================
+// GUARDAR
+// =====================================================
+
+async function guardarArchivo(){
+
+const respuesta =
+document.getElementById(
+"respuesta"
+).value.trim();
+
+const mensaje =
+document.getElementById("mensaje");
+
+
+if(respuesta === ""){
+
+mensaje.textContent =
+"💗 Escribe una respuesta antes de continuar.";
+
+return;
+
+}
+
+
+// Evitar duplicados
+
+const yaCompletado =
+localStorage.getItem(
+"archivo13_" + archivoActual
+) === "true";
+
+
+if(yaCompletado){
+
+mensaje.textContent =
+"✅ Este archivo ya está completado.";
+
+return;
+
+}
+
+
+mensaje.textContent =
+"💌 Guardando respuesta...";
+
+
+try{
+
+const preguntaExacta =
+"Nivel 13 - Archivo " +
+archivoActual +
+": " +
+archivos[archivoActual].pregunta;
+
+
+const {error} =
+await supabaseClient
+.from("respuestas_nivel4")
+.insert([{
+
+pregunta:preguntaExacta,
+
+respuesta:respuesta,
+
+tipo:"Nivel 13 - Archivo Secreto"
+
+}]);
+
+
+if(error){
+
+console.error(error);
+
+mensaje.textContent =
+"❌ No se pudo guardar la respuesta.";
+
+return;
+
+}
+
+
+// =====================================================
+// GUARDAR PROGRESO
+// =====================================================
+
+localStorage.setItem(
+"archivo13_" + archivoActual,
+"true"
+);
+
+
+// Guardar copia local
+
+localStorage.setItem(
+"archivo13_respuesta_" + archivoActual,
+respuesta
+);
+
+
+// =====================================================
+// DAR XP UNA SOLA VEZ
+// =====================================================
+
+const xpYaDado =
+localStorage.getItem(
+"archivo13_xp_" + archivoActual
+);
+
+
+if(xpYaDado !== "true"){
+
+agregarXP(200);
+
+localStorage.setItem(
+"archivo13_xp_" + archivoActual,
+"true"
+);
+
+}
+
+
+mensaje.textContent =
+"✅ ¡Respuesta guardada!";
+
+
+setTimeout(function(){
+
+cerrarModal();
+
+actualizarArchivos();
+
+},700);
+
+
+}catch(error){
+
+console.error(error);
+
+mensaje.textContent =
+"❌ Ocurrió un error.";
+
+}
+
+}
+
+
+// =====================================================
+// ACTUALIZAR TARJETAS
+// =====================================================
+
+function actualizarArchivos(){
+
+let completados = 0;
+
+
+for(let i=1;i<=5;i++){
+
+const tarjeta =
+document.getElementById(
+"archivo" + i
+);
+
+const icono =
+document.getElementById(
+"icono" + i
+);
+
+const estado =
+document.getElementById(
+"estado" + i
+);
+
+const boton =
+document.getElementById(
+"boton" + i
+);
+
+
+const completado =
+localStorage.getItem(
+"archivo13_" + i
+) === "true";
+
+
+const anteriorCompletado =
+i === 1 ||
+localStorage.getItem(
+"archivo13_" + (i-1)
+) === "true";
+
+
+// =====================================================
+// COMPLETADO
+// =====================================================
+
+if(completado){
+
+tarjeta.classList.remove(
+"bloqueado"
+);
+
+tarjeta.classList.add(
+"completado"
+);
+
+icono.textContent =
+"✅";
+
+estado.textContent =
+"✅ COMPLETADO";
+
+boton.textContent =
+"👀 VER RESPUESTA";
+
+boton.disabled =
+false;
+
+completados++;
+
+}
+
+
+// =====================================================
+// DISPONIBLE
+// =====================================================
+
+else if(anteriorCompletado){
+
+tarjeta.classList.remove(
+"bloqueado"
+);
+
+tarjeta.classList.remove(
+"completado"
+);
+
+icono.textContent =
+"📂";
+
+estado.textContent =
+"🔓 Disponible";
+
+boton.textContent =
+"ABRIR ARCHIVO";
+
+boton.disabled =
+false;
+
+}
+
+
+// =====================================================
+// BLOQUEADO
+// =====================================================
+
+else{
+
+tarjeta.classList.add(
+"bloqueado"
+);
+
+tarjeta.classList.remove(
+"completado"
+);
+
+icono.textContent =
+"🔒";
+
+estado.textContent =
+"🔒 Bloqueado";
+
+boton.textContent =
+"BLOQUEADO";
+
+boton.disabled =
+false;
+
+}
+
+}
+
+
+actualizarXP();
+
+
+// =====================================================
+// COMPLETÓ LOS 5
+// =====================================================
+
+if(completados === 5){
+
+localStorage.setItem(
+"nivel13Completado",
+"true"
+);
+
+document.getElementById(
+"final"
+).style.display =
+"block";
+
+}
+
+}
+
+
+// =====================================================
+// AL ENTRAR AL NIVEL
+// =====================================================
+
+document.addEventListener(
+"DOMContentLoaded",
+function(){
+
+actualizarXP();
+
+actualizarArchivos();
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,721 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nivel 12 - Bonus: Samis ❤️</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top,#ff4f9a 0%,transparent 35%),
+        linear-gradient(135deg,#120015,#2b001f,#080008);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+    text-align:center;
+}
+
+h1{
+    font-size:42px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#ffb9d9;
+    font-size:18px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 0 30px rgba(255,50,150,.2);
+}
+
+.xp{
+    display:inline-block;
+    background:#ff3f91;
+    padding:10px 18px;
+    border-radius:20px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.progress{
+    width:100%;
+    height:12px;
+    background:#3a1930;
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:25px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#ff3f91,#ff9ac7);
+    transition:.4s;
+}
+
+.question-number{
+    color:#ff9ac7;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.question{
+    font-size:27px;
+    font-weight:bold;
+    line-height:1.4;
+    margin:15px 0 25px;
+}
+
+.options{
+    display:grid;
+    gap:14px;
+}
+
+.option{
+    width:100%;
+    border:none;
+    border-radius:16px;
+    padding:17px;
+    background:#35102c;
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.option:hover{
+    transform:scale(1.02);
+    background:#64144e;
+}
+
+.option.correct{
+    background:#188754;
+}
+
+.option.wrong{
+    background:#9b244f;
+}
+
+.feedback{
+    min-height:30px;
+    margin-top:18px;
+    font-size:18px;
+    font-weight:bold;
+    line-height:1.4;
+}
+
+.next{
+    display:none;
+    margin-top:18px;
+    border:none;
+    padding:14px 25px;
+    border-radius:20px;
+    background:#ff3f91;
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.next:hover{
+    background:#ff66a8;
+}
+
+.final{
+    display:none;
+}
+
+.final h2{
+    font-size:34px;
+    color:#ff8fc2;
+}
+
+.score{
+    font-size:25px;
+    margin:20px 0;
+}
+
+.message{
+    font-size:19px;
+    line-height:1.6;
+    color:#ffd8e9;
+}
+
+.button{
+    display:inline-block;
+    margin-top:25px;
+    padding:15px 25px;
+    border-radius:25px;
+    background:#ff3f91;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+@media(max-width:600px){
+
+    h1{
+        font-size:32px;
+    }
+
+    .question{
+        font-size:22px;
+    }
+
+    .card{
+        padding:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>💗 BONUS: SAMIS 💗</h1>
+
+<div class="subtitle">
+Nivel 12 · ¿Qué tan bien entiendes a tu niña? 🥰
+</div>
+
+
+<div class="card" id="game">
+
+<div class="xp">
+⭐ XP: <span id="xp">0</span>
+</div>
+
+<div class="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="question-number" id="questionNumber"></div>
+
+<div class="question" id="question"></div>
+
+<div class="options" id="options"></div>
+
+<div class="feedback" id="feedback"></div>
+
+<button class="next" id="nextButton" onclick="siguientePregunta()">
+💕 Siguiente
+</button>
+
+</div>
+
+
+<div class="card final" id="final">
+
+<div style="font-size:70px;">
+👑🦁❤️
+</div>
+
+<h2>¡BONUS COMPLETADO!</h2>
+
+<div class="score">
+⭐ Obtuviste <span id="finalXP">0</span> XP
+</div>
+
+<div class="message" id="finalMessage"></div>
+
+<a href="mapa.html" class="button">
+🗺️ VOLVER AL MAPA
+</a>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   CONEXIÓN CON SUPABASE
+========================================== */
+
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* ==========================================
+   PREGUNTAS
+========================================== */
+
+const preguntas = [
+
+{
+pregunta:
+"🥺 Si Samis tuvo un día horrible, ¿qué crees que necesitaría más de ti?",
+
+opciones:[
+"Que la deje sola",
+"Un abrazo y que la escuches ❤️",
+"Hacerle muchas preguntas",
+"Decirle que se aguante"
+],
+
+correcta:1
+},
+
+{
+pregunta:
+"💕 Si tuvieran un día completo juntos sin ninguna obligación, ¿qué crees que elegiría Samis?",
+
+opciones:[
+"Quedarse encerrados haciendo nada",
+"Salir a conocer un lugar nuevo",
+"Dormir todo el día",
+"Un poco de todo, mientras esté contigo"
+],
+
+correcta:3
+},
+
+{
+pregunta:
+"😳 Si Samis se queda mirándote sin decir nada, ¿qué crees que está pensando?",
+
+opciones:[
+"Qué sueño tengo",
+"Qué guapo está mi niño 👀❤️",
+"Qué voy a comer",
+"Me quiero ir"
+],
+
+correcta:1
+},
+
+{
+pregunta:
+"🫂 Si de repente Samis te abraza muy fuerte y no te quiere soltar, ¿qué crees que significa?",
+
+opciones:[
+"Que tiene frío",
+"Que quiere molestarte",
+"Que quiere estar cerquita de ti ❤️",
+"Que está aburrida"
+],
+
+correcta:2
+},
+
+{
+pregunta:
+"🌎 Si pudieran cumplir uno de estos planes juntos, ¿cuál crees que emocionaría más a Samis?",
+
+opciones:[
+"Ir a muchos lugares juntos",
+"Pasar una Navidad juntos",
+"Crear muchos recuerdos",
+"Todas las anteriores ❤️"
+],
+
+correcta:3
+},
+
+{
+pregunta:
+"💌 Si Samis pudiera guardar un solo recuerdo de ustedes para siempre, ¿qué crees que elegiría?",
+
+opciones:[
+"Un regalo",
+"Una foto",
+"Un momento especial juntos",
+"Cualquier momento donde hayan sido felices juntos ❤️"
+],
+
+correcta:3
+},
+
+{
+pregunta:
+"🙈 Si Samis está nerviosa cuando está contigo, ¿qué crees que debería hacer Donovan?",
+
+opciones:[
+"Hacer más bromas",
+"Ignorarla",
+"Hacerla sentir tranquila y querida ❤️",
+"Preguntarle por qué está nerviosa cada cinco segundos 😂"
+],
+
+correcta:2
+},
+
+{
+pregunta:
+"🦁❤️ Y la más importante: si Samis te pregunta “¿quieres seguir siendo mi pequeño Simba?”, ¿qué debería responder Donovan?",
+
+opciones:[
+"No sé",
+"Tal vez",
+"Sí, siempre ❤️",
+"Solo si hay tacos 🌮😂"
+],
+
+correcta:2
+}
+
+];
+
+
+let preguntaActual = 0;
+let puntos = 0;
+let respondida = false;
+
+
+/* ==========================================
+   ELEMENTOS
+========================================== */
+
+const pregunta =
+document.getElementById("question");
+
+const opciones =
+document.getElementById("options");
+
+const feedback =
+document.getElementById("feedback");
+
+const nextButton =
+document.getElementById("nextButton");
+
+const questionNumber =
+document.getElementById("questionNumber");
+
+const progressBar =
+document.getElementById("progressBar");
+
+const xp =
+document.getElementById("xp");
+
+
+/* ==========================================
+   MOSTRAR PREGUNTA
+========================================== */
+
+function mostrarPregunta(){
+
+respondida = false;
+
+const actual =
+preguntas[preguntaActual];
+
+questionNumber.textContent =
+"Pregunta " +
+(preguntaActual + 1) +
+" de " +
+preguntas.length;
+
+pregunta.textContent =
+actual.pregunta;
+
+opciones.innerHTML = "";
+
+feedback.textContent = "";
+
+nextButton.style.display = "none";
+
+progressBar.style.width =
+((preguntaActual) /
+preguntas.length * 100) + "%";
+
+
+actual.opciones.forEach((opcion,index)=>{
+
+const boton =
+document.createElement("button");
+
+boton.className = "option";
+
+boton.textContent = opcion;
+
+boton.onclick = () =>
+responder(index,boton);
+
+opciones.appendChild(boton);
+
+});
+
+}
+
+
+/* ==========================================
+   GUARDAR RESPUESTA EN SUPABASE
+========================================== */
+
+async function guardarRespuesta(
+numeroPregunta,
+preguntaTexto,
+respuestaTexto,
+esCorrecta
+){
+
+const { error } =
+await supabaseClient
+.from("respuestas_nivel4")
+.insert([
+
+{
+pregunta:
+"Nivel 12 - Pregunta " +
+numeroPregunta +
+": " +
+preguntaTexto,
+
+respuesta:
+respuestaTexto,
+
+tipo:
+"Nivel 12 - Bonus Samis - " +
+(esCorrecta
+? "Correcta"
+: "Incorrecta")
+}
+
+]);
+
+
+if(error){
+
+console.error(
+"Error guardando respuesta:",
+error
+);
+
+}else{
+
+console.log(
+"❤️ Respuesta guardada correctamente"
+);
+
+}
+
+}
+
+
+/* ==========================================
+   RESPONDER
+========================================== */
+
+async function responder(indice,boton){
+
+if(respondida) return;
+
+respondida = true;
+
+
+const actual =
+preguntas[preguntaActual];
+
+const correcta =
+actual.correcta;
+
+
+const botones =
+document.querySelectorAll(".option");
+
+botones.forEach(b=>{
+b.disabled = true;
+});
+
+
+const respuestaSeleccionada =
+actual.opciones[indice];
+
+const esCorrecta =
+indice === correcta;
+
+
+/* Guardar respuesta */
+
+await guardarRespuesta(
+preguntaActual + 1,
+actual.pregunta,
+respuestaSeleccionada,
+esCorrecta
+);
+
+
+if(esCorrecta){
+
+boton.classList.add("correct");
+
+puntos += 200;
+
+xp.textContent =
+puntos;
+
+feedback.textContent =
+"💗 ¡Correcto! Sabes muy bien cómo es tu Samis. 🥰";
+
+}else{
+
+boton.classList.add("wrong");
+
+botones[correcta]
+.classList.add("correct");
+
+feedback.textContent =
+"🥺 Casi... piensa un poquito más en tu Samis ❤️";
+
+}
+
+
+nextButton.style.display =
+"inline-block";
+
+}
+
+
+/* ==========================================
+   SIGUIENTE
+========================================== */
+
+function siguientePregunta(){
+
+preguntaActual++;
+
+
+if(
+preguntaActual <
+preguntas.length
+){
+
+mostrarPregunta();
+
+}else{
+
+terminarNivel();
+
+}
+
+}
+
+
+/* ==========================================
+   TERMINAR NIVEL
+========================================== */
+
+function terminarNivel(){
+
+progressBar.style.width =
+"100%";
+
+
+const xpActual =
+Number(
+localStorage.getItem("xp") || 0
+);
+
+
+localStorage.setItem(
+"xp",
+xpActual + puntos
+);
+
+
+localStorage.setItem(
+"nivel12Completado",
+"true"
+);
+
+
+document.getElementById("game")
+.style.display = "none";
+
+
+document.getElementById("final")
+.style.display = "block";
+
+
+document.getElementById("finalXP")
+.textContent = puntos;
+
+
+let mensaje;
+
+
+if(puntos === 1600){
+
+mensaje =
+"😭❤️ ¡PERFECTO, MI PEQUEÑO SIMBA! " +
+"No solo conoces a tu Samis... " +
+"también sabes cómo hacerla sentir querida, " +
+"tranquila y especial. 🦁❤️";
+
+}
+
+else if(puntos >= 1000){
+
+mensaje =
+"🥰❤️ ¡Muy bien, Simba! " +
+"Conoces muchísimo a tu Samis y sabes bastante bien " +
+"cómo hacerla sentir especial. " +
+"Todavía quedan algunas cositas por descubrir. 🦁💕";
+
+}
+
+else if(puntos >= 600){
+
+mensaje =
+"💕 No estuvo nada mal, Simba. " +
+"Hay algunas cosas que todavía tienes que descubrir " +
+"sobre tu Samis, pero todavía quedan muchos momentos juntos. ❤️";
+
+}
+
+else{
+
+mensaje =
+"😂❤️ Simba, creo que necesitas pasar más tiempo con tu Samis. " +
+"Pero tranquilo... todavía tienes muchos niveles para conocerla cada vez más. 🦁💕";
+
+}
+
+
+document.getElementById("finalMessage")
+.textContent = mensaje;
+
+}
+
+
+mostrarPregunta();
+
+</script>
+
+</body>
+</html>

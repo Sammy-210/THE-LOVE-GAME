@@ -1,0 +1,631 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nivel 18 — ¿Qué tan enamorado estás? ❤️</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top,#741642 0%,transparent 42%),
+        linear-gradient(135deg,#080808,#250817,#080808);
+    padding:25px;
+}
+
+.container{
+    max-width:850px;
+    margin:auto;
+    text-align:center;
+}
+
+h1{
+    font-size:40px;
+    margin-bottom:8px;
+    text-shadow:0 0 20px #ff4f9a;
+}
+
+.subtitulo{
+    color:#ffb6d5;
+    font-size:19px;
+    margin-bottom:20px;
+}
+
+.xp{
+    display:inline-block;
+    background:#160a11;
+    border:2px solid #ff4f9a;
+    border-radius:20px;
+    padding:10px 22px;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+.card{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,105,160,.5);
+    border-radius:25px;
+    padding:32px;
+    box-shadow:0 0 35px rgba(255,40,120,.25);
+}
+
+.emoji{
+    font-size:58px;
+    margin-bottom:10px;
+}
+
+.pregunta{
+    font-size:25px;
+    line-height:1.4;
+    margin-bottom:25px;
+}
+
+.opciones{
+    display:grid;
+    gap:13px;
+}
+
+.opcion{
+    border:none;
+    border-radius:15px;
+    padding:17px;
+    background:linear-gradient(90deg,#8f174d,#d52d75);
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.opcion:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 18px #ff4f9a;
+}
+
+.opcion:disabled{
+    opacity:.7;
+    cursor:default;
+}
+
+.progreso{
+    margin-top:20px;
+    color:#ddd;
+}
+
+.barra{
+    height:12px;
+    background:#2b1722;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.barraInterna{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#ff4f9a,#ff9ac5);
+    transition:.5s;
+}
+
+.final{
+    display:none;
+}
+
+.corazonGrande{
+    font-size:85px;
+    animation:latir 1s infinite;
+}
+
+.final h2{
+    color:#ff9ac5;
+    font-size:38px;
+}
+
+.nivelAmor{
+    font-size:34px;
+    font-weight:bold;
+    color:#ff79b0;
+    margin:20px 0;
+    text-shadow:0 0 20px #ff4f9a;
+}
+
+.mensaje{
+    font-size:19px;
+    line-height:1.7;
+}
+
+.estrellas{
+    font-size:32px;
+    letter-spacing:5px;
+    margin:20px 0;
+}
+
+.boton{
+    display:inline-block;
+    margin-top:25px;
+    padding:15px 28px;
+    background:linear-gradient(90deg,#b71961,#ef4d91);
+    border-radius:30px;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+@keyframes latir{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.18);
+    }
+}
+
+.corazonFlotante{
+    position:fixed;
+    font-size:25px;
+    pointer-events:none;
+    animation:subir 4s linear forwards;
+}
+
+@keyframes subir{
+    0%{
+        transform:translateY(0);
+        opacity:1;
+    }
+    100%{
+        transform:translateY(-100vh);
+        opacity:0;
+    }
+}
+
+@media(max-width:600px){
+
+    h1{
+        font-size:30px;
+    }
+
+    .card{
+        padding:22px;
+    }
+
+    .pregunta{
+        font-size:21px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💘 ¿QUÉ TAN ENAMORADO ESTÁS?</h1>
+
+    <div class="subtitulo">
+        Una prueba para descubrir qué tan fuerte está
+        el corazón de mi pequeño Simba 🦁❤️
+    </div>
+
+    <div class="xp">
+        ⭐ XP: <span id="xp">0</span>
+    </div>
+
+    <div id="juego" class="card">
+
+        <div class="emoji" id="emoji">
+            ❤️
+        </div>
+
+        <div class="pregunta" id="pregunta"></div>
+
+        <div class="opciones" id="opciones"></div>
+
+        <div class="progreso">
+            Pregunta <span id="numero">1</span> de 10
+        </div>
+
+        <div class="barra">
+            <div class="barraInterna" id="barra"></div>
+        </div>
+
+    </div>
+
+    <div id="final" class="card final">
+
+        <div class="corazonGrande">
+            ❤️
+        </div>
+
+        <h2>
+            RESULTADO DEL TEST
+        </h2>
+
+        <div class="nivelAmor" id="nivelAmor"></div>
+
+        <div class="estrellas" id="estrellas"></div>
+
+        <div class="mensaje" id="mensaje"></div>
+
+        <p>
+            Pero recuerda... ningún test puede medir realmente
+            todo lo que siente una persona. ❤️
+        </p>
+
+        <a href="mapa.html" class="boton">
+            🗺️ CONTINUAR AL NIVEL 19
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+const preguntas=[
+
+{
+    emoji:"📱",
+    pregunta:"Si Samis te manda un mensaje inesperado, ¿qué haces?",
+    opciones:[
+        ["Lo respondo cuando pueda",5],
+        ["Lo respondo rápido",8],
+        ["Me emociona verlo",10],
+        ["Dejo lo que estoy haciendo para contestarle ❤️",12]
+    ]
+},
+
+{
+    emoji:"👀",
+    pregunta:"Si ves algo que sabes que le gustaría a Samis...",
+    opciones:[
+        ["Sigo con lo mío",4],
+        ["Pienso en ella",8],
+        ["Se lo mando",10],
+        ["Pienso 'esto le encantaría' y quiero compartirlo con ella ❤️",12]
+    ]
+},
+
+{
+    emoji:"🫂",
+    pregunta:"Cuando tienes un día difícil, ¿qué prefieres?",
+    opciones:[
+        ["Estar solo",5],
+        ["Distraerme",7],
+        ["Hablar con alguien",9],
+        ["Estar con Samis porque me tranquiliza ❤️",12]
+    ]
+},
+
+{
+    emoji:"🌎",
+    pregunta:"Si pudieras planear algo para ustedes dos...",
+    opciones:[
+        ["Una salida sencilla",6],
+        ["Una cita bonita",8],
+        ["Un viaje juntos",10],
+        ["Una aventura que recuerden para siempre ❤️",12]
+    ]
+},
+
+{
+    emoji:"💐",
+    pregunta:"Si pudieras volver a vivir un momento especial con Samis...",
+    opciones:[
+        ["Tal vez",5],
+        ["Sí, alguno",8],
+        ["Varios momentos",10],
+        ["Todos los que pueda ❤️",12]
+    ]
+},
+
+{
+    emoji:"😂",
+    pregunta:"Si Samis se ríe por una tontería que hiciste...",
+    opciones:[
+        ["Me río también",6],
+        ["Me da pena",7],
+        ["Me encanta hacerla reír",10],
+        ["Haría cualquier tontería por verla sonreír ❤️",12]
+    ]
+},
+
+{
+    emoji:"⚽",
+    pregunta:"Si Samis va a verte jugar fútbol...",
+    opciones:[
+        ["Está bien",5],
+        ["Me gusta que vaya",8],
+        ["Me hace feliz verla ahí",10],
+        ["Me emociona muchísimo saber que está apoyándome ❤️",12]
+    ]
+},
+
+{
+    emoji:"🌅",
+    pregunta:"Imaginen que están viendo juntos un atardecer...",
+    opciones:[
+        ["Bonito momento",6],
+        ["Me gustaría",8],
+        ["La abrazaría",10],
+        ["Querría quedarme así con ella todo el tiempo ❤️",12]
+    ]
+},
+
+{
+    emoji:"💭",
+    pregunta:"¿Con qué frecuencia piensas en Samis?",
+    opciones:[
+        ["De vez en cuando",4],
+        ["Varias veces al día",8],
+        ["Bastante",10],
+        ["Demasiado seguido 😂❤️",12]
+    ]
+},
+
+{
+    emoji:"🦁❤️",
+    pregunta:"La última y más importante: si Samis te pregunta si quieres seguir a su lado...",
+    opciones:[
+        ["Sí",7],
+        ["Claro",9],
+        ["Sí, quiero",11],
+        ["Sí, siempre que ella quiera ❤️",15]
+    ]
+}
+
+];
+
+let actual=0;
+let puntos=0;
+
+let xp=parseInt(
+    localStorage.getItem("xp") || "0"
+);
+
+document.getElementById("xp").textContent=xp;
+
+function mostrarPregunta(){
+
+    const p=preguntas[actual];
+
+    document.getElementById("emoji").textContent=p.emoji;
+
+    document.getElementById("pregunta").textContent=
+        p.pregunta;
+
+    document.getElementById("numero").textContent=
+        actual+1;
+
+    document.getElementById("barra").style.width=
+        ((actual/preguntas.length)*100)+"%";
+
+    const contenedor=
+        document.getElementById("opciones");
+
+    contenedor.innerHTML="";
+
+    p.opciones.forEach((opcion)=>{
+
+        const boton=
+            document.createElement("button");
+
+        boton.className="opcion";
+
+        boton.textContent=opcion[0];
+
+        boton.onclick=()=>{
+            responder(opcion[1],opcion[0]);
+        };
+
+        contenedor.appendChild(boton);
+
+    });
+}
+
+function responder(valor,respuesta){
+
+    puntos+=valor;
+
+    xp+=150;
+
+    localStorage.setItem("xp",xp);
+
+    document.getElementById("xp").textContent=xp;
+
+    localStorage.setItem(
+        "nivel18_respuesta_"+(actual+1),
+        respuesta
+    );
+
+    document.querySelectorAll(".opcion")
+    .forEach(boton=>{
+        boton.disabled=true;
+    });
+
+    crearCorazones();
+
+    setTimeout(()=>{
+
+        actual++;
+
+        if(actual>=preguntas.length){
+
+            terminar();
+
+        }else{
+
+            mostrarPregunta();
+
+        }
+
+    },550);
+}
+
+function terminar(){
+
+    document.getElementById("juego").style.display=
+        "none";
+
+    document.getElementById("final").style.display=
+        "block";
+
+    document.getElementById("barra").style.width=
+        "100%";
+
+    /*
+       Puntuación máxima:
+       12+12+12+12+12+12+12+12+12+15 = 123
+    */
+
+    let porcentaje=
+        Math.round((puntos/123)*100);
+
+    if(porcentaje>100){
+        porcentaje=100;
+    }
+
+    let nivel="";
+    let estrellas="";
+    let mensaje="";
+
+    if(porcentaje>=95){
+
+        nivel="💍 ENAMORADÍSIMO";
+
+        estrellas="❤️ ❤️ ❤️ ❤️ ❤️";
+
+        mensaje=
+        "Simba... esto ya no parece un simple crush 😂❤️. " +
+        "Tu corazón está completamente ocupado por tu Samis. " +
+        "Definitivamente hay muchísimo cariño y ganas de compartir la vida juntos.";
+
+    }
+    else if(porcentaje>=85){
+
+        nivel="💘 MUY ENAMORADO";
+
+        estrellas="❤️ ❤️ ❤️ ❤️ 🤍";
+
+        mensaje=
+        "Tu corazón está bastante comprometido, pequeño Simba. 🦁❤️ " +
+        "Samis ocupa un lugar muy especial en tus pensamientos.";
+
+    }
+    else if(porcentaje>=70){
+
+        nivel="🥰 ENAMORADO";
+
+        estrellas="❤️ ❤️ ❤️ 🤍 🤍";
+
+        mensaje=
+        "Hay muchísimo cariño y sentimientos bonitos. 💗 " +
+        "Todavía hay muchas cosas que pueden descubrir juntos.";
+
+    }
+    else if(porcentaje>=55){
+
+        nivel="💗 ILUSIONADO";
+
+        estrellas="❤️ ❤️ 🤍 🤍 🤍";
+
+        mensaje=
+        "Hay una conexión bonita y muchas ganas de seguir viviendo momentos juntos. ❤️";
+
+    }
+    else{
+
+        nivel="👀 CORAZÓN EN PROCESO";
+
+        estrellas="❤️ 🤍 🤍 🤍 🤍";
+
+        mensaje=
+        "Parece que todavía queda mucho por descubrir... " +
+        "pero eso puede hacer que la historia sea todavía más interesante. 🦁❤️";
+
+    }
+
+    document.getElementById("nivelAmor").textContent=
+        nivel+" — "+porcentaje+"%";
+
+    document.getElementById("estrellas").textContent=
+        estrellas;
+
+    document.getElementById("mensaje").textContent=
+        mensaje;
+
+    localStorage.setItem(
+        "nivel18Porcentaje",
+        porcentaje
+    );
+
+    localStorage.setItem(
+        "nivel18Completado",
+        "true"
+    );
+
+    crearCorazones();
+
+}
+
+function crearCorazones(){
+
+    for(let i=0;i<12;i++){
+
+        const c=
+            document.createElement("div");
+
+        c.className="corazonFlotante";
+
+        c.textContent=
+            ["❤️","💕","💗","💖","💘"][
+                Math.floor(Math.random()*5)
+            ];
+
+        c.style.left=
+            Math.random()*100+"vw";
+
+        c.style.bottom="-30px";
+
+        c.style.animationDuration=
+            (3+Math.random()*2)+"s";
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>{
+            c.remove();
+        },5000);
+
+    }
+
+}
+
+mostrarPregunta();
+
+</script>
+
+</body>
+</html>

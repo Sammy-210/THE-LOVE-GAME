@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nivel 4 - Verdad o Reto ❤️</title>
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        const SUPABASE_URL = "https://hefospvuiewnrcnjslpi.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+        const supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #10000c, #30001d, #10000c);
+            color: white;
+            padding: 25px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .top {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .lion {
+            font-size: 65px;
+        }
+
+        h1 {
+            color: #ff6fae;
+            font-size: 38px;
+            margin: 10px 0;
+        }
+
+        .subtitle {
+            color: #ffd1e4;
+            font-size: 18px;
+        }
+
+        .xp-box {
+            background: rgba(255, 105, 170, 0.15);
+            border: 1px solid #ff6fae;
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .test {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,105,174,0.5);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .test h2 {
+            color: #ff8fbe;
+            margin-top: 0;
+        }
+
+        .type {
+            display: inline-block;
+            background: #ff4f9a;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .question {
+            font-size: 19px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 110px;
+            resize: vertical;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            outline: none;
+            background: white;
+            color: #222;
+            margin-bottom: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 13px 20px;
+            background: linear-gradient(135deg, #ff4f9a, #ff78b5);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.03);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 13px;
+            border-radius: 12px;
+            display: none;
+            background: rgba(255, 105, 170, 0.15);
+            border: 1px solid #ff6fae;
+            color: #ffd8e8;
+        }
+
+        .success {
+            color: #8dffbf;
+        }
+
+        .error {
+            color: #ff8f9d;
+        }
+
+        .heart-animation {
+            font-size: 50px;
+            text-align: center;
+            margin: 15px 0;
+            animation: heart 0.8s infinite alternate;
+            display: none;
+        }
+
+        @keyframes heart {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.3);
+            }
+        }
+
+        .countdown {
+            text-align: center;
+            font-size: 55px;
+            color: #ff7db6;
+            font-weight: bold;
+            display: none;
+            margin: 20px;
+        }
+
+        .finish {
+            display: none;
+            text-align: center;
+            background: rgba(255, 105, 170, 0.12);
+            border: 1px solid #ff6fae;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .finish h2 {
+            color: #ff77b2;
+        }
+
+        .map-button {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            background: linear-gradient(135deg, #ff4f9a, #ff78b5);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .saving {
+            font-size: 14px;
+            color: #ffc6dc;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="top">
+        <div class="lion">🦁❤️</div>
+
+        <h1>NIVEL 4</h1>
+
+        <div class="subtitle">
+            VERDAD O RETO
+        </div>
+
+        <p>
+            Mi pequeño Simba, ahora vienen preguntas un poquito más
+            difíciles... 😏❤️
+        </p>
+    </div>
+
+    <div class="xp-box">
+        ⭐ XP de este nivel: <strong>800 XP</strong>
+        <br>
+        Cada prueba vale <strong>100 XP</strong>
+    </div>
+
+
+    <!-- PRUEBA 1 -->
+
+    <div class="test" id="test1">
+
+        <span class="type">💗 VERDAD</span>
+
+        <h2>Prueba 1</h2>
+
+        <div class="question">
+            ¿Qué fue lo primero que pensaste de mí cuando empezamos a hablar?
+        </div>
+
+        <textarea id="respuesta1"
+            placeholder="Escribe tu respuesta aquí..."></textarea>
+
+        <button onclick="guardarRespuesta(1, 'verdad', '¿Qué fue lo primero que pensaste de mí cuando empezamos a hablar?', 'respuesta1')">
+            💌 Responder
+        </button>
+
+        <div class="message" id="mensaje1"></div>
+
+    </div>
+
+
+    <!-- PRUEBA 2 -->
+
+    <div class="test" id="test2">
+
+        <span class="type">😏 RETO</span>
+
+        <h2>Prueba 2</h2>
+
+        <div class="question">
+            Escribe exactamente <strong>3 palabras</strong> para describir
+            lo que sientes cuando estás conmigo.
+        </div>
+
+        <input
+            id="respuesta2"
+            type="text"
+            placeholder="Ejemplo: felicidad, paz, amor">
+
+        <button onclick="retoTresPalabras()">
+            ❤️ Cumplir reto
+        </button>
+
+        <div class="message" id="mensaje2"></div>
+
+    </div>
+
+
+    <!-- PRUEBA 3 -->
+
+    <div class="test" id="test3">
+
+        <span class="type">💗 VERDAD</span>
+
+        <h2>Prueba 3</h2>
+
+        <div class="question">
+            ¿Cuál es uno de los momentos conmigo que más te gusta recordar?
+        </div>
+
+        <textarea id="respuesta3"
+            placeholder="Cuéntamelo... ❤️"></textarea>
+
+        <button onclick="guardarRespuesta(3, 'verdad', '¿Cuál es uno de los momentos conmigo que más te gusta recordar?', 'respuesta3')">
+            💕 Responder
+        </button>
+
+        <div class="message" id="mensaje3"></div>
+
+    </div>
+
+
+    <!-- PRUEBA 4 -->
+
+    <div class="test" id="test4">
+
+        <span class="type">⏱️ RETO</span>
+
+        <h2>Prueba 4</h2>
+
+        <div class="question">
+            Quédate mirando la pantalla durante 5 segundos pensando en tu Samis. 🥺❤️
+        </div>
+
+        <div class="countdown" id="contador">
+            5
+        </div>
+
+        <button id="botonReto4" onclick="retoCincoSegundos()">
+            🥰 Aceptar reto
+        </button>
+
+        <div class="message" id="mensaje4"></div>
+
+    </div>
+
+
+    <!-- PRUEBA 5 -->
+
+    <div class="test" id="test5">
+
+        <span class="type">💗 VERDAD</span>
+
+        <h2>Prueba 5</h2>
+
+        <div class="question">
+            ¿Qué es lo que más te gusta de mi forma de ser?
+        </div>
+
+        <textarea id="respuesta5"
+            placeholder="Sé sincero... 👀❤️"></textarea>
+
+        <button onclick="guardarRespuesta(5, 'verdad', '¿Qué es lo que más te gusta de mi forma de ser?', 'respuesta5')">
+            💌 Responder
+        </button>
+
+        <div class="message" id="mensaje5"></div>
+
+    </div>
+
+
+    <!-- PRUEBA 6 -->
+
+    <div class="test" id="test6">
+
+        <span class="type">❤️ RETO</span>
+
+        <h2>Prueba 6</h2>
+
+        <div class="question">
+            Mándale un corazón a tu Samis. ❤️
+            <br><br>
+            No importa cómo... pero que sea con amor.
+        </div>
+
+        <div class="heart-animation" id="corazones">
+            ❤️💗❤️
+        </div>
+
+        <button onclick="retoCorazon()">
+            ❤️ Enviar corazón
+        </button>
+
+        <div class="message" id="mensaje6"></div>
+
+    </div>
+
+
+    <!-- PRUEBA 7 -->
+
+    <div class="test" id="test7">
+
+        <span class="type">💗 VERDAD</span>
+
+        <h2>Prueba 7</h2>
+
+        <div class="question">
+            Si pudiéramos ir juntos a cualquier lugar del mundo,
+            ¿a dónde me llevarías y por qué?
+        </div>
+
+        <textarea id="respuesta7"
+            placeholder="Dime nuestro destino... 🌎❤️"></textarea>
+
+        <button onclick="guardarRespuesta(7, 'verdad', 'Si pudiéramos ir juntos a cualquier lugar del mundo, ¿a dónde me llevarías y por qué?', 'respuesta7')">
+            ✈️ Responder
+        </button>
+
+        <div class="message" id="mensaje7"></div>
+
+    </div>
+
+
+    <!-- PRUEBA 8 -->
+
+    <div class="test" id="test8">
+
+        <span class="type">🥰 RETO FINAL</span>
+
+        <h2>Prueba 8</h2>
+
+        <div class="question">
+            Promete que cuando veas a tu Samis le darás un abrazo
+            muy fuerte. 🥺❤️
+            <br><br>
+            Y si quieres... también un besito. 😏
+        </div>
+
+        <button onclick="retoAbrazo()">
+            💕 LO PROMETO
+        </button>
+
+        <div class="message" id="mensaje8"></div>
+
+    </div>
+
+
+    <!-- FINAL -->
+
+    <div class="finish" id="finalNivel">
+
+        <div style="font-size:60px;">🦁❤️</div>
+
+        <h2>¡NIVEL 4 COMPLETADO!</h2>
+
+        <p>
+            Mi pequeño Simba...
+        </p>
+
+        <p>
+            Superaste todas las pruebas. 🥺❤️
+        </p>
+
+        <p>
+            Has ganado:
+        </p>
+
+        <h2>+800 XP ⭐</h2>
+
+        <p>
+            Tus respuestas quedaron guardadas. 💌
+        </p>
+
+        <a href="mapa.html" class="map-button">
+            🗺️ VOLVER AL MAPA
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // ------------------------------------
+    // VARIABLES
+    // ------------------------------------
+
+    let pruebasCompletadas = 0;
+
+    const totalPruebas = 8;
+
+
+    // ------------------------------------
+    // GUARDAR RESPUESTA EN SUPABASE
+    // ------------------------------------
+
+    async function enviarRespuesta(pregunta, respuesta, tipo) {
+
+        const { data, error } = await supabaseClient
+            .from("respuestas_nivel4")
+            .insert([
+                {
+                    pregunta: pregunta,
+                    respuesta: respuesta,
+                    tipo: tipo
+                }
+            ]);
+
+        if (error) {
+
+            console.error("Error:", error);
+
+            return false;
+
+        }
+
+        return true;
+    }
+
+
+    // ------------------------------------
+    // COMPLETAR PRUEBA
+    // ------------------------------------
+
+    function completarPrueba(numero) {
+
+        const prueba = document.getElementById("test" + numero);
+
+        if (prueba.dataset.completada === "true") {
+            return;
+        }
+
+        prueba.dataset.completada = "true";
+
+        pruebasCompletadas++;
+
+        if (pruebasCompletadas >= totalPruebas) {
+            terminarNivel();
+        }
+    }
+
+
+    // ------------------------------------
+    // VERDADES
+    // ------------------------------------
+
+    async function guardarRespuesta(
+        numero,
+        tipo,
+        pregunta,
+        idRespuesta
+    ) {
+
+        const textarea = document.getElementById(idRespuesta);
+
+        const respuesta = textarea.value.trim();
+
+        const mensaje = document.getElementById(
+            "mensaje" + numero
+        );
+
+        if (respuesta === "") {
+
+            mensaje.style.display = "block";
+
+            mensaje.className = "message error";
+
+            mensaje.textContent =
+                "Primero escribe tu respuesta ❤️";
+
+            return;
+        }
+
+
+        const boton = textarea.nextElementSibling;
+
+        boton.disabled = true;
+
+        mensaje.style.display = "block";
+
+        mensaje.className = "message";
+
+        mensaje.textContent =
+            "💌 Guardando tu respuesta...";
+
+
+        const guardado = await enviarRespuesta(
+            pregunta,
+            respuesta,
+            tipo
+        );
+
+
+        if (!guardado) {
+
+            boton.disabled = false;
+
+            mensaje.className = "message error";
+
+            mensaje.textContent =
+                "❌ No se pudo guardar. Inténtalo nuevamente.";
+
+            return;
+        }
+
+
+        mensaje.className = "message success";
+
+        mensaje.innerHTML =
+            "❤️ Respuesta guardada. Solo sigue con la siguiente prueba.";
+
+        textarea.disabled = true;
+
+        completarPrueba(numero);
+    }
+
+
+    // ------------------------------------
+    // RETO 2
+    // ------------------------------------
+
+    async function retoTresPalabras() {
+
+        const input =
+            document.getElementById("respuesta2");
+
+        const respuesta =
+            input.value.trim();
+
+        const mensaje =
+            document.getElementById("mensaje2");
+
+        const palabras =
+            respuesta.split(/\s+/).filter(Boolean);
+
+
+        if (palabras.length !== 3) {
+
+            mensaje.style.display = "block";
+
+            mensaje.className = "message error";
+
+            mensaje.textContent =
+                "😏 El reto dice EXACTAMENTE 3 palabras.";
+
+            return;
+        }
+
+
+        const boton =
+            input.nextElementSibling;
+
+        boton.disabled = true;
+
+        mensaje.style.display = "block";
+
+        mensaje.className = "message";
+
+        mensaje.textContent =
+            "💌 Guardando tu respuesta...";
+
+
+        const guardado = await enviarRespuesta(
+            "Escribe exactamente 3 palabras para describir lo que sientes cuando estás conmigo.",
+            respuesta,
+            "reto"
+        );
+
+
+        if (!guardado) {
+
+            boton.disabled = false;
+
+            mensaje.className = "message error";
+
+            mensaje.textContent =
+                "❌ No se pudo guardar. Inténtalo nuevamente.";
+
+            return;
+        }
+
+
+        input.disabled = true;
+
+        mensaje.className = "message success";
+
+        mensaje.textContent =
+            "❤️ ¡Reto cumplido! Exactamente 3 palabras.";
+
+        completarPrueba(2);
+    }
+
+
+    // ------------------------------------
+    // RETO 4
+    // ------------------------------------
+
+    function retoCincoSegundos() {
+
+        const boton =
+            document.getElementById("botonReto4");
+
+        const contador =
+            document.getElementById("contador");
+
+        const mensaje =
+            document.getElementById("mensaje4");
+
+        boton.disabled = true;
+
+        contador.style.display = "block";
+
+        let numero = 5;
+
+        contador.textContent = numero;
+
+
+        const intervalo = setInterval(async () => {
+
+            numero--;
+
+            contador.textContent = numero;
+
+
+            if (numero <= 0) {
+
+                clearInterval(intervalo);
+
+                contador.style.display = "none";
+
+                const guardado = await enviarRespuesta(
+                    "Quédate mirando la pantalla durante 5 segundos pensando en tu Samis.",
+                    "Acepté el reto de 5 segundos pensando en mi Samis ❤️",
+                    "reto"
+                );
+
+
+                if (!guardado) {
+
+                    boton.disabled = false;
+
+                    mensaje.style.display = "block";
+
+                    mensaje.className = "message error";
+
+                    mensaje.textContent =
+                        "❌ No se pudo guardar el reto.";
+
+                    return;
+                }
+
+
+                mensaje.style.display = "block";
+
+                mensaje.className = "message success";
+
+                mensaje.textContent =
+                    "🥺❤️ Reto cumplido. Espero que hayas pensado en mí.";
+
+                completarPrueba(4);
+            }
+
+        }, 1000);
+    }
+
+
+    // ------------------------------------
+    // RETO 6
+    // ------------------------------------
+
+    async function retoCorazon() {
+
+        const boton =
+            document.querySelector("#test6 button");
+
+        const corazones =
+            document.getElementById("corazones");
+
+        const mensaje =
+            document.getElementById("mensaje6");
+
+
+        boton.disabled = true;
+
+        corazones.style.display = "block";
+
+        const guardado = await enviarRespuesta(
+            "Mándale un corazón a tu Samis.",
+            "❤️ Reto cumplido. Le mandé un corazón a mi Samis.",
+            "reto"
+        );
+
+
+        if (!guardado) {
+
+            boton.disabled = false;
+
+            corazones.style.display = "none";
+
+            mensaje.style.display = "block";
+
+            mensaje.className = "message error";
+
+            mensaje.textContent =
+                "❌ No se pudo guardar el reto.";
+
+            return;
+        }
+
+
+        mensaje.style.display = "block";
+
+        mensaje.className = "message success";
+
+        mensaje.textContent =
+            "❤️ ¡Corazón enviado!";
+
+        completarPrueba(6);
+    }
+
+
+    // ------------------------------------
+    // RETO 8
+    // ------------------------------------
+
+    async function retoAbrazo() {
+
+        const boton =
+            document.querySelector("#test8 button");
+
+        const mensaje =
+            document.getElementById("mensaje8");
+
+
+        boton.disabled = true;
+
+        const guardado = await enviarRespuesta(
+            "Promete que cuando veas a tu Samis le darás un abrazo muy fuerte.",
+            "LO PROMETO ❤️",
+            "reto"
+        );
+
+
+        if (!guardado) {
+
+            boton.disabled = false;
+
+            mensaje.style.display = "block";
+
+            mensaje.className = "message error";
+
+            mensaje.textContent =
+                "❌ No se pudo guardar el reto.";
+
+            return;
+        }
+
+
+        mensaje.style.display = "block";
+
+        mensaje.className = "message success";
+
+        mensaje.innerHTML =
+            "🥺❤️ Promesa aceptada. Ahora más te vale cumplirla.";
+
+        completarPrueba(8);
+    }
+
+
+    // ------------------------------------
+    // TERMINAR NIVEL
+    // ------------------------------------
+
+    function terminarNivel() {
+
+        let xpAnterior =
+            parseInt(localStorage.getItem("xp")) || 0;
+
+        let nuevoXP =
+            xpAnterior + 800;
+
+
+        localStorage.setItem(
+            "xp",
+            nuevoXP
+        );
+
+
+        localStorage.setItem(
+            "nivel4Completado",
+            "true"
+        );
+
+
+        const final =
+            document.getElementById("finalNivel");
+
+        final.style.display = "block";
+
+
+        final.scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+
+</script>
+
+</body>
+</html>

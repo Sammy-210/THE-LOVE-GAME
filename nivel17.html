@@ -1,0 +1,610 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nivel 17 — Compatibilidad ❤️</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+"https://hefospvuiewnrcnjslpi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JOykK5bONcAeCI-PkP2RlA_RxMyag5n";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top,#7b1746 0%,transparent 42%),
+        linear-gradient(135deg,#080808,#250817,#080808);
+    padding:25px;
+}
+
+.container{
+    max-width:850px;
+    margin:auto;
+    text-align:center;
+}
+
+h1{
+    font-size:40px;
+    margin-bottom:8px;
+    text-shadow:0 0 20px #ff4f9a;
+}
+
+.subtitulo{
+    color:#ffb6d5;
+    font-size:19px;
+    margin-bottom:20px;
+}
+
+.corazones{
+    font-size:35px;
+    letter-spacing:8px;
+    margin-bottom:10px;
+}
+
+.xp{
+    display:inline-block;
+    background:#160a11;
+    border:2px solid #ff4f9a;
+    border-radius:20px;
+    padding:10px 22px;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+.card{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,105,160,.5);
+    border-radius:25px;
+    padding:32px;
+    box-shadow:0 0 35px rgba(255,40,120,.25);
+}
+
+.pregunta{
+    font-size:25px;
+    line-height:1.4;
+    margin-bottom:25px;
+}
+
+.datos{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.dato{
+    background:rgba(255,255,255,.06);
+    border:1px solid #ff6fa8;
+    border-radius:15px;
+    padding:15px;
+}
+
+.dato strong{
+    display:block;
+    color:#ff9ac5;
+    margin-bottom:5px;
+}
+
+.opciones{
+    display:grid;
+    gap:13px;
+}
+
+.opcion{
+    border:none;
+    border-radius:15px;
+    padding:17px;
+    background:linear-gradient(90deg,#8f174d,#d52d75);
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.opcion:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 18px #ff4f9a;
+}
+
+.barra{
+    height:12px;
+    background:#2b1722;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:20px;
+}
+
+.barraInterna{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#ff4f9a,#ff9ac5);
+    transition:.5s;
+}
+
+.progreso{
+    margin-top:12px;
+    color:#ddd;
+}
+
+.final{
+    display:none;
+}
+
+.final h2{
+    color:#ff9ac5;
+    font-size:38px;
+}
+
+.porcentaje{
+    font-size:75px;
+    font-weight:bold;
+    color:#ff79b0;
+    text-shadow:0 0 25px #ff4f9a;
+    margin:20px 0;
+}
+
+.mensajeFinal{
+    font-size:20px;
+    line-height:1.7;
+}
+
+.corazonFinal{
+    font-size:80px;
+    animation:latir 1s infinite;
+}
+
+.boton{
+    display:inline-block;
+    margin-top:25px;
+    padding:15px 28px;
+    background:linear-gradient(90deg,#b71961,#ef4d91);
+    border-radius:30px;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+@keyframes latir{
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.18);
+    }
+}
+
+.corazonFlotante{
+    position:fixed;
+    font-size:25px;
+    pointer-events:none;
+    animation:subir 4s linear forwards;
+}
+
+@keyframes subir{
+    0%{
+        transform:translateY(0);
+        opacity:1;
+    }
+
+    100%{
+        transform:translateY(-100vh);
+        opacity:0;
+    }
+}
+
+@media(max-width:600px){
+
+    h1{
+        font-size:30px;
+    }
+
+    .datos{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:22px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="corazones">
+        ❤️ 💗 ❤️
+    </div>
+
+    <h1>COMPATIBILIDAD</h1>
+
+    <div class="subtitulo">
+        Donovan ❤️ Samantha
+    </div>
+
+    <div class="xp">
+        ⭐ XP: <span id="xp">0</span>
+    </div>
+
+    <div id="juego" class="card">
+
+        <div class="datos">
+
+            <div class="dato">
+                <strong>🦁 Donovan</strong>
+                25 de febrero de 2009
+            </div>
+
+            <div class="dato">
+                <strong>💗 Samantha</strong>
+                21 de febrero de 2008
+            </div>
+
+        </div>
+
+        <div class="pregunta" id="pregunta"></div>
+
+        <div class="opciones" id="opciones"></div>
+
+        <div class="progreso">
+            Pregunta <span id="numero">1</span> de 8
+        </div>
+
+        <div class="barra">
+            <div class="barraInterna" id="barra"></div>
+        </div>
+
+    </div>
+
+    <div id="final" class="card final">
+
+        <div class="corazonFinal">
+            ❤️
+        </div>
+
+        <h2>
+            ¡RESULTADO FINAL!
+        </h2>
+
+        <div class="porcentaje">
+            <span id="porcentaje">0</span>%
+        </div>
+
+        <div class="mensajeFinal" id="mensajeFinal"></div>
+
+        <p>
+            Porque al final la compatibilidad no se trata
+            solamente de un número... ❤️
+        </p>
+
+        <p>
+            Se trata de todos los momentos que todavía
+            les faltan por vivir juntos. 🥹
+        </p>
+
+        <a href="mapa.html" class="boton">
+            🗺️ CONTINUAR AL NIVEL 18
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+const preguntas=[
+
+{
+    pregunta:"❤️ ¿Qué tan importante es para ti pasar tiempo juntos?",
+    opciones:[
+        "Muchísimo",
+        "Bastante",
+        "Normal",
+        "No tanto"
+    ]
+},
+
+{
+    pregunta:"😂 Si están juntos, ¿qué prefieres?",
+    opciones:[
+        "Reírnos y hacer tonterías",
+        "Hablar de todo",
+        "Ver una película",
+        "Todo lo anterior"
+    ]
+},
+
+{
+    pregunta:"🌎 Si pudieran viajar juntos, ¿qué elegirías?",
+    opciones:[
+        "Playa",
+        "Un lugar nuevo",
+        "Una aventura",
+        "Cualquier lugar mientras sea juntos"
+    ]
+},
+
+{
+    pregunta:"🫂 ¿Qué significa para ti un abrazo de alguien que quieres?",
+    opciones:[
+        "Cariño",
+        "Tranquilidad",
+        "Sentirme cerca de esa persona",
+        "Todo lo anterior"
+    ]
+},
+
+{
+    pregunta:"⚽ Si Samis va a verte jugar fútbol, ¿qué significa para ti?",
+    opciones:[
+        "Que me apoya",
+        "Que le interesa lo que hago",
+        "Que quiere verme feliz",
+        "Todo lo anterior"
+    ]
+},
+
+{
+    pregunta:"💐 ¿Qué recuerdo elegirías para volver a vivir?",
+    opciones:[
+        "Las flores",
+        "Verte jugar fútbol",
+        "Un momento romántico",
+        "Cualquier momento juntos"
+    ]
+},
+
+{
+    pregunta:"🎬 ¿Cuál sería una cita perfecta?",
+    opciones:[
+        "Tacos + película",
+        "Atardecer",
+        "Salir a conocer un lugar",
+        "Una cita donde podamos hacer de todo"
+    ]
+},
+
+{
+    pregunta:"🦁❤️ Y la más importante... ¿qué tan importante es Samis para ti?",
+    opciones:[
+        "Mucho",
+        "Demasiado",
+        "Muchísimo",
+        "Es mi persona especial ❤️"
+    ]
+}
+
+];
+
+let actual=0;
+let puntos=0;
+
+let xp=parseInt(
+    localStorage.getItem("xp") || "0"
+);
+
+document.getElementById("xp").textContent=xp;
+
+function mostrarPregunta(){
+
+    const p=preguntas[actual];
+
+    document.getElementById("pregunta").textContent=
+        p.pregunta;
+
+    document.getElementById("numero").textContent=
+        actual+1;
+
+    document.getElementById("barra").style.width=
+        ((actual/preguntas.length)*100)+"%";
+
+    const contenedor=
+        document.getElementById("opciones");
+
+    contenedor.innerHTML="";
+
+    p.opciones.forEach((opcion,indice)=>{
+
+        const boton=
+            document.createElement("button");
+
+        boton.className="opcion";
+
+        boton.textContent=opcion;
+
+        boton.onclick=()=>{
+            responder(indice);
+        };
+
+        contenedor.appendChild(boton);
+
+    });
+}
+
+function responder(indice){
+
+    /*
+       Cada respuesta suma puntos.
+       Las opciones más románticas
+       tienen más peso.
+    */
+
+    const valores=[8,10,12,15];
+
+    puntos+=valores[indice];
+
+    xp+=200;
+
+    localStorage.setItem("xp",xp);
+
+    document.getElementById("xp").textContent=xp;
+
+    localStorage.setItem(
+        "nivel17_respuesta_"+(actual+1),
+        preguntas[actual].opciones[indice]
+    );
+
+    crearCorazones();
+
+    document.querySelectorAll(".opcion")
+    .forEach(b=>{
+        b.disabled=true;
+    });
+
+    setTimeout(()=>{
+
+        actual++;
+
+        if(actual>=preguntas.length){
+
+            terminar();
+
+        }else{
+
+            mostrarPregunta();
+
+        }
+
+    },600);
+
+}
+
+function terminar(){
+
+    /*
+       El máximo es 120.
+       Lo convertimos a porcentaje.
+    */
+
+    let porcentaje=
+        Math.round((puntos/120)*100);
+
+    if(porcentaje>100){
+        porcentaje=100;
+    }
+
+    document.getElementById("juego").style.display=
+        "none";
+
+    document.getElementById("final").style.display=
+        "block";
+
+    document.getElementById("barra").style.width=
+        "100%";
+
+    document.getElementById("porcentaje").textContent=
+        porcentaje;
+
+    let mensaje="";
+
+    if(porcentaje>=95){
+
+        mensaje=
+        "💍❤️ ¡COMPATIBILIDAD CASI PERFECTA! " +
+        "Parece que estos dos están hechos para entenderse. " +
+        "Donovan y Samantha tienen una conexión muy especial.";
+
+    }
+    else if(porcentaje>=85){
+
+        mensaje=
+        "🥰❤️ ¡MUY ALTA COMPATIBILIDAD! " +
+        "Hay muchísimo cariño, conexión y ganas de compartir momentos juntos.";
+
+    }
+    else if(porcentaje>=70){
+
+        mensaje=
+        "💗 ¡BUENA COMPATIBILIDAD! " +
+        "Tienen muchas cosas en común y todavía pueden descubrir muchísimo juntos.";
+
+    }
+    else{
+
+        mensaje=
+        "😂❤️ ¡TODAVÍA HAY MUCHO POR DESCUBRIR! " +
+        "Pero eso también hace divertida la historia de Donovan y Samis.";
+
+    }
+
+    document.getElementById("mensajeFinal").textContent=
+        mensaje;
+
+    localStorage.setItem(
+        "nivel17Compatibilidad",
+        porcentaje
+    );
+
+    localStorage.setItem(
+        "nivel17Completado",
+        "true"
+    );
+
+    crearCorazones();
+
+}
+
+function crearCorazones(){
+
+    for(let i=0;i<12;i++){
+
+        const c=
+            document.createElement("div");
+
+        c.className=
+            "corazonFlotante";
+
+        c.textContent=
+            ["❤️","💕","💗","💖","💘"][
+                Math.floor(Math.random()*5)
+            ];
+
+        c.style.left=
+            Math.random()*100+"vw";
+
+        c.style.bottom=
+            "-30px";
+
+        c.style.animationDuration=
+            (3+Math.random()*2)+"s";
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>{
+            c.remove();
+        },5000);
+
+    }
+
+}
+
+mostrarPregunta();
+
+</script>
+
+</body>
+</html>
