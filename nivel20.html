@@ -522,21 +522,18 @@ function pruebaMemoria(){
     document.getElementById("titulo")
         .textContent="PRUEBA 1 — MEMORIA RÁPIDA";
 
-   document.getElementById("pregunta")
-    .textContent =
-    "Mira la secuencia durante unos segundos. Después desaparecerá.";
+    document.getElementById("pregunta")
+        .textContent =
+        "Mira la secuencia durante unos segundos. Después desaparecerá.";
 
-const contenido =
-    document.getElementById("contenido");
+    const contenido =
+        document.getElementById("contenido");
 
-contenido.innerHTML = `
+    contenido.innerHTML = `
 
-    <div class="secuencia" id="secuencia">
-        🦁 💗 ⭐ 🌙
-    </div>
-
-`;
-    
+        <div class="secuencia" id="secuencia">
+            🦁 💗 ⭐ 🌙
+        </div>
 
         <p class="texto">
             Memorízala...
@@ -544,24 +541,24 @@ contenido.innerHTML = `
 
     `;
 
-setTimeout(()=>{
-    
-    document.getElementById("pregunta")
-        .textContent =
-        "¿Cuál era el tercer símbolo?";
+    setTimeout(()=>{
 
-    contenido.innerHTML = "";
+        document.getElementById("pregunta")
+            .textContent =
+            "¿Cuál era el tercer símbolo?";
 
-    crearOpciones([
-        ["🦁",false],
-        ["⭐",true],
-        ["🌙",false],
-        ["💗",false]
-    ]);
+        contenido.innerHTML = "";
 
-},3000);
+        crearOpciones([
+            ["🦁",false],
+            ["⭐",true],
+            ["🌙",false],
+            ["💗",false]
+        ]);
 
+    },3000);
 
+}
 /* =========================
    PRUEBA 2
    PUERTAS
