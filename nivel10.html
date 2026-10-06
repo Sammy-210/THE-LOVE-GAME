@@ -578,11 +578,17 @@ async function responder(numero, respuesta) {
         return;
     }
 
-    /*
-     * Todas las respuestas son válidas.
-     * Este nivel trata de imaginar
-     * el futuro juntos.
-     */
+    const preguntaTexto =
+        document
+            .getElementById("q" + numero)
+            .querySelector("h2")
+            .textContent
+            .trim();
+
+    await guardarRespuestaSupabase(
+        preguntaTexto,
+        respuesta
+    );
 
     xpNivel += 150;
 
@@ -611,23 +617,11 @@ async function responder(numero, respuesta) {
     }, 300);
 
 }
-
-
 /* =========================
    RESPUESTA ABIERTA
 ========================= */
 async function responderLibre() {
-const preguntaTexto =
-    document
-        .getElementById("q7")
-        .querySelector("h2")
-        .textContent
-        .trim();
 
-await guardarRespuestaSupabase(
-    preguntaTexto,
-    respuesta
-);
     if (preguntaActual !== 7) {
         return;
     }
@@ -647,21 +641,25 @@ await guardarRespuestaSupabase(
         );
 
         return;
+
     }
 
 
-    xpNivel += 150;
     const preguntaTexto =
-    document
-        .getElementById("q" + numero)
-        .querySelector("h2")
-        .textContent
-        .trim();
+        document
+            .getElementById("q7")
+            .querySelector("h2")
+            .textContent
+            .trim();
 
-await guardarRespuestaSupabase(
-    preguntaTexto,
-    respuesta
-);
+
+    await guardarRespuestaSupabase(
+        preguntaTexto,
+        respuesta
+    );
+
+
+    xpNivel += 150;
 
     document
         .getElementById("xpNivel")
@@ -671,7 +669,6 @@ await guardarRespuestaSupabase(
     completarNivel();
 
 }
-
 
 /* =========================
    COMPLETAR NIVEL
