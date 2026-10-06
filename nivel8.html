@@ -605,7 +605,59 @@ actualizarXP();
 /* =========================
    COMPRAR PREMIO
 ========================= */
+async function guardarCompraSupabase(
+    nombre,
+    precio,
+    descripcion
+) {
 
+    try {
+
+        const { error } =
+            await supabaseClient
+            .from("respuestas_nivel4")
+            .insert([{
+
+                pregunta:
+                    "Nivel 8 - Compra de premio",
+
+                respuesta:
+                    nombre +
+                    " | Precio: " +
+                    precio +
+                    " XP | " +
+                    descripcion,
+
+                tipo:
+                    "Nivel 8 - Cofre de Premios"
+
+            }]);
+
+        if (error) {
+
+            console.error(
+                "Error al guardar compra:",
+                error
+            );
+
+        } else {
+
+            console.log(
+                "✅ Compra del Nivel 8 guardada en Supabase"
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Error:",
+            error
+        );
+
+    }
+
+}
 function comprar(
     nombre,
     icono,
@@ -661,6 +713,11 @@ function comprar(
         "ultimoPremioDescripcion",
         descripcion
     );
+    await guardarCompraSupabase(
+    nombre,
+    precio,
+    descripcion
+);
 
 
     /*
