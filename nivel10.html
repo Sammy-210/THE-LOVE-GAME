@@ -508,7 +508,40 @@ textarea {
 let preguntaActual = 0;
 let xpNivel = 0;
 let nivelTerminado = false;
+async function guardarRespuestaSupabase(
+    preguntaTexto,
+    respuestaTexto
+) {
 
+    const { error } =
+        await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+
+            pregunta: preguntaTexto,
+
+            respuesta: respuestaTexto,
+
+            tipo: "Nivel 10 - Nuestro futuro"
+
+        }]);
+
+    if (error) {
+
+        console.error(
+            "Error al guardar respuesta:",
+            error
+        );
+
+    } else {
+
+        console.log(
+            "✅ Respuesta del Nivel 10 guardada"
+        );
+
+    }
+
+}
 
 /* =========================
    MOSTRAR PREGUNTA
@@ -539,8 +572,7 @@ function mostrarPregunta(numero) {
 /* =========================
    RESPONDER
 ========================= */
-
-function responder(numero, respuesta) {
+async function responder(numero, respuesta) {
 
     if (numero !== preguntaActual) {
         return;
@@ -584,9 +616,18 @@ function responder(numero, respuesta) {
 /* =========================
    RESPUESTA ABIERTA
 ========================= */
+async function responderLibre() {
+const preguntaTexto =
+    document
+        .getElementById("q7")
+        .querySelector("h2")
+        .textContent
+        .trim();
 
-function responderLibre() {
-
+await guardarRespuestaSupabase(
+    preguntaTexto,
+    respuesta
+);
     if (preguntaActual !== 7) {
         return;
     }
@@ -610,6 +651,17 @@ function responderLibre() {
 
 
     xpNivel += 150;
+    const preguntaTexto =
+    document
+        .getElementById("q" + numero)
+        .querySelector("h2")
+        .textContent
+        .trim();
+
+await guardarRespuestaSupabase(
+    preguntaTexto,
+    respuesta
+);
 
     document
         .getElementById("xpNivel")
