@@ -807,7 +807,32 @@ window.supabase.createClient(
 
     const xpTexto =
         document.getElementById("xp");
+async function guardarRespuestaSupabase(
+    preguntaTexto,
+    respuestaTexto,
+    esCorrecta
+) {
 
+    const { error } = await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+            pregunta: preguntaTexto,
+            respuesta: respuestaTexto,
+            tipo: "Nivel 3 - " +
+                (esCorrecta ? "Correcta" : "Incorrecta")
+        }]);
+
+    if (error) {
+        console.error(
+            "Error al guardar respuesta:",
+            error
+        );
+    } else {
+        console.log(
+            "✅ Respuesta del Nivel 3 guardada"
+        );
+    }
+}
 
     function mostrarSecreto() {
 
@@ -978,12 +1003,23 @@ window.supabase.createClient(
         }
 
 
-        xpTexto.innerText =
-            xpGanado;
+       xpTexto.innerText =
+    xpGanado;
 
+const respuestaTexto =
+    secretos[actual].respuestas[indice];
 
-        nextButton.style.display =
-            "block";
+const esCorrecta =
+    indice === secretos[actual].correcta;
+
+guardarRespuestaSupabase(
+    secretos[actual].pregunta,
+    respuestaTexto,
+    esCorrecta
+);
+
+nextButton.style.display =
+    "block";
 
     }
 
