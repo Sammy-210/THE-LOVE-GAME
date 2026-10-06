@@ -445,35 +445,105 @@ function mostrarPregunta(){
     });
 }
 
-function responder(indice){
+async function guardarRespuestaSupabase(pregunta, respuesta, puntosGanados){
 
-    /*
-       Cada respuesta suma puntos.
-       Las opciones más románticas
-       tienen más peso.
-    */
+    const { error } = await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+            pregunta: pregunta,
+            respuesta: respuesta,
+            tipo: "Nivel 17 - Compatibilidad - " + puntosGanados + " puntos"
+        }]);
 
-    const valores=[8,10,12,15];
+    if(error){
 
-    puntos+=valores[indice];
+        console.error(
+            "Error guardando respuesta:",
+            error
+        );
 
-    xp+=200;
+        return false;
+    }
 
-    localStorage.setItem("xp",xp);
+    return true;
+}
 
-    document.getElementById("xp").textContent=xp;
 
-    localStorage.setItem(
-        "nivel17_respuesta_"+(actual+1),
-        preguntas[actual].opciones[indice]
-    );
+async function responder(indice){
 
-    crearCorazones();
+    const preguntaActual =
+        preguntas[actual];
+
+    const puntosGanados =
+        [8,10,12,15][indice];
 
     document.querySelectorAll(".opcion")
     .forEach(b=>{
         b.disabled=true;
     });
+
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            preguntaActual.pregunta,
+            preguntaActual.opciones[indice],
+            puntosGanados
+        );
+
+
+    if(!guardada){
+
+        alert(
+            "❌ No se pudo guardar tu respuesta. Inténtalo nuevamente."
+        );
+
+        document.querySelectorAll(".opcion")
+        .forEach(b=>{
+            b.disabled=false;
+        });
+
+        return;
+    }
+
+
+    /*
+       SUMAR PUNTOS DE COMPATIBILIDAD
+    */
+
+    puntos += puntosGanados;
+
+
+    /*
+       SUMAR XP
+    */
+
+    xp += 200;
+
+    localStorage.setItem(
+        "xp",
+        xp
+    );
+
+    document.getElementById("xp")
+    .textContent=xp;
+
+
+    /*
+       GUARDAR RESPUESTA LOCALMENTE
+    */
+
+    localStorage.setItem(
+        "nivel17_respuesta_"+(actual+1),
+        preguntaActual.opciones[indice]
+    );
+
+
+    crearCorazones();
+
+
+    /*
+       SIGUIENTE PREGUNTA
+    */
 
     setTimeout(()=>{
 
