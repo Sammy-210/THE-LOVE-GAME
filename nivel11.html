@@ -926,16 +926,67 @@ function mostrarDesafio(){
 
 }
 
+async function guardarRespuestaSupabase(
+    preguntaTexto,
+    respuestaTexto,
+    esCorrecta
+){
 
+    const { error } =
+        await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+
+            pregunta: preguntaTexto,
+
+            respuesta: respuestaTexto,
+
+            tipo:
+            "Nivel 11 - Jefe Final - " +
+            (esCorrecta ? "Correcta" : "Incorrecta")
+
+        }]);
+
+    if(error){
+
+        console.error(
+            "Error al guardar respuesta:",
+            error
+        );
+
+    }else{
+
+        console.log(
+            "✅ Respuesta del Nivel 11 guardada"
+        );
+
+    }
+
+}
 /* RESPONDER */
 
-function responder(indice){
+async function responder(indice){
 
     const desafio =
     desafios[actual];
 
 
-    if(indice === desafio.correcta){
+    const respuestaTexto =
+    desafio.opciones[indice];
+
+
+    const esCorrecta =
+    indice === desafio.correcta;
+
+
+    await guardarRespuestaSupabase(
+        desafio.pregunta,
+        respuestaTexto,
+        esCorrecta
+    );
+
+
+    if(esCorrecta){
 
         feedback.className =
         "feedback show good";
@@ -978,8 +1029,6 @@ function responder(indice){
     }
 
 }
-
-
 /* PROGRESO */
 
 function actualizarProgreso(){
