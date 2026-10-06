@@ -466,7 +466,17 @@ async function guardarRespuestaSupabase(preguntaTexto, respuestaTexto, esCorrect
         }
 
         xpTexto.innerText = xpGanado;
+const respuestaTexto =
+    preguntas[preguntaActual].respuestas[indice];
 
+const esCorrecta =
+    indice === preguntas[preguntaActual].correcta;
+
+guardarRespuestaSupabase(
+    preguntas[preguntaActual].pregunta,
+    respuestaTexto,
+    esCorrecta
+);
         next.style.display = "block";
     }
 
