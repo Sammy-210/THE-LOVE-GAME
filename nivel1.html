@@ -379,6 +379,22 @@ window.supabase.createClient(
     const xpTexto = document.getElementById("xp");
 
     function mostrarPregunta() {
+        async function guardarRespuestaSupabase(preguntaTexto, respuestaTexto, esCorrecta) {
+
+    const { error } = await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+            pregunta: preguntaTexto,
+            respuesta: respuestaTexto,
+            tipo: "Nivel 1 - " + (esCorrecta ? "Correcta" : "Incorrecta")
+        }]);
+
+    if (error) {
+        console.error("Error al guardar respuesta:", error);
+    } else {
+        console.log("✅ Respuesta guardada en Supabase");
+    }
+}
 
         respondida = false;
         next.style.display = "none";
