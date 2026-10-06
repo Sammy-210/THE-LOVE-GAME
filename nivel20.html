@@ -592,12 +592,75 @@ function pruebaPuertas(){
 
 }
 
+async function guardarRespuestaSupabase(
+    pregunta,
+    respuesta,
+    correcta
+){
+    const { error } =
+        await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+            pregunta: pregunta,
+            respuesta: respuesta,
+            tipo:
+                "Nivel 20 - Prueba Simba - " +
+                (correcta ? "Correcta" : "Incorrecta")
+        }]);
 
+    if(error){
+        console.error(
+            "Error guardando respuesta:",
+            error
+        );
+        return false;
+    }
+
+    return true;
+}
 /* =========================
    PRUEBA 3
    SECUENCIA
 ========================= */
+function pruebaSecuencia(){
 
+    document.getElementById("icono")
+        .textContent="🔢";
+
+    document.getElementById("titulo")
+        .textContent="PRUEBA 3 — COMPLETA LA SECUENCIA";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "¿Qué número sigue en la secuencia?";
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <div class="secuencia">
+            2 — 4 — 8 — 16 — ?
+        </div>
+
+        <input
+            class="numero"
+            id="respuestaNumero"
+            type="number"
+            placeholder="?"
+        >
+
+        <br>
+
+        <button
+            class="boton"
+            onclick="comprobarSecuencia()">
+
+            🔢 COMPROBAR
+
+        </button>
+
+    `;
+
+}
 async function comprobarSecuencia(){
 
     const respuesta =
@@ -648,7 +711,50 @@ async function comprobarSecuencia(){
    PRUEBA 4
    REACCIÓN
 ========================= */
+function pruebaReaccion(){
 
+    document.getElementById("icono")
+        .textContent="⚡";
+
+    document.getElementById("titulo")
+        .textContent="PRUEBA 4 — REFLEJOS SIMBA";
+
+    document.getElementById("pregunta")
+        .textContent=
+        "Haz clic en el botón únicamente cuando aparezca ¡AHORA!";
+
+    document.getElementById("contenido")
+        .innerHTML=`
+
+        <button
+            class="botonReaccion"
+            id="botonReaccion"
+            onclick="reaccionar()">
+
+            ESPERA...
+
+        </button>
+
+    `;
+
+    reaccionIniciada=false;
+    reaccionTerminada=false;
+
+    const tiempo =
+        Math.floor(
+            Math.random() * 3000
+        ) + 2000;
+
+    setTimeout(()=>{
+
+        reaccionIniciada=true;
+
+        document.getElementById("botonReaccion")
+            .textContent="¡AHORA!";
+
+    },tiempo);
+
+}
 async function reaccionar(){
 
     if(!reaccionIniciada){
@@ -660,7 +766,6 @@ async function reaccionar(){
                 false
             );
 
-
         if(!guardada){
 
             alert(
@@ -670,7 +775,6 @@ async function reaccionar(){
             return;
 
         }
-
 
         document.getElementById("mensaje")
             .textContent =
@@ -685,6 +789,27 @@ async function reaccionar(){
 
 
     reaccionTerminada=true;
+
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            "Prueba 4 — Reflejos Simba",
+            "Reacción rápida",
+            true
+        );
+
+
+    if(!guardada){
+
+        reaccionTerminada=false;
+
+        alert(
+            "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+        );
+
+        return;
+
+    }
 
 
     pruebaCorrecta(
