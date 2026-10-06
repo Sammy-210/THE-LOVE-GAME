@@ -497,16 +497,7 @@ function mostrarReto(){
         .innerHTML="";
 
 
-    const estrella=
-        document.querySelectorAll(".estrella")
-        [retoActual];
-
-    if(estrella){
-
-        estrella.classList.add("ganada");
-
-    }
-
+    
 
     switch(retoActual){
 
@@ -956,21 +947,53 @@ function pregunta(texto){
 
 function opciones(lista){
 
-    const contenedor=
+    const contenedor =
         document.getElementById("opciones");
 
     contenedor.innerHTML="";
 
     lista.forEach(item=>{
 
-        const boton=
+        const boton =
             document.createElement("button");
 
         boton.className="opcion";
 
         boton.textContent=item[0];
 
-        boton.onclick=()=>{
+        boton.onclick=async ()=>{
+
+            document
+                .querySelectorAll(".opcion")
+                .forEach(b=>{
+                    b.disabled=true;
+                });
+
+            const preguntaActual =
+                document.getElementById("pregunta")
+                .textContent;
+
+            const guardada =
+                await guardarRespuestaSupabase(
+                    preguntaActual,
+                    item[0],
+                    item[1]
+                );
+
+            if(!guardada){
+
+                document
+                    .querySelectorAll(".opcion")
+                    .forEach(b=>{
+                        b.disabled=false;
+                    });
+
+                alert(
+                    "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+                );
+
+                return;
+            }
 
             if(item[1]){
 
@@ -984,6 +1007,16 @@ function opciones(lista){
                     .textContent=
                     "❌ Esa no es. Intenta otra vez.";
 
+                setTimeout(()=>{
+
+                    document
+                        .querySelectorAll(".opcion")
+                        .forEach(b=>{
+                            b.disabled=false;
+                        });
+
+                },800);
+
             }
 
         };
@@ -994,8 +1027,45 @@ function opciones(lista){
 
 }
 
+    async function guardarRespuestaSupabase(
+    pregunta,
+    respuesta,
+    correcta
+){
 
-/* =========================
+    const { error } =
+        await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+
+            pregunta: pregunta,
+
+            respuesta: respuesta,
+
+            tipo:
+                "Nivel 21 - Reto de las 1000 XP - " +
+                (correcta
+                    ? "Correcta"
+                    : "Incorrecta")
+
+        }]);
+
+    if(error){
+
+        console.error(
+            "Error guardando respuesta:",
+            error
+        );
+
+        return false;
+
+    }
+
+    return true;
+
+}
+    
+    /* =========================
    CORRECTO
 ========================= */
 
@@ -1014,6 +1084,16 @@ function correcto(){
     document.getElementById("mensaje")
         .textContent=
         "⭐ ¡ESTRELLA CONSEGUIDA! +100 XP";
+
+    const estrella =
+        document.querySelectorAll(".estrella")
+        [retoActual];
+
+    if(estrella){
+
+        estrella.classList.add("ganada");
+
+    }
 
     document
         .querySelectorAll(".opcion")
@@ -1040,7 +1120,6 @@ function correcto(){
     },850);
 
 }
-
 
 /* =========================
    FINAL
