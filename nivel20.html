@@ -962,71 +962,9 @@ function crearOpciones(lista){
    PRUEBA CORRECTA
 ========================= */
 
-async function guardarRespuestaSupabase(
-    pregunta,
-    respuesta,
-    correcta
-){
-
-    const { error } =
-        await supabaseClient
-        .from("respuestas_nivel4")
-        .insert([{
-
-            pregunta: pregunta,
-
-            respuesta: respuesta,
-
-            tipo:
-                "Nivel 20 - Prueba Simba - " +
-                (correcta ? "Correcta" : "Incorrecta")
-
-        }]);
-
-
-    if(error){
-
-        console.error(
-            "Error guardando respuesta:",
-            error
-        );
-
-        return false;
-
-    }
-
-    return true;
-
-}
-
-
-async function pruebaCorrecta(
+function pruebaCorrecta(
     respuestaSeleccionada
 ){
-
-    const preguntaActual =
-        document.getElementById("pregunta")
-        .textContent;
-
-
-    const guardada =
-        await guardarRespuestaSupabase(
-            preguntaActual,
-            respuestaSeleccionada,
-            true
-        );
-
-
-    if(!guardada){
-
-        alert(
-            "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
-        );
-
-        return;
-
-    }
-
 
     puntos++;
 
@@ -1068,7 +1006,6 @@ async function pruebaCorrecta(
     },900);
 
 }
-
 /* =========================
    TERMINAR
 ========================= */
