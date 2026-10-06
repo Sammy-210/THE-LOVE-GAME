@@ -912,13 +912,47 @@ function mostrarMision(){
    RESPONDER
 ========================= */
 
-function responder(
+async function guardarRespuestaSupabase(
+    pregunta,
+    respuesta,
+    correcta,
+    valor
+){
+
+    const { error } = await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+            pregunta: pregunta,
+            respuesta: respuesta,
+            tipo:
+                "Nivel 19 - Caja Negra - " +
+                (correcta ? "Correcta" : "Incorrecta") +
+                " - " +
+                valor +
+                " puntos"
+        }]);
+
+    if(error){
+
+        console.error(
+            "Error guardando respuesta:",
+            error
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+
+async function responder(
     indice,
     respuesta,
     valor
 ){
 
-    const m=
+    const m =
         misiones[actual];
 
     document
@@ -928,17 +962,46 @@ function responder(
         });
 
 
+    const esCorrecta =
+        indice === m.correcta;
+
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            m.pregunta,
+            respuesta,
+            esCorrecta,
+            valor
+        );
+
+
+    if(!guardada){
+
+        alert(
+            "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+        );
+
+        document
+            .querySelectorAll(".opcion")
+            .forEach(boton=>{
+                boton.disabled=false;
+            });
+
+        return;
+    }
+
+
     respuestas.push({
         mision:actual+1,
         respuesta:respuesta
     });
 
 
-    if(indice===m.correcta){
+    if(esCorrecta){
 
-        puntos+=valor;
+        puntos += valor;
 
-        xp+=250;
+        xp += 250;
 
         localStorage.setItem(
             "xp",
@@ -949,7 +1012,7 @@ function responder(
             .textContent=xp;
 
         document.getElementById("mensaje")
-            .textContent=
+            .textContent =
             "🔓 ¡Prueba superada! +250 XP";
 
         crearCorazones();
@@ -959,7 +1022,7 @@ function responder(
     else{
 
         document.getElementById("mensaje")
-            .textContent=
+            .textContent =
             "👀 Esa opción no abre la cerradura...";
 
     }
