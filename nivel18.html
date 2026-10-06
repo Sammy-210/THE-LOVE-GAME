@@ -446,27 +446,104 @@ function mostrarPregunta(){
     });
 }
 
-function responder(valor,respuesta){
+async function guardarRespuestaSupabase(pregunta, respuesta, valor){
 
-    puntos+=valor;
+    const { error } = await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
+            pregunta: pregunta,
+            respuesta: respuesta,
+            tipo: "Nivel 18 - ¿Qué tan enamorado estás? - " +
+                  valor + " puntos"
+        }]);
 
-    xp+=150;
+    if(error){
 
-    localStorage.setItem("xp",xp);
+        console.error(
+            "Error guardando respuesta:",
+            error
+        );
 
-    document.getElementById("xp").textContent=xp;
+        return false;
+    }
 
-    localStorage.setItem(
-        "nivel18_respuesta_"+(actual+1),
-        respuesta
-    );
+    return true;
+}
+
+
+async function responder(valor,respuesta){
+
+    const preguntaActual =
+        preguntas[actual];
+
 
     document.querySelectorAll(".opcion")
     .forEach(boton=>{
         boton.disabled=true;
     });
 
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            preguntaActual.pregunta,
+            respuesta,
+            valor
+        );
+
+
+    if(!guardada){
+
+        alert(
+            "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+        );
+
+        document.querySelectorAll(".opcion")
+        .forEach(boton=>{
+            boton.disabled=false;
+        });
+
+        return;
+    }
+
+
+    /*
+       SUMAR PUNTOS
+    */
+
+    puntos += valor;
+
+
+    /*
+       SUMAR XP
+    */
+
+    xp += 150;
+
+    localStorage.setItem(
+        "xp",
+        xp
+    );
+
+    document.getElementById("xp")
+    .textContent=xp;
+
+
+    /*
+       GUARDAR RESPUESTA LOCALMENTE
+    */
+
+    localStorage.setItem(
+        "nivel18_respuesta_"+(actual+1),
+        respuesta
+    );
+
+
     crearCorazones();
+
+
+    /*
+       SIGUIENTE PREGUNTA
+    */
 
     setTimeout(()=>{
 
@@ -483,6 +560,7 @@ function responder(valor,respuesta){
         }
 
     },550);
+
 }
 
 function terminar(){
