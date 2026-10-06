@@ -522,18 +522,21 @@ function pruebaMemoria(){
     document.getElementById("titulo")
         .textContent="PRUEBA 1 — MEMORIA RÁPIDA";
 
-    document.getElementById("pregunta")
-        .textContent=
-        "Mira la secuencia durante unos segundos. Después desaparecerá.";
+   document.getElementById("pregunta")
+    .textContent =
+    "Mira la secuencia durante unos segundos. Después desaparecerá.";
 
-    const contenido=
-        document.getElementById("contenido");
+const contenido =
+    document.getElementById("contenido");
 
-    contenido.innerHTML=`
+contenido.innerHTML = `
 
-        <div class="secuencia" id="secuencia">
-            🦁 💗 ⭐ 🌙
-        </div>
+    <div class="secuencia" id="secuencia">
+        🦁 💗 ⭐ 🌙
+    </div>
+
+`;
+    
 
         <p class="texto">
             Memorízala...
@@ -541,28 +544,22 @@ function pruebaMemoria(){
 
     `;
 
-    setTimeout(()=>{
+setTimeout(()=>{
+    
+    document.getElementById("pregunta")
+        .textContent =
+        "¿Cuál era el tercer símbolo?";
 
-        contenido.innerHTML=`
+    contenido.innerHTML = "";
 
-            <div class="pregunta">
-                ¿Cuál era el tercer símbolo?
-            </div>
+    crearOpciones([
+        ["🦁",false],
+        ["⭐",true],
+        ["🌙",false],
+        ["💗",false]
+    ]);
 
-        `;
-
-        crearOpciones([
-
-            ["🦁",false],
-            ["⭐",true],
-            ["🌙",false],
-            ["💗",false]
-
-        ]);
-
-    },3000);
-
-}
+},3000);
 
 
 /* =========================
