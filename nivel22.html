@@ -712,18 +712,34 @@ function paso5(){
    MENSAJE
 ========================= */
 
-function guardarMensaje(){
+    async function guardarMensaje(){
 
-    const texto=
+    const texto =
         document.getElementById(
             "mensajeFuturo"
         ).value.trim();
 
-    if(texto.length<3){
+    if(texto.length < 3){
 
         document.getElementById("mensaje")
-            .textContent=
+            .textContent =
             "💌 Escribe un mensaje antes de sellarlo.";
+
+        return;
+
+    }
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            "Nivel 22 - Compartimento 2 - Mensaje",
+            texto
+        );
+
+    if(!guardada){
+
+        alert(
+            "❌ No se pudo guardar el mensaje. Inténtalo nuevamente."
+        );
 
         return;
 
@@ -738,23 +754,38 @@ function guardarMensaje(){
 
 }
 
-
 /* =========================
    PREDICCIÓN
 ========================= */
 
-function guardarPrediccion(){
+async function guardarPrediccion(){
 
-    const texto=
+    const texto =
         document.getElementById(
             "prediccion"
         ).value.trim();
 
-    if(texto.length<3){
+    if(texto.length < 3){
 
         document.getElementById("mensaje")
-            .textContent=
+            .textContent =
             "🔮 Escribe tu predicción antes de guardarla.";
+
+        return;
+
+    }
+
+    const guardada =
+        await guardarRespuestaSupabase(
+            "Nivel 22 - Compartimento 4 - Predicción",
+            texto
+        );
+
+    if(!guardada){
+
+        alert(
+            "❌ No se pudo guardar la predicción. Inténtalo nuevamente."
+        );
 
         return;
 
@@ -776,21 +807,54 @@ function guardarPrediccion(){
 
 function crearOpciones(lista){
 
-    const contenedor=
+    const contenedor =
         document.getElementById("opciones");
 
     contenedor.innerHTML="";
 
     lista.forEach(item=>{
 
-        const boton=
+        const boton =
             document.createElement("button");
 
         boton.className="opcion";
 
         boton.textContent=item[0];
 
-        boton.onclick=()=>{
+        boton.onclick=async ()=>{
+
+            document
+                .querySelectorAll(".opcion")
+                .forEach(b=>{
+                    b.disabled=true;
+                });
+
+            const preguntaActual =
+                document.getElementById(
+                    "pregunta"
+                ).textContent;
+
+            const guardada =
+                await guardarRespuestaSupabase(
+                    preguntaActual,
+                    item[0]
+                );
+
+            if(!guardada){
+
+                document
+                    .querySelectorAll(".opcion")
+                    .forEach(b=>{
+                        b.disabled=false;
+                    });
+
+                alert(
+                    "❌ No se pudo guardar la respuesta. Inténtalo nuevamente."
+                );
+
+                return;
+
+            }
 
             completarPaso();
 
@@ -801,8 +865,39 @@ function crearOpciones(lista){
     });
 
 }
+async function guardarRespuestaSupabase(
+    pregunta,
+    respuesta
+){
 
+    const { error } =
+        await supabaseClient
+        .from("respuestas_nivel4")
+        .insert([{
 
+            pregunta: pregunta,
+
+            respuesta: respuesta,
+
+            tipo:
+                "Nivel 22 - Cápsula del Tiempo"
+
+        }]);
+
+    if(error){
+
+        console.error(
+            "Error guardando respuesta:",
+            error
+        );
+
+        return false;
+
+    }
+
+    return true;
+
+}
 /* =========================
    COMPLETAR
 ========================= */
